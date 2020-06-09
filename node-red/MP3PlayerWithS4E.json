@@ -1,0 +1,1022 @@
+[
+    {
+        "id": "78fd2299.d76c7c",
+        "type": "tab",
+        "label": "MP3Play w/ S4E & STM32f769i",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "abd21e1f.0914c",
+        "type": "inject",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "x": 330,
+        "y": 1580,
+        "wires": [
+            [
+                "cde300db.87e0d"
+            ]
+        ]
+    },
+    {
+        "id": "cde300db.87e0d",
+        "type": "es-get",
+        "z": "78fd2299.d76c7c",
+        "name": "Get Record by ID",
+        "documentId": "1585586013800",
+        "documentIndex": "s4e",
+        "documentType": "mp3player",
+        "includeFields": "",
+        "server": "de7ee9c5.fa7f18",
+        "x": 590,
+        "y": 1580,
+        "wires": [
+            [
+                "34b7d483.8e897c"
+            ]
+        ]
+    },
+    {
+        "id": "34b7d483.8e897c",
+        "type": "debug",
+        "z": "78fd2299.d76c7c",
+        "name": "debugESGET",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 880,
+        "y": 1580,
+        "wires": []
+    },
+    {
+        "id": "c877f3db.2bc328",
+        "type": "mqtt in",
+        "z": "78fd2299.d76c7c",
+        "name": "TriggerFrom MQTT",
+        "topic": "dev/update/+/mp3Player",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "b367818b.872ae8",
+        "x": 170,
+        "y": 380,
+        "wires": [
+            [
+                "32d968f3.e9b76",
+                "a062bb27.eb8c68",
+                "7d0dd1d6.27e8b"
+            ]
+        ]
+    },
+    {
+        "id": "d2d87f1f.f6173",
+        "type": "debug",
+        "z": "78fd2299.d76c7c",
+        "name": "debugPopulateTrackdDropDown",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 1410,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "159e157b.fb8013",
+        "type": "sqlite",
+        "z": "78fd2299.d76c7c",
+        "mydb": "fb41eb3b.46f878",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "sqlite3",
+        "x": 1080,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f1f060e2.f044f8",
+        "type": "function",
+        "z": "78fd2299.d76c7c",
+        "d": true,
+        "name": "Insert SQL",
+        "func": "var seconds_remaining = msg.payload.seconds_remaining\nmsg.topic = \"insert into MP3Player_access_log(status, Track, seconds_remaining, vol) values ('\"+\n             msg.payload.status+\"','\"+msg.payload.track+\"',\"+msg.payload.seconds_remaining+\",\"+msg.payload.vol+\");\";\nconsole.log(\"Insert SQL:\"+ msg.topic);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 710,
+        "y": 520,
+        "wires": [
+            [
+                "159e157b.fb8013"
+            ]
+        ]
+    },
+    {
+        "id": "8182af9c.47d7d8",
+        "type": "ui_chart",
+        "z": "78fd2299.d76c7c",
+        "name": "Volume & Seconds Remaining",
+        "group": "8d5a0ba4.4dc6e8",
+        "order": 1,
+        "width": "0",
+        "height": "0",
+        "label": "Volume Chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "120",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "1",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#f83913",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#ff05a6",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 970,
+        "y": 840,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2020b3dd.64f07c",
+        "type": "function",
+        "z": "78fd2299.d76c7c",
+        "name": "MP3 Player Status",
+        "func": "var vol          = {topic: \"Volume\",         payload: msg.payload.vol};\nvar secRemaining = {topic: \"Sec. Remaining\", payload: msg.payload.seconds_remaining};\n\n\n\nreturn [vol,secRemaining];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 620,
+        "y": 800,
+        "wires": [
+            [
+                "8182af9c.47d7d8"
+            ],
+            [
+                "8182af9c.47d7d8"
+            ]
+        ]
+    },
+    {
+        "id": "90737f85.01c178",
+        "type": "inject",
+        "z": "78fd2299.d76c7c",
+        "name": "Reset chart",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "x": 370,
+        "y": 920,
+        "wires": [
+            [
+                "605daf95.6feb7"
+            ]
+        ]
+    },
+    {
+        "id": "605daf95.6feb7",
+        "type": "function",
+        "z": "78fd2299.d76c7c",
+        "name": "Reset chart",
+        "func": "msg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 610,
+        "y": 920,
+        "wires": [
+            [
+                "8182af9c.47d7d8"
+            ]
+        ]
+    },
+    {
+        "id": "cca88e7b.66edf8",
+        "type": "ui_text",
+        "z": "78fd2299.d76c7c",
+        "group": "8d5a0ba4.4dc6e8",
+        "order": 11,
+        "width": "0",
+        "height": "0",
+        "name": "",
+        "label": "Status",
+        "format": "{{msg.payload.status}}",
+        "layout": "row-spread",
+        "x": 880,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "9a7bf821.38f638",
+        "type": "ui_text",
+        "z": "78fd2299.d76c7c",
+        "group": "8d5a0ba4.4dc6e8",
+        "order": 12,
+        "width": "0",
+        "height": "0",
+        "name": "",
+        "label": "Track",
+        "format": "{{msg.payload.track}}",
+        "layout": "row-spread",
+        "x": 870,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "9179a9b0.575f9",
+        "type": "ui_button",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "group": "8d5a0ba4.4dc6e8",
+        "order": 2,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "Reset chart",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "{}",
+        "payloadType": "json",
+        "topic": "",
+        "x": 370,
+        "y": 840,
+        "wires": [
+            [
+                "8182af9c.47d7d8"
+            ]
+        ]
+    },
+    {
+        "id": "6bc93de.056ec44",
+        "type": "ui_text",
+        "z": "78fd2299.d76c7c",
+        "group": "8d5a0ba4.4dc6e8",
+        "order": 14,
+        "width": "0",
+        "height": "0",
+        "name": "",
+        "label": "Volume",
+        "format": "{{msg.payload.vol}}",
+        "layout": "row-spread",
+        "x": 880,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "cdc62130.159168",
+        "type": "ui_text",
+        "z": "78fd2299.d76c7c",
+        "group": "8d5a0ba4.4dc6e8",
+        "order": 15,
+        "width": "0",
+        "height": "0",
+        "name": "",
+        "label": "Time Remaining",
+        "format": "{{msg.payload.timeRemaining}}",
+        "layout": "row-spread",
+        "x": 910,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "7d0dd1d6.27e8b",
+        "type": "json",
+        "z": "78fd2299.d76c7c",
+        "name": "To JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 380,
+        "y": 660,
+        "wires": [
+            [
+                "9a7bf821.38f638",
+                "6bc93de.056ec44",
+                "cdc62130.159168",
+                "2020b3dd.64f07c",
+                "cca88e7b.66edf8",
+                "f1f060e2.f044f8",
+                "28cab94c.c1f6f6"
+            ]
+        ]
+    },
+    {
+        "id": "458c2015.69b11",
+        "type": "ui_button",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "group": "8d5a0ba4.4dc6e8",
+        "order": 6,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "Toggle Mute",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "{\"actionEvent\":\"toggleMute\"}",
+        "payloadType": "json",
+        "topic": "",
+        "x": 380,
+        "y": 1160,
+        "wires": [
+            [
+                "e4a1d6b6.cf9e68",
+                "59fe37d9.3d2868"
+            ]
+        ]
+    },
+    {
+        "id": "e4a1d6b6.cf9e68",
+        "type": "mqtt out",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "topic": "dev/cmd/STM32F746G/mp3Player",
+        "qos": "0",
+        "retain": "",
+        "broker": "b367818b.872ae8",
+        "x": 1390,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "dd9e3486.be80d",
+        "type": "ui_button",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "group": "8d5a0ba4.4dc6e8",
+        "order": 4,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "Toggle Pause",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "{\"actionEvent\":\"togglePause\"}",
+        "payloadType": "json",
+        "topic": "",
+        "x": 380,
+        "y": 1220,
+        "wires": [
+            [
+                "e4a1d6b6.cf9e68",
+                "59fe37d9.3d2868"
+            ]
+        ]
+    },
+    {
+        "id": "951c2eae.9eba4",
+        "type": "function",
+        "z": "78fd2299.d76c7c",
+        "name": "set VOL AE",
+        "func": "var newPayload = {actionEvent: \"setVolume\",data: msg.payload.toString()};\n\nvar newMsg = {payload: newPayload};\n\nreturn [newMsg,{payload: \"Volume Changed\"}];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 610,
+        "y": 1320,
+        "wires": [
+            [
+                "e4a1d6b6.cf9e68",
+                "59fe37d9.3d2868"
+            ],
+            [
+                "1360c5a8.f7cf7a"
+            ]
+        ]
+    },
+    {
+        "id": "7d914de1.7f5304",
+        "type": "ui_text_input",
+        "z": "78fd2299.d76c7c",
+        "name": "Set RGB LED",
+        "label": "Set RGB LED",
+        "tooltip": "",
+        "group": "8d5a0ba4.4dc6e8",
+        "order": 17,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "mode": "text",
+        "delay": "0",
+        "topic": "",
+        "x": 380,
+        "y": 1440,
+        "wires": [
+            [
+                "a121bc76.5c86a"
+            ]
+        ]
+    },
+    {
+        "id": "a121bc76.5c86a",
+        "type": "function",
+        "z": "78fd2299.d76c7c",
+        "name": "Set RGB LED",
+        "func": "var newPayload = {actionEvent: \"setRGBLED\",data: msg.payload};\n\nvar newMsg = {payload: newPayload};\n\nreturn [newMsg,{payload: \"RGB SET\"}];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 660,
+        "y": 1460,
+        "wires": [
+            [
+                "e4a1d6b6.cf9e68",
+                "59fe37d9.3d2868"
+            ],
+            [
+                "1360c5a8.f7cf7a"
+            ]
+        ]
+    },
+    {
+        "id": "32d968f3.e9b76",
+        "type": "function",
+        "z": "78fd2299.d76c7c",
+        "d": true,
+        "name": "Map MP3Player Status to ES",
+        "func": "var newMsg = { payload: msg.payload, documentIndex: \"s4e\",documentId:Date.now(),  documentType : \"mp3player\"};\nvar msgAsString = JSON.stringify(newMsg);\nnode.log(\"Sending Msg to ES:\"+msgAsString);\n\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 550,
+        "y": 280,
+        "wires": [
+            [
+                "cd5ed884.533268"
+            ]
+        ]
+    },
+    {
+        "id": "cd5ed884.533268",
+        "type": "es-create",
+        "z": "78fd2299.d76c7c",
+        "d": true,
+        "name": "S4E MP3Player",
+        "documentIndex": "s4e",
+        "documentType": "mp3player",
+        "server": "de7ee9c5.fa7f18",
+        "x": 850,
+        "y": 280,
+        "wires": [
+            [
+                "d2d87f1f.f6173"
+            ]
+        ]
+    },
+    {
+        "id": "2274c1db.56b71e",
+        "type": "ui_numeric",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "label": "Set Volume",
+        "tooltip": "",
+        "group": "8d5a0ba4.4dc6e8",
+        "order": 18,
+        "width": 0,
+        "height": 0,
+        "wrap": false,
+        "passthru": true,
+        "topic": "",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "step": 1,
+        "x": 370,
+        "y": 1280,
+        "wires": [
+            [
+                "951c2eae.9eba4"
+            ]
+        ]
+    },
+    {
+        "id": "1360c5a8.f7cf7a",
+        "type": "ui_toast",
+        "z": "78fd2299.d76c7c",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "topic": "Change",
+        "name": "Change",
+        "x": 860,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "4c5f8d63.942f4c",
+        "type": "inject",
+        "z": "78fd2299.d76c7c",
+        "name": "Create MP3Player_access_log Table",
+        "topic": "CREATE TABLE MP3Player_access_log(id INTEGER PRIMARY KEY AUTOINCREMENT, Status TEXT NOT NULL, Track TEXT NOT NULL, Seconds_Remaining INT NOT NULL,  Vol INT NOT NULL, create_datetime default current_timestamp);",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 620,
+        "y": 460,
+        "wires": [
+            [
+                "159e157b.fb8013"
+            ]
+        ]
+    },
+    {
+        "id": "ce4d8e4.37da5f",
+        "type": "function",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "func": "msg.topic = \"API Error\";\nif (msg.error) {\n msg.payload = msg.error.message\n} else {\n msg.payload = \"\"\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 1660,
+        "wires": [
+            [
+                "ebc4577.3b85d28"
+            ]
+        ]
+    },
+    {
+        "id": "f5b4a726.52c7b",
+        "type": "catch",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "scope": null,
+        "x": 180,
+        "y": 1660,
+        "wires": [
+            [
+                "fc9dd4e8.e90d48",
+                "ce4d8e4.37da5f"
+            ]
+        ]
+    },
+    {
+        "id": "5e4af8df.d5e7e",
+        "type": "ui_toast",
+        "z": "78fd2299.d76c7c",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "",
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "topic": "",
+        "name": "",
+        "x": 910,
+        "y": 1660,
+        "wires": []
+    },
+    {
+        "id": "fc9dd4e8.e90d48",
+        "type": "debug",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "active": true,
+        "console": false,
+        "complete": "error",
+        "x": 360,
+        "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "ebc4577.3b85d28",
+        "type": "delay",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "x": 580,
+        "y": 1660,
+        "wires": [
+            [
+                "5e4af8df.d5e7e"
+            ]
+        ]
+    },
+    {
+        "id": "a062bb27.eb8c68",
+        "type": "debug",
+        "z": "78fd2299.d76c7c",
+        "name": "debugMQTTInboundMsg",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 600,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "d5305ffd.01cfe8",
+        "type": "ui_button",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "group": "8d5a0ba4.4dc6e8",
+        "order": 6,
+        "width": "0",
+        "height": "0",
+        "passthru": false,
+        "label": "Next Track",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "{\"actionEvent\":\"nextTrack\"}",
+        "payloadType": "json",
+        "topic": "",
+        "x": 370,
+        "y": 1060,
+        "wires": [
+            [
+                "e4a1d6b6.cf9e68",
+                "59fe37d9.3d2868"
+            ]
+        ]
+    },
+    {
+        "id": "f7f6a612.d7ed18",
+        "type": "mqtt out",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "topic": "dev/myTopic",
+        "qos": "0",
+        "retain": "",
+        "broker": "ed19a022.0697b8",
+        "x": 1200,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "28cab94c.c1f6f6",
+        "type": "rbe",
+        "z": "78fd2299.d76c7c",
+        "name": "Send to AWS IOT Only on Volume Change",
+        "func": "deadband",
+        "gap": "5%",
+        "start": "",
+        "inout": "out",
+        "property": "payload.vol",
+        "x": 880,
+        "y": 640,
+        "wires": [
+            [
+                "f7f6a612.d7ed18",
+                "edffd215.a6d4e8"
+            ]
+        ]
+    },
+    {
+        "id": "3a16775b.95f5d",
+        "type": "mqtt in",
+        "z": "78fd2299.d76c7c",
+        "name": "AWS IOT Shadow update",
+        "topic": "dev/update/STM32F769i/mp3Player",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "ed19a022.0697b8",
+        "x": 410,
+        "y": 980,
+        "wires": [
+            [
+                "edffd215.a6d4e8",
+                "e4a1d6b6.cf9e68",
+                "59fe37d9.3d2868"
+            ]
+        ]
+    },
+    {
+        "id": "edffd215.a6d4e8",
+        "type": "debug",
+        "z": "78fd2299.d76c7c",
+        "name": "debugAWSIOTShadow",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 1310,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "59fe37d9.3d2868",
+        "type": "mqtt out",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "topic": "dev/cmd/STM32F769i/mp3Player",
+        "qos": "0",
+        "retain": "",
+        "broker": "b367818b.872ae8",
+        "x": 1410,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "232d467f.00de02",
+        "type": "ui_button",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "group": "8d5a0ba4.4dc6e8",
+        "order": 6,
+        "width": "0",
+        "height": "0",
+        "passthru": false,
+        "label": "Prev Track",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "{\"actionEvent\":\"prevTrack\"}",
+        "payloadType": "json",
+        "topic": "",
+        "x": 370,
+        "y": 1100,
+        "wires": [
+            [
+                "59fe37d9.3d2868",
+                "e4a1d6b6.cf9e68"
+            ]
+        ]
+    },
+    {
+        "id": "7c7c037e.49ea4c",
+        "type": "ui_slider",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "label": "Volume Slider",
+        "tooltip": "",
+        "group": "8d5a0ba4.4dc6e8",
+        "order": 12,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "end",
+        "topic": "",
+        "min": 0,
+        "max": "100",
+        "step": 1,
+        "x": 380,
+        "y": 1360,
+        "wires": [
+            [
+                "951c2eae.9eba4"
+            ]
+        ]
+    },
+    {
+        "id": "1adcf4db.08d1f3",
+        "type": "ui_dropdown",
+        "z": "78fd2299.d76c7c",
+        "name": "Play Track Dropdown",
+        "label": "Play Track",
+        "tooltip": "Play Track",
+        "place": "Select option",
+        "group": "8d5a0ba4.4dc6e8",
+        "order": 13,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "options": [
+            {
+                "label": "",
+                "value": "",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "",
+        "x": 930,
+        "y": 80,
+        "wires": [
+            [
+                "d3191855.a0a3a8"
+            ]
+        ]
+    },
+    {
+        "id": "d30fa05e.258778",
+        "type": "mqtt in",
+        "z": "78fd2299.d76c7c",
+        "name": "TriggerFrom MQTT",
+        "topic": "dev/update/+/mp3Player/populateTracksDropDown",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "b367818b.872ae8",
+        "x": 110,
+        "y": 100,
+        "wires": [
+            [
+                "4922e085.d24bb8"
+            ]
+        ]
+    },
+    {
+        "id": "ec8e0f09.26095",
+        "type": "function",
+        "z": "78fd2299.d76c7c",
+        "name": "Populate Drop down",
+        "func": "msg2 = {options: [ msg.payload] }\nreturn msg2;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 550,
+        "y": 160,
+        "wires": [
+            [
+                "1adcf4db.08d1f3"
+            ]
+        ]
+    },
+    {
+        "id": "4922e085.d24bb8",
+        "type": "json",
+        "z": "78fd2299.d76c7c",
+        "name": "To JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 300,
+        "y": 120,
+        "wires": [
+            [
+                "ec8e0f09.26095"
+            ]
+        ]
+    },
+    {
+        "id": "d3191855.a0a3a8",
+        "type": "function",
+        "z": "78fd2299.d76c7c",
+        "name": "Reposition To Track",
+        "func": "var newMsg = {actionEvent: \"repositionToTrack\",data: msg.payload};\n\nreturn {payload: newMsg};",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1160,
+        "y": 180,
+        "wires": [
+            [
+                "ca512b72.77619",
+                "d2d87f1f.f6173"
+            ]
+        ]
+    },
+    {
+        "id": "ca512b72.77619",
+        "type": "mqtt out",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "topic": "dev/cmd/STM32F769i/mp3Player",
+        "qos": "0",
+        "retain": "",
+        "broker": "b367818b.872ae8",
+        "x": 1550,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "de7ee9c5.fa7f18",
+        "type": "remote-server",
+        "z": "",
+        "name": "Docker ES",
+        "host": "http://localhost:9200",
+        "timeout": "2000",
+        "reqtimeout": "2000"
+    },
+    {
+        "id": "b367818b.872ae8",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "localhost",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": false,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "fb41eb3b.46f878",
+        "type": "sqlitedb",
+        "z": "",
+        "db": "/home/abusous2000/Downloads/Temp/sqlite3/test.db",
+        "mode": "RWC"
+    },
+    {
+        "id": "8d5a0ba4.4dc6e8",
+        "type": "ui_group",
+        "z": "",
+        "name": "Struts4Embedded",
+        "tab": "b142e111.f7d9e",
+        "disp": true,
+        "width": "14",
+        "collapse": false
+    },
+    {
+        "id": "ed19a022.0697b8",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "AWS IOT",
+        "broker": "a1km560udu1n3o-ats.iot.us-west-2.amazonaws.com",
+        "port": "8883",
+        "tls": "d56347d5.acf75",
+        "clientid": "zdev_3",
+        "usetls": true,
+        "compatmode": false,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "b142e111.f7d9e",
+        "type": "ui_tab",
+        "z": "",
+        "name": "Struts4Embedded",
+        "icon": "fa-bitcoin",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "d56347d5.acf75",
+        "type": "tls-config",
+        "z": "",
+        "name": "AWS-TLS",
+        "cert": "/home/abusous2000/Downloads/Temp/certificate.pem.crt",
+        "key": "/home/abusous2000/Downloads/Temp/private.pem.key",
+        "ca": "/home/abusous2000/Downloads/Temp/amazon_cas.txt",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false
+    }
+]

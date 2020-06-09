@@ -1,0 +1,161 @@
+#key for openweather
+309e6bd24d886218bc4ca92241a01668
+
+docker run -itd \
+--name=mqtt \
+--restart=always \
+--net=host \
+-v /home/abusous2000/Downloads/Temp/mosquitto/config:/mqtt/config:ro \
+-v /home/abusous2000/Downloads/Temp/mosquitto/data:/mqtt/data \
+-v /home/abusous2000/Downloads/Temp/mosquitto/log:/mqtt/log \
+-p 1883:1883 \
+toke/mosquitto
+
+
+#elasticsearch
+docker run -p 9200:9200 -p 9300:9300 -v $HOME/Downloads/Temp/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.6.1 
+/etc/init.d/elasticsearch start
+
+#phpliteadmin
+docker run -it --rm -p 2015:2015 -v $HOME/Downloads/Temp/sqlite3:/db --name websql shadowcodex/phpliteadmin
+
+#Node-Red
+docker run -it -p 1880:1880 -v $HOME/Downloads/Temp/sqlite3:/sqlite3/mqtt --name mynodered nodered
+dockerCommit2 1.2 6fd428b72139 nodered/node-red
+docker save -o ./node-red.tar node-red
+docker start -ai 6fd428b72139
+dockerLogin 6fd428b72139
+
+node_modules/node-red-contrib-elasticsearch7/get.js
+/usr/src/node-red/node_modules/node-red/settings.js
+mosquitto_pub -h localhost -t dev/update/STM32F769i/mp3Player -m "{\"status\":\"Playing\",\"track\":\"Love u Babe\",\"vol\":77,\"seconds_remaining\":120,\"timeRemaining\":\"4:32\"}";
+MPU6050Strust4EmbeddedWithSTM32F429ZI-NUCLEO144
+http://localhost:9200
+10.42.0.1
+http://localhost:1880/#flow/81076d92.b3dc
+mosquitto_sub -h localhost -t S4E/dev/mp3Player/update
+mosquitto_sub -h localhost -t dev/cmd/STM32F429ZI/mpu6050
+mosquitto_sub -h localhost -t dev/update/STM32F429ZI/mpu6050
+mosquitto_sub -h localhost -t dev/cmd/STM32F769i/mp3Player
+mosquitto_pub -h localhost -t "dev/myTopic" -m "Hello Salah"
+mosquitto_sub -h 172.17.0.2 -t dev/update/STM32F429ZI/mpu6050
+mosquitto_pub -h 172.17.0.2  -t dev/cmd/STM32F769i/mp3Player -m "{\"actionEvent\":\"setRGBLED\",\"data\":\"0|255|255\"}"
+mosquitto_pub -h 172.17.0.2  -t dev/cmd/STM32F769i/mp3Player -m "{\"actionEvent\":\"repositionToTrack\",\"data\":\"TRACK_10\"}"
+mosquitto_pub -h 172.17.0.2  -t dev/cmd/STM32F769i/mp3Player -m "{\"actionEvent\":\"togglePause\"}"
+mosquitto_pub -h 172.17.0.2  -t dev/cmd/STM32F769i/mp3Player -m "{\"actionEvent\":\"toggleMute\"}"
+mosquitto_pub -h 172.17.0.2  -t dev/cmd/STM32F769i/mp3Player -m "{\"actionEvent\":\"prevTrack\"}"
+mosquitto_pub -h 172.17.0.2  -t dev/update/STM32F769i/mp3Player/populateTracksDropDown -m "{\"payload\":\"TRACK_1\"},\"options\":{\"TRACK_1\":\"Track 1\",\"TRACK_2\":\"Track 2\"}}"
+mosquitto_pub -h 172.17.0.2  -t dev/update/STM32F769i/mp3Player/populateTracksDropDown -m "{\"Track 3\":\"TRACK_3\",\"Track 4\":\"TRACK_4\"}"
+if ( !isActonEventThdInitialized() ){
+  	dbgprintf("ActonEventThd hasbot been initilized. Plz call initActonEventThd() in your startup code");
+  	chSysHalt("ActonEventThd hasbot been initilized. Plz call initActonEventThd() in your startup code");
+ }
+${openstm32_compiler_path}
+
+http://www.mqtt-dashboard.com/
+watch -n 30 'mosquitto_pub -h 172.17.0.2  -t "dev/myTopic" -m "{\"actionEvent\":\"setRGBLED\",\"data\":\"0|0|255\"}"'
+watch -n 25 "mosquitto_pub -h 18.195.236.123 -t dev/myTopic -m '{\"actionEvent\":\"setRGBLED\",\"data\":\"0|0|0\"}'"
+mosquitto_sub -h 18.195.236.123 -t "dev/myTopic"
+mosquitto_pub -h 18.195.236.123 -t "dev/myTopic" -m "Hello Salah"
+mosquitto_pub -h 18.195.236.123  -t "dev/myTopic" -m "{\"actionEvent\":\"setRGBLED\",\"data\":\"0|255|255\"}"
+mosquitto_pub -h localhost -t "dev/triggerWeather" -m "Hello Salah10"
+
+mosquitto_pub -h localhost -t "stat/shp6/STATUS8" -m "{\"StatusSNS\":{\"ENERGY\":{\"Power\": 4.2}}}"
+mosquitto_pub -h localhost -t "stat/shp2/STATUS8" -m "{\"StatusSNS\":{\"ENERGY\":{\"Power\": 4.2}}}"
+mosquitto_pub -h localhost -t "stat/shp2/STATUS8" -m "{\"StatusSNS\":{\"ENERGY\":{\"Total\": 18.2}}}"
+
+
+mosquitto_pub -h localhost -t "stat/shp6/STATUS8" -m "{\"StatusSNS\":{\"ENERGY\":{\"Power\": 14.2}}}"
+mosquitto_pub -h localhost -t "stat/shp2/STATUS8" -m "{\"StatusSNS\":{\"ENERGY\":{\"Power\": 5.2}}}"
+
+
+mosquitto_pub -h localhost -t "stat/shp6/STATUS8" -m "{\"StatusSNS\":{\"ENERGY\":{\"Power\": 2.2}}}"
+mosquitto_pub -h localhost -t "stat/shp2/STATUS8" -m "{\"StatusSNS\":{\"ENERGY\":{\"Power\": 15.2}}}"
+
+
+curl localhost:9200/weather/Amman/_search -d  '{   "aggs" : {     "max_id" : {       "max" : {           "field" : "_id"        }      }    },    "size":0  }'
+
+curl -X POST http://localhost:9200/weather/Amman/16/_create -d @$HOME/Downloads/Temp/weather.json -H 'Content-Type: application/json'
+curl -X GET http://localhost:9200/weather/Amman/51
+
+curl -X GET http://localhost:9200/?pretty
+
+curl -X DELETE http://localhost:9200/weather
+
+CREATE TABLE weather (entry_id INT AUTO_INCREMENT,
+    city TEXT NOT NULL,
+    tempc DECIMAL NOT NULL,
+    pressure INTEGER NOT NULL,
+    create_datetime default current_timestamp,
+    PRIMARY KEY(entry_id) );
+CREATE TABLE MP3Player_access_log(id INTEGER PRIMARY KEY AUTOINCREMENT, Status TEXT NOT NULL, Track TEXT NOT NULL, Seconds_Remaining INT NOT NULL,  Vol INT NOT NULL, create_datetime default current_timestamp);
+
+
+var os=global.get('os');
+var fs=global.get('fs');
+Function Example:
+
+This function will list all files of the type .js on the console
+
+var fs=global.get('fs');
+var path="/home/steve/.node-red";
+try{
+fs.readdir(path, function(err, items) {
+    for (var i=0; i<items.length; i++) {
+ var r=items[i].search(/\.js/);
+if (r!= -1)
+        node.log(items[i]);
+else
+node.log(items[i]+"is not a js file");
+    } //for loop
+});
+}
+catch(err){
+node.log("error");
+}
+return msg;
+
+his is covered Writing Functions sections of the Node-RED docs
+
+You need to add npm modules to the settings.js file. You can find this file in ~/.node-red/
+
+The section you are looking for is the functionGlobalContext section.
+
+...
+functionGlobalContext: {
+   fft: require('fft')
+},
+...
+You would then access the module in the function node with the following:
+
+var FFT = context.global.get('fft');
+var fft = new FFT(n, inverse);
+...
+Also be careful where you installed the fft module, it needs to be either in ~/.node-red/node_modules or installed globally so it is accessable to Node-RED
+https://stackoverflow.com/questions/41228221/can-you-export-multiple-classes-from-a-single-nodejs-module
+
+
+#define STM32_HSECLK                8000000U
+#define STM32_PLLCLKIN              (STM32_HSECLK / STM32_PLLM_VALUE)= 25000000U / 25
+#define STM32_PLLVCO                (STM32_PLLCLKIN * STM32_PLLN_VALUE)= (25000000U / 25) * 432
+
+#define STM32_PLLM_VALUE            25
+#define STM32_PLLN_VALUE            432
+#define STM32_PLLP_VALUE            2
+#define STM32_PLL_P_CLKOUT          (STM32_PLLVCO / STM32_PLLP_VALUE) = ((25000000U / 25) * 432) / 2
+#define STM32_SYSCLK                STM32_PLL_P_CLKOUT = ((25000000U / 25) * 432) / 2
+#define STM32_HCLK                  (STM32_SYSCLK / 1) = ((25000000U / 25) * 432) / 2
+#define STM32_PCLK1                 (STM32_HCLK / 4)   = (((25000000U / 25) * 432) / 2) / 4
+#define STM32_TIMCLK1               (STM32_PCLK1 * 2)  = ((((25000000 / 25) * 432) / 2) / 4) * 2
+$aws/things/zdev_3/shadow/update
+
+7 Apr 04:48:11 - [info] [mqtt-broker:AWS IOT] Connection failed to broker: zdev_3@mqtts://a1km560udu1n3o-ats.iot.us-west-2.amazonaws.com:8883
+7 Apr 04:48:27 - [info] [mqtt-broker:AWS IOT] Connection failed to broker: zdev_3@mqtts://a1km560udu1n3o-ats.iot.us-west-2.amazonaws.com:8883
+7 Apr 04:48:39 - [info] Stopping flows
+7 Apr 04:48:39 - [info] [mqtt-broker:localhost] Disconnected from broker: mqtt://localhost:1883
+7 Apr 04:48:39 - [info] Stopped flows
+7 Apr 04:48:39 - [info] Starting flows
+7 Apr 04:48:39 - [info] Started flows
+7 Apr 04:48:39 - [info] [sqlitedb:96aaab15.184278] opened /home/abusous2000/Downloads/Temp/sqlite3/test.db ok
+7 Apr 04:48:39 - [info] [mqtt-broker:localhost] Connected to broker: mqtt://localhost:1883
+7 Apr 04:48:39 - [info] [mqtt-broker:AWS IOT] Connected to broker: zdev_3@mqtts://a1km560udu1n3o-ats.iot.us-west-2.amazonaws.com:8883
