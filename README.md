@@ -3,7 +3,7 @@
 
 # Brief Description
 Implementation of Model View Controller (MVC) framework/pattern called Struts for embedded environments ([**Struts4Embedded**](https://en.wikipedia.org/wiki/Apache_Struts_1)). This framework mimics a framework that was popular 18 years ago in the Java community called([**Struts**](https://en.wikipedia.org/wiki/Apache_Struts_1)).
-As a use case example, an [**MP3 Player**](https://github.com/abusous2000/MP3PlayerUsingSTM32F7AndChibiOS) was implement which could be controlled via MQTT messages (via LWIP Ethernet or via WiFi Module ESP8266) or via a simple web interface. Local MQTT broker (Mosquito) was used to send and to receive messages and commands with the MCU; also connectivity to an AWS IOT MQTT was also demonstrated.
+As a use case example, an [**MP3 Player**](https://github.com/abusous2000/MP3PlayerUsingSTM32F7) was implement which could be controlled via MQTT messages (via LWIP Ethernet or via WiFi Module ESP8266) or via a simple web interface. Local MQTT broker (Mosquito) was used to send and to receive messages and commands with the MCU; also connectivity to an AWS IOT MQTT was also demonstrated.
 
 # Purpose
 - The Embedded community lacks frameworks that could speed-up & ease development. The opposite exists in the Java and JavaScript communities who evolved many useful frameworks (i.e. Spring, Camel, Hibernate, JQuery, ...etc).
@@ -22,8 +22,8 @@ IMHO, a solid & well designed frameworks can make projects
 - it makes projects easier to debug & maintain.
 
 # Architectural Overview
-[![MP3Player with TM32F7 Architectural Overview](https://raw.githubusercontent.com/abusous2000/MP3PlayerUsingSTM32F7AndChibiOS/master/MP3PlayerWithSTM32F7ArchitecturalOverview.png)]
-[**Click here for High Resolution Diagram in PDF**](https://github.com/abusous2000/MP3PlayerUsingSTM32F7AndChibios/raw/master/STM32F769i-MP3Player.pdf)
+[![MP3Player with TM32F7 Architectural Overview](https://raw.githubusercontent.com/abusous2000/MP3PlayerUsingSTM32F7/master/MP3PlayerWithSTM32F7ArchitecturalOverview.png)]
+[**Click here for High Resolution Diagram in PDF**](https://github.com/abusous2000/MP3PlayerUsingSTM32F7raw/master/STM32F769i-MP3Player.pdf)
 
 
 # Why Using MVC is Very Useful?
