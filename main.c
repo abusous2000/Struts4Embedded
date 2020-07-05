@@ -8,6 +8,7 @@
 #include "ButtonLEDs.h"
 #include "PotReader.h"
 #include "MQTTClient.h"
+#include "SDCard.h"
 
 static void initDrivers(void);
 /*VCP Serial configuration*/
@@ -26,6 +27,7 @@ static const SerialConfig wifiSerialvfg = {
   0
 };
 #endif
+
 BaseSequentialStream *GlobalDebugChannel = (BaseSequentialStream *)&PORTAB_SD;
 void initWifiModuleServer(void);
 
@@ -60,12 +62,22 @@ int main(void) {
   initMQTTClient();
 #endif
 
+#if S4E_USE_SDCARD == 1
+  SDCardDriverITF_Typedef *pSDCardDriverITF 			= getSDCardDriver();
+
+  pSDCardDriverITF->init(pSDCardDriverITF);
+  if ( !pSDCardDriverITF->mount(pSDCardDriverITF))
+      pSDCardDriverITF->processFiles(pSDCardDriverITF);
+#endif
   while (true) {
       chThdSleepMilliseconds(250);
   }
 }
 
+static NameValuePairStaticTypeDef readFilesFromFolder=  {.key=READ_FILES_FROM_FOLDER,	.value="/music"};
 static void initDrivers(void){
+  initStruts4EmbeddedFramework();
+  putSysProperty(&readFilesFromFolder);
 #if S4E_USE_RGB == 1
   initP9813RGBDriver(TOTAL_NUM_OF_LEDS);
 #endif

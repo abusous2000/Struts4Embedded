@@ -20,7 +20,9 @@
 #endif
 
 #define MAX_ADC_VALUE               4096
-#define POT_GPIO_PIN                LINE_ARD_A0//PA6
+#ifndef POT_GPIO_PIN
+#define POT_GPIO_PIN                LINE_ARD_A0
+#endif
 #define ADC_TIM_FREQ 				10000U
 #define TIM_PERIOD_CYCLES   		2500         ///5.4KHz/2700=2Hz-->Equation as follows-->update event (in Hz)= Timer Clock /((prescaler+1)*(period+1))
 #define POT_VALUE_BTWN_0_TO_100    ((100*getPotValue())/MAX_ADC_VALUE)

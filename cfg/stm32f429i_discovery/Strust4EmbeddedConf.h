@@ -14,7 +14,7 @@
 #define USE_LCD_TFT 			0
 #endif
 #ifndef S4E_USE_JOYSTICK
-#define S4E_USE_JOYSTICK        1
+#define S4E_USE_JOYSTICK        0
 #endif
 #ifndef S4E_USE_BLINKER_THD
 #define S4E_USE_BLINKER_THD     1
@@ -23,7 +23,7 @@
 #define S4E_USE_WIFI_MODULE_THD 0
 #endif
 #ifndef S4E_USE_SSD1306_LCD
-#define S4E_USE_SSD1306_LCD     1
+#define S4E_USE_SSD1306_LCD     0
 #endif
 #ifndef S4E_USE_POT
 #define S4E_USE_POT             1
@@ -33,13 +33,18 @@
 #endif
 //With This board, you cannot used ARD_11 & ETH, there is a conflict
 #ifndef S4E_USE_BUZZER
-#define S4E_USE_BUZZER				0
+#define S4E_USE_BUZZER			0
 #endif
 #ifndef S4E_USE_RGB
 #define S4E_USE_RGB             0
 #endif
+/*
+ * Without removing/de-soldering the gyro on rhe STM32F429i-disc board,
+ * it will be hard to make ethernet work, see this for details. There are pin conflicts
+ * https://www.emcraft.com/stm32f429discovery/connecting-to-ethernet-on-stm32f429
+ */
 #ifndef S4E_USE_MQTT
-#define S4E_USE_MQTT            1
+#define S4E_USE_MQTT            0
 #endif
 #ifndef S4E_USE_WEB_SERVER
 #define S4E_USE_WEB_SERVER      0
@@ -70,7 +75,7 @@
 #define MAX_THD_NAME_SIZE          		25
 #define MAX_NUM_OF_WORKER_THDS			4
 
-#define PORTAB_SD                       SD3
+#define PORTAB_SD                       SD1
 #define MQTT_CMD_SUBSCRIBE_TOPIC   		"dev/cmd/STM32F429ZI/mp3Player"
 #define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/STM32F429ZI/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithStm32F429ZI"
@@ -84,9 +89,9 @@
 #define SSD1306_SA0_PIN    				GPIOF_ARD_D8
 #define SSD1306_RESET_PORT				GPIOF
 #define SSD1306_RESET_PIN				GPIOF_ARD_D7
-#define LINE_LED_GREEN                  LINE_LED1
-#define LINE_LED_BLUE                   LINE_LED2
-#define LINE_LED_RED                    LINE_LED3
+
+#define LINE_LED_GREEN                  PAL_LINE(GPIOG, GPIOG_LED3_GREEN)
+#define LINE_LED_RED                    PAL_LINE(GPIOG, GPIOG_LED4_RED)
 
 #define TIM_TGRO_EVENT_EXTSEL 		    0x08 //See p. 386 in RM
 #define ADC_POT_TIM                     GPTD3 ///See p. 386 in RM
@@ -98,6 +103,10 @@
 #define MPU_I2C_AF						4
 #define MPU_I2CD						I2CD2
 //#define LINE_ARD_D2                 PAL_LINE(GPIOA, 10U)
+#define POT_GPIO_PIN                    PAL_LINE(GPIOA, 3U)
 #define MPU_INT_PORT					GPIOA
 #define MPU_INT_PIN						10
+#ifndef LINE_JOY_UP
+#define USER_BUTTON                     PAL_LINE(GPIOA, 0U)
+#endif
 #endif /* CFG_STRUST4EMBEDDED_H_ */

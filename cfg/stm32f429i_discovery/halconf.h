@@ -31,7 +31,7 @@
 #define _CHIBIOS_HAL_CONF_
 #define _CHIBIOS_HAL_CONF_VER_7_1_
 
-#include "mcuconf.h"
+#include "../stm32f429i_discovery/mcuconf.h"
 #if !defined(CHPRINTF_USE_FLOAT) || defined(__DOXYGEN__)
 #define CHPRINTF_USE_FLOAT                         TRUE
 #endif
@@ -108,8 +108,13 @@
 /**
  * @brief   Enables the MAC subsystem.
  */
+/*
+ * Without removing/de-soldering the gyro on rhe STM32F429i-disc board,
+ * it will be hard to make ethernet work, see this for details. There are pin conflicts
+ * https://www.emcraft.com/stm32f429discovery/connecting-to-ethernet-on-stm32f429
+ */
 #if !defined(HAL_USE_MAC) || defined(__DOXYGEN__)
-#define HAL_USE_MAC                         TRUE
+#define HAL_USE_MAC                         FALSE
 #endif
 
 /**

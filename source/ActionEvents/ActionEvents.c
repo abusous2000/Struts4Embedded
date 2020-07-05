@@ -1,7 +1,7 @@
+#include "Strust4EmbeddedConf.h"
 #include "ch.h"
 #include "hal.h"
 #include "ActionEvents.h"
-#include "Strust4EmbeddedConf.h"
 #include "Strust4Embedded.h"
 #include "P9813_RGB_Driver.h"
 #include "PWM.h"

@@ -1,8 +1,7 @@
 #ifndef SOURCE_BUTTONSLEDS_BUTTONLEDS_H_
 #define SOURCE_BUTTONSLEDS_BUTTONLEDS_H_
+#include "Strust4EmbeddedConf.h"
 #include "CPal.h"
-#define BUZZER_LINE                 LINE_ARD_D11 //D11
-#define RGB_LINE                    LINE_ARD_D12 //D12
 
 #ifndef S4E_USE_BUZZER
 #define S4E_USE_BUZZER				0
@@ -10,7 +9,12 @@
 #ifndef LINE_LED_GREEN
 #define LINE_LED_GREEN              LINE_ARD_D13
 #endif
-
+#if S4E_USE_BUZZER == 1
+#define BUZZER_LINE                 LINE_ARD_D11 //D11
+#endif
+#if S4E_USE_RGB == 1
+#define RGB_LINE                    LINE_ARD_D12 //D12
+#endif
 #ifndef LINE_JOY_UP
 #define LINE_JOY_UP                 LINE_ARD_A1//PAL_LINE(GPIOA, 4U)  //A1
 #define LINE_JOY_RIGHT              LINE_ARD_A2//PAL_LINE(GPIOC, 2U)  //A2
