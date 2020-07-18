@@ -14,7 +14,7 @@ It should be noted that these use cases could be easily modified to fit other pr
 # Architectural Overview
 I created this architectural diagram for the MP# player use case with STM32F769i. Please pay attention to the sequenced steps; and from there you should be able to trace the system & have a good overview.
 ![MP3Player with TM32F7 Architectural Overview](https://raw.githubusercontent.com/abusous2000/MP3PlayerUsingSTM32F7/master/docs/STM32F769i-MP3Player.png)
-**[Click here]**(https://github.com/abusous2000/MP3PlayerUsingSTM32F7raw/master/docs/STM32F769i-MP3Player.pdf) for High Resolution Diagram in PDF
+**[Click here](https://github.com/abusous2000/MP3PlayerUsingSTM32F7raw/master/docs/STM32F769i-MP3Player.pdf)** for High Resolution Diagram in PDF
 
 # Supported Boards
 The framework was tested using the following development boards: STM32F407 Discovery, [STM32F407VET6 Blackboard](https://os.mbed.com/users/hudakz/code/STM32F407VET6_Hello/shortlog/), [Seeed Arch Max 1.1](https://www.seeedstudio.com/Arch-Max-v1-1-p-2632.html), ST32F746 & STM32F769i discovery boards, STM32F446re-Nucleo, STM32F429zi-Nucleo, & STM32F746zg-Nucleo.
