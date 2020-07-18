@@ -1,5 +1,5 @@
 # Brief Description
-**Struts4Embedded (S4E)** is a *MVC framework* designed for embedded systems; it mimics Java's **[Struts 1.0](https://en.wikipedia.org/wiki/Apache_Struts_1)** that was popular 18+ years ago. Basically it's a pattern that decouples the model (data structure) from your view (UI); and all are decoupled from the controller (business logic), which often results in projects that are *easy to manage, maintain & scale*. For now, S4E is coupled to **ChibiOS RTOS** and there are plans to port it to other RTOSes.
+**Struts4Embedded (S4E)** is a *MVC framework* designed for embedded systems; it mimics Java's **[Struts 1.0](https://en.wikipedia.org/wiki/Apache_Struts_1)** that was popular 18+ years ago. Basically it's a pattern that decouples the model (data structure) from your view (UI); and all are decoupled from the controller (business logic), which often results in projects that are *easy to manage, maintain & scale*. For now, S4E is coupled to **[ChibiOS RTOS](https://www.chibios.org/)** and there are plans to port it to other RTOSes.
  
 # Use Cases (Proof of Concepts)
 In this release, **three IOT use cases** were provided as a proof of concepts to help developers get started:-
