@@ -2,7 +2,7 @@
 [![Watch demo](https://img.youtube.com/vi/peghfjOStV0/0.jpg)](https://www.youtube.com/watch?v=peghfjOStV0)
 
 # Brief Description
-Struts4Embedded (S4E) is a MVC framework designed for embedded systems; it mimics Java's [**Struts 1.0 **](https://en.wikipedia.org/wiki/Apache_Struts_1) that was popular 18+ years ago. Basically it's a pattern that decouples the model (data structure) from your view (UI); and all are decoupled from the controller (business logic), which often results in projects that are easy to manage, maintain & scale. For now, S4E is coupled to ChibiOS 20.3.x and there are plans to port it to other RTOSes.
+Struts4Embedded (S4E) is a MVC framework designed for embedded systems; it mimics Java's [Struts 1.0](https://en.wikipedia.org/wiki/Apache_Struts_1) that was popular 18+ years ago. Basically it's a pattern that decouples the model (data structure) from your view (UI); and all are decoupled from the controller (business logic), which often results in projects that are easy to manage, maintain & scale. For now, S4E is coupled to ChibiOS 20.3.x and there are plans to port it to other RTOSes.
  
 # Use Cases (Proof of Concepts)
 In this release, three IOT use cases were provided as a proof of concepts to help developers get started. 
@@ -14,7 +14,7 @@ It should be noted that these use cases could be easily modified to fit other pr
 # Architectural Overview
 I created this architectural diagram for the MP# player use case with STM32F769i. Please pay attention to the sequenced steps; and from there you should be able to trace the system & have a good overview.
 ![MP3Player with TM32F7 Architectural Overview](https://raw.githubusercontent.com/abusous2000/MP3PlayerUsingSTM32F7/master/docs/STM32F769i-MP3Player.png)
-[**Click here**] for High Resolution Diagram in PDF(https://github.com/abusous2000/MP3PlayerUsingSTM32F7raw/master/docs/STM32F769i-MP3Player.pdf)
+**[Click here]**(https://github.com/abusous2000/MP3PlayerUsingSTM32F7raw/master/docs/STM32F769i-MP3Player.pdf) for High Resolution Diagram in PDF
 
 # Supported Boards
 The framework was tested using the following development boards: STM32F407 Discovery, [STM32F407VET6 Blackboard](https://os.mbed.com/users/hudakz/code/STM32F407VET6_Hello/shortlog/), [Seeed Arch Max 1.1](https://www.seeedstudio.com/Arch-Max-v1-1-p-2632.html), ST32F746 & STM32F769i discovery boards, STM32F446re-Nucleo, STM32F429zi-Nucleo, & STM32F746zg-Nucleo.
@@ -22,7 +22,7 @@ The framework was tested using the following development boards: STM32F407 Disco
 # How to Test, Build & Deploy?
 Simply clone each use case's repository from github into *ChibiOS/demo/STM32* folder, and then import the make projects into ChibiStudio like any other project. Please take a note of the following; they will shorten your start-up time: 
 
-- Download [ChibiOS 20.3.x](https://osdn.net/projects/chibios/releases/72607], and from now on this will be knows as *ChibiOS*
+- Download [ChibiOS 20.3.x](https://osdn.net/projects/chibios/releases/72607), and from now on this will be knows as *ChibiOS*
 - LWIP zip file is expected to be expanded in *ChibiOS/ext* folder; same goes for FATFS.- if you decide to use uGFX, then please clone the modified version of [uGFX v2.7](https://github.com/abusous2000/uGFX-2.7) in ChibiOS/ext folder; this version has been modified slightly. Note that recent versions were very hard to integrate with ChibiOS.
 - in *ChiboOS/* root folder; please clone [ChibiOS-Contrib](https://github.com/ChibiOS/ChibiOS-Contrib); S4E is dependent on it.
 - every development board has its own configuration & make files. A configuration file per board is located into *./conf/<Board Name>/Struts4EmbeddedConf.h* where you'll find all specific configuration parameters per board (inclusive of all used pins & drivers). And make files are all grouped in /.make folder. Therefore this is a great starting point to understand project dependencies.
