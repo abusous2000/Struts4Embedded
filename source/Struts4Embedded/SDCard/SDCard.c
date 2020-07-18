@@ -5,7 +5,7 @@
  *      Author: abusous2000
  */
 #include "Strust4EmbeddedConf.h"
-#if S4E_USE_SDCARD == 1
+#if S4E_USE_SDCARD != 0
 #include "ch.h"
 #include "hal.h"
 #include "Strust4Embedded.h"
@@ -20,21 +20,17 @@ CC_WEAK FRESULT processFile (char *filePath){(void)filePath;
 
 #if HAL_USE_MMC_SPI
 static FATFS MMC_FS;
-#define NSS_LINE 	PAL_LINE(GPIOE,12)
-#define SCK_LINE 	PAL_LINE(GPIOE,13)
-#define MISO_LINE 	PAL_LINE(GPIOE,14)
-#define MOSI_LINE 	PAL_LINE(GPIOE,15)
 //This variable is expected to be name this way to work with FatFS
 MMCDriver MMCD1;
 
 /* Maximum speed SPI configuration (18MHz, CPHA=0, CPOL=0, MSb first).*/
-static SPIConfig hs_spicfg 	= {.circular=FALSE, .end_cb=NULL, .ssport=PAL_PORT(NSS_LINE), .sspad=PAL_PAD(NSS_LINE), .cr1=0, .cr2=0};
+static SPIConfig hs_spicfg 	= {.circular=FALSE, .end_cb=NULL, .ssport=PAL_PORT(SD_CARD_NSS_LINE), .sspad=PAL_PAD(SD_CARD_NSS_LINE), .cr1=0, .cr2=0};
 /* Low speed SPI configuration (281.250kHz, CPHA=0, CPOL=0, MSb first).*/
-static SPIConfig ls_spicfg 	= {.circular=FALSE, .end_cb=NULL, .ssport=PAL_PORT(NSS_LINE), .sspad=PAL_PAD(NSS_LINE), .cr1=SPI_CR1_BR_2 | SPI_CR1_BR_1, .cr2=0};
-static MMCConfig MMCD1_Config={.spip=&SPID1, .lscfg=&ls_spicfg, .hscfg=&hs_spicfg} ;
+static SPIConfig ls_spicfg 	= {.circular=FALSE, .end_cb=NULL, .ssport=PAL_PORT(SD_CARD_NSS_LINE), .sspad=PAL_PAD(SD_CARD_NSS_LINE), .cr1=SPI_CR1_BR_2 | SPI_CR1_BR_1, .cr2=0};
+static MMCConfig MMCDrv_Config={.spip=&PROTAB_MMCSPI, .lscfg=&ls_spicfg, .hscfg=&hs_spicfg} ;
 
 bool my_mmc_lld_is_card_inserted(MMCDriver *sdcp){(void)sdcp;
- return palReadLine(NSS_LINE);
+ return palReadLine(SD_CARD_NSS_LINE);
 }
 #else
 static FATFS SDC_FS;
@@ -59,15 +55,19 @@ SDCardDriverITF_Typedef *getSDCardDriver(void){
 
 FRESULT initMMC(SDCardDriverITF_Typedef *pSDCardDriverITF) {
 #if HAL_USE_MMC_SPI
-  palSetLineMode(NSS_LINE,  PAL_MODE_OUTPUT_PUSHPULL | PAL_STM32_OSPEED_HIGH); // NSS-black
-  palSetLineMode(SCK_LINE,  PAL_MODE_ALTERNATE(5) 	 | PAL_STM32_OSPEED_HIGH | PAL_STM32_PUPDR_PULLUP); // SCK-white
-  palSetLineMode(MISO_LINE, PAL_MODE_ALTERNATE(5)    | PAL_STM32_OSPEED_HIGH | PAL_STM32_PUPDR_PULLUP); // MISO--Eggplant
-  palSetLineMode(MOSI_LINE, PAL_MODE_ALTERNATE(5)    | PAL_STM32_OSPEED_HIGH | PAL_STM32_PUPDR_PULLUP); // MOSI-gray
-  palSetLine(NSS_LINE); // set NSS high
+
+  palSetLineMode(SD_CARD_NSS_LINE,  PAL_MODE_OUTPUT_PUSHPULL | PAL_STM32_OSPEED_HIGHEST);
+#ifndef SDMMC_ALREADY_CONFIG
+  palSetLineMode(SD_CARD_SCK_LINE,  MMC_SPI_PIN_MODE );
+  palSetLineMode(SD_CARD_MISO_LINE, MMC_SPI_PIN_MODE_MISO );
+  palSetLineMode(SD_CARD_MOSI_LINE, MMC_SPI_PIN_MODE );
+#endif
+  palSetLine(SD_CARD_NSS_LINE); // set NSS high
+
   // initialize MMC driver
   mmcObjectInit(&MMCD1);
   //MMCD1.vmt->is_inserted=my_mmc_lld_is_card_inserted;
-  mmcStart(&MMCD1, &MMCD1_Config);
+  mmcStart(&MMCD1, &MMCDrv_Config);
 #elif HAL_USE_SDC == TRUE
   #ifndef SDMMC_ALREADY_CONFIG
   palSetLineMode(SDMMMC_DETECT,  PAL_MODE_INPUT_PULLUP); // SCK-white
@@ -99,7 +99,7 @@ FRESULT mountSDCard(SDCardDriverITF_Typedef *pSDCardDriverITF){
   else
 	dbgprintf( "mountSDCard: Connected to card\r\n");
 
-  err = f_mount(&MMC_FS, "1:/",1);
+  err = f_mount(&MMC_FS, "/",1);
   if(err != FR_OK){
      dbgprintf("mountSDCard: f_mount() failed %d\r\n", err);
 	 mmcDisconnect(&MMCD1);

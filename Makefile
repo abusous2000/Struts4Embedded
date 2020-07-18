@@ -3,11 +3,14 @@
 #
 
 all:
-	@echo === Building for stm32f407_discovery ===============================
-	+@make --no-print-directory -f make/stm32f407_blackboard.make all
+	@echo === Building for seeed_arch_max ===============================
+#	+@make --no-print-directory -f make/seeed_arch_max.make all
+#	+@make --no-print-directory -f make/seeed_arch_max-C++.make all	
+	@echo === Building for stm32f407_blackboard ===============================
+#	+@make --no-print-directory -f make/stm32f407_blackboard.make all
 #	+@make --no-print-directory -f make/stm32f407_blackboard-C++.make all	
 	@echo === Building for stm32f407_discovery ===============================
-#	+@make --no-print-directory -f make/stm32f407_discovery.make all
+	+@make --no-print-directory -f make/stm32f407_discovery.make all
 #	+@make --no-print-directory -f make/stm32f407_discovery-C++.make all	
 	@echo === Building for stm32f429i_discovery ===============================
 #	+@make --no-print-directory -f make/stm32f429i_discovery.make all
@@ -32,6 +35,7 @@ all:
 
 clean:
 	@echo
+	+@make --no-print-directory -f make/seeed_arch_max.make clean		
 	+@make --no-print-directory -f make/stm32f407_blackboard.make clean		
 	+@make --no-print-directory -f make/stm32f407_discovery.make clean		
 	+@make --no-print-directory -f make/stm32f429i_discovery.make clean		

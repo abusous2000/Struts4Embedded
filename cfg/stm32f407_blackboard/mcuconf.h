@@ -245,6 +245,8 @@
 #define STM32_RTC_CR_INIT                   0
 #define STM32_RTC_TAMPCR_INIT               0
 
+//Added By AbuSous2000
+#define STM32_SDC_USE_SDMMC1                 1
 /*
  * SDC driver system settings.
  */

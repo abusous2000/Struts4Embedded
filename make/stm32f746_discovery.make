@@ -90,17 +90,11 @@ MCU  = cortex-m7
 
 # Imported source files and paths.
 CHIBIOS  := ../../..
-GFXLIB = /home/abusous2000/ChibiOS_20.3.0/ext/ugfx-2.7
 GFXBOARD = STM32F746-Discovery
 STMHAL = STM32F7xx_HAL_Driver
-CHIBIOS_CONTRIB :=/home/abusous2000/Downloads/Temp/ChibiOS-Contrib
-CH_CUMMUNITY    := ../../../community/os/various/
 BOARD_NAME := stm32f746_discovery
-CONFDIR  := ./cfg/$(BOARD_NAME)
-BUILDDIR := ./build/$(BOARD_NAME)
-DEPDIR   := ./.dep/$(BOARD_NAME)
-ALLINC  += $(CH_CUMMUNITY)
-ALLINC  += $(GFXINC)
+STRUTS4EMBEDDED :=$(CHIBIOS)/demos/STM32/Struts4Embedded/source/Struts4Embedded
+include $(STRUTS4EMBEDDED)/CommonS4EVars.mk
 
 # Licensing files.
 include $(CHIBIOS)/os/license/license.mk
@@ -122,7 +116,7 @@ include $(CHIBIOS)/tools/mk/autobuild.mk
 #include $(CHIBIOS)/test/oslib/oslib_test.mk
 include $(CHIBIOS)/os/hal/lib/streams/streams.mk
 include $(CHIBIOS_CONTRIB)/os/common/ports/ARMCMx/compilers/GCC/utils/fault_handlers_v7m.mk
-#include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
+include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
 #STARTUPLD = /os/common/startup/ARMCMx/compilers/GCC/ld
 include $(CHIBIOS)/os/various/lwip_bindings/lwip.mk
 # Define linker script file here

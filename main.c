@@ -9,8 +9,14 @@
 #include "PotReader.h"
 #include "MQTTClient.h"
 #include "SDCard.h"
+#ifdef USE_USBCFG
+#include "usbcfg.h"
+static void initUSBCFG(void);
+#endif
 
 static void initDrivers(void);
+
+
 /*VCP Serial configuration*/
 static const SerialConfig myserialcfg = {
   115200,
@@ -28,7 +34,9 @@ static const SerialConfig wifiSerialvfg = {
 };
 #endif
 
+#if DEBUG_TRACE_PRINT == 1
 BaseSequentialStream *GlobalDebugChannel = (BaseSequentialStream *)&PORTAB_SD;
+#endif
 void initWifiModuleServer(void);
 
 void initMain(void);
@@ -40,9 +48,13 @@ void initMain(void){
 #endif
 int main(void) {
   initMain();
-
-  sdStart(&PORTAB_SD, &myserialcfg);
-
+#if HAL_USE_SERIAL == 1
+	#ifdef USE_USBCFG
+	  initUSBCFG();
+	#else
+	  sdStart(&PORTAB_SD, &myserialcfg);
+	#endif
+#endif
   initDrivers();
   initActonEventThd();
 
@@ -68,16 +80,21 @@ int main(void) {
   pSDCardDriverITF->init(pSDCardDriverITF);
   if ( !pSDCardDriverITF->mount(pSDCardDriverITF))
       pSDCardDriverITF->processFiles(pSDCardDriverITF);
+  else
+	  dbgprintf("Failed to mount SD card\r\n");
 #endif
   while (true) {
       chThdSleepMilliseconds(250);
   }
 }
-
+#if S4E_USE_SDCARD == 1
 static NameValuePairStaticTypeDef readFilesFromFolder=  {.key=READ_FILES_FROM_FOLDER,	.value="/music"};
+#endif
 static void initDrivers(void){
   initStruts4EmbeddedFramework();
+#if S4E_USE_SDCARD == 1
   putSysProperty(&readFilesFromFolder);
+#endif
 #if S4E_USE_RGB == 1
   initP9813RGBDriver(TOTAL_NUM_OF_LEDS);
 #endif
@@ -98,5 +115,21 @@ void periodicSysTrigger(uint32_t i){(void)i;
 	   publishStatusToBroker();
 #endif
 }
+#ifdef USE_USBCFG
+static void initUSBCFG(void){
+	/*
+	* Initializes a serial-over-USB CDC driver.
+	*/
+	sduObjectInit(&PORTAB_SDU);
+	sduStart(&PORTAB_SDU, &serusbcfg);
+	chThdSleepMilliseconds(300);
 
+	usbDisconnectBus(serusbcfg.usbp);
+	chThdSleepMilliseconds(1500);
+	usbStart(serusbcfg.usbp, &usbcfg);
+	usbConnectBus(serusbcfg.usbp);
+
+	sdStart(&PORTAB_SD_VCP, &myserialcfg);
+}
+#endif
 

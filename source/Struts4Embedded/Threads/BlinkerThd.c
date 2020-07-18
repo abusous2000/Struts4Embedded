@@ -1,5 +1,5 @@
 #include "Strust4EmbeddedConf.h"
-#if S4E_USE_BLINKER_THD == 1
+#if S4E_USE_BLINKER_THD != 0
 #include "ch.h"
 #include "hal.h"
 #include "Strust4Embedded.h"

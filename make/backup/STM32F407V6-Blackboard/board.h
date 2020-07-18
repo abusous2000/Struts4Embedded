@@ -27,14 +27,14 @@
 /*===========================================================================*/
 
 /*
- * Setup for Seeed Arch Max board.
+ * Setup for STM32F407V6-Blackboard based on Seeed Arch Max.
  */
 
 /*
  * Board identifier.
  */
 #define BOARD_SEEED_ARCH_MAX
-#define BOARD_NAME                  "Seeed Arch Max"
+#define BOARD_NAME                  "STM32F407V6-Blackboard"
 
 /*
  * Ethernet PHY type.
@@ -44,6 +44,22 @@
 #define BOARD_PHY_ID            MII_LAN8720_ID
 #define BOARD_PHY_RMII
 
+
+/*
+ *
+MDIO	<=>		PA_2 --black
+MDC	<=>			PC_1---white
+nINT/RETCLK	<=>	PA_1---Eggplant
+CRS	<=>			PA_7---Gray
+RX0	<=>			PC_4---blue
+RX1	<=>			PC_5-- green
+TX_EN	<=>		PB_11--orange
+TX0	<=>			PB_12--yellow
+TX1	<=>			PB_13--Eggplant
+GND	<=>			GND
+VCC	<=>			+3.3V
+ *
+ */
 /*
  * Board oscillators-related settings.
  */

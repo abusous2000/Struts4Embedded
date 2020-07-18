@@ -11,14 +11,20 @@ static int  				 maxActionEventCount 		  = 0;
 static map_t                 *actionEventsMap             = NULL;
 
 ActionEvent_Typedef *sendActionEvent(char *aeName){
-  ActionEvent_Typedef     *pActionEvent = (ActionEvent_Typedef*)chFifoTakeObjectI(pMainQueue);//Get a free object from pool
+  ActionEvent_Typedef     *tmp = getActionEvent(aeName);//This is more like memcpy the AE definition, & later override the pData field, see triggerActionEventNoLock()
 
-  pActionEvent->processed = 0;
-  if ( pActionEvent != NULL ){
-      *pActionEvent = *(getActionEvent(aeName));//This is more like memcpy the AE definition, & later override the pData field, see triggerActionEventNoLock()
-      chFifoSendObjectI(pMainQueue,pActionEvent);
+  if ( tmp != NULL){
+	  ActionEvent_Typedef     *pActionEvent = (ActionEvent_Typedef*)chFifoTakeObjectI(pMainQueue);//Get a free object from pool
+
+	  pActionEvent->processed = 0;
+	  //Do memory copy ONLY after you receive a NULL pointer.
+	 *pActionEvent =    *tmp;
+	 chFifoSendObjectI(pMainQueue,pActionEvent);
+
+	 return pActionEvent;
   }
-  return pActionEvent;
+
+  return NULL;
 }
 ActionEvent_Typedef *getActionEventByNdx(int ndx){
    return gActionEvents[ndx];
@@ -53,6 +59,8 @@ ActionEvent_Typedef *triggerActionEventNoLock(char *aeName, char *pData, uint32_
   }
   ActionEvent_Typedef *pAE = sendActionEvent(aeName);
 
+  if ( pAE == NULL )
+	  return NULL;
   pAE->dataType = IS_CHAR_STR_NULL(pData)?INT_DTYPE:CHAR_DTYPE;
   //Use memory pool only when needed. If that was the case, then
   //Always deep copy when char data else memory corruption will happen
@@ -83,6 +91,8 @@ ActionEvent_Typedef *triggerActionEvent(char *aeName, char *pData, uint32_t data
   chSchRescheduleS();
   chSysUnlock();
 
+  if ( pAE == NULL )
+	  dbgprintf("AE % doesn't exists!!\r\n",aeName);
   return pAE;
 }
 ActionEvent_Typedef *triggerActionEventFromISR(char *aeName, char *pData, uint32_t data, char *eventSource){
@@ -94,7 +104,8 @@ ActionEvent_Typedef *triggerActionEventFromISR(char *aeName, char *pData, uint32
 }
 CC_WEAK
 int32_t defaultAction(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
-   dbgprintf("Executing defaultAction\r\n");
+
+
 
    return MSG_OK;
 }

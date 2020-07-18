@@ -5,7 +5,7 @@
  *      Author: abusous2000
  */
 #include "Strust4EmbeddedConf.h"
-#if S4E_USE_WIFI_MODULE_THD == 1
+#if S4E_USE_WIFI_MODULE_THD != 0
 #include "ch.h"
 #include "hal.h"
 #include "Strust4Embedded.h"

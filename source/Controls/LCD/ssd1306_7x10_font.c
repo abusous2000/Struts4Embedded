@@ -1,5 +1,5 @@
 #include "ssd1306.h"
-#if S4E_USE_SSD1306_LCD == 1
+#if S4E_USE_SSD1306_LCD != 0
 #include <stdbool.h>
 #include <stdint.h>
 

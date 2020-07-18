@@ -10,12 +10,21 @@
 #ifndef S4E_USE_PWM
 #define S4E_USE_PWM 	0
 #endif
-#if S4E_USE_PWM == 1
+#if S4E_USE_PWM != 0
 #ifndef SOURCE_STRUTS4EMBEDDED_PWM_PWM_H_
 #define SOURCE_STRUTS4EMBEDDED_PWM_PWM_H_
 
-#define PWM_DRIVER 		PWMD8
-#define TIM8_FREQ 		10000
+
+
+#define TIM_FREQ 		10000
+//the defaults are tailored for STM32F7xxx
+#ifndef PWM_LINE1
+#define PWM_LINE1 		LINE_ARD_D0
+#define PWM_LINE2 		LINE_ARD_D1
+#define PWM_LINE1_CH    0
+#define PWM_LINE2_CH    1
+#define PWM_LINE_AF   	3
+#endif
 #ifdef __cplusplus
  extern "C" {
 #endif

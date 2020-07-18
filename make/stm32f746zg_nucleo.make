@@ -90,13 +90,10 @@ MCU  = cortex-m7
 
 # Imported source files and paths.
 CHIBIOS  := ../../..
-CHIBIOS_CONTRIB :=/home/abusous2000/Downloads/Temp/ChibiOS-Contrib
-CH_CUMMUNITY    := ../../../community/os/various/
 BOARD_NAME := stm32f746zg_nucleo
-CONFDIR  := ./cfg/$(BOARD_NAME)
-BUILDDIR := ./build/$(BOARD_NAME)
-DEPDIR   := ./.dep/$(BOARD_NAME)
-ALLINC  += $(CH_CUMMUNITY)
+STRUTS4EMBEDDED :=$(CHIBIOS)/demos/STM32/Struts4Embedded/source/Struts4Embedded
+include $(STRUTS4EMBEDDED)/CommonS4EVars.mk
+
 
 # Licensing files.
 include $(CHIBIOS)/os/license/license.mk

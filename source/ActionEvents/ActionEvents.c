@@ -51,7 +51,7 @@ static int32_t togglePausePlay(ActionEvent_Typedef 	*pActionEvent){(void)pAction
 void updateDutyCycleBasedOnVolume(void){
 #if S4E_USE_PWM > 0
 	double dc= ((double)volume/100.0f);
-	setPWMDutyCycle(TIM8_FREQ*dc,TIM8_FREQ*dc);
+	setPWMDutyCycle(TIM_FREQ*dc,TIM_FREQ*dc);
 	dbgprintf("New Duty Cycle:%f\r\n",dc);
 #endif
 }
@@ -83,7 +83,7 @@ static int32_t nextTrack(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
 }
 
 int32_t setRGBLED(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
-#if S4E_USE_RGB > 0
+#if S4E_USE_RGB == 1
    if ( pActionEvent->u.pData != NULL){
 	   char temp[DATA_FIELD_WAS_LT_MAX];
 	   strlcpy(temp,pActionEvent->u.pData,DATA_FIELD_WAS_LT_MAX);
@@ -107,7 +107,7 @@ int32_t setRGBLED(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
 }
 
 static int32_t setPWMParams(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
-#if S4E_USE_PWM > 0
+#if S4E_USE_PWM == 1
 	if ( pActionEvent->u.pData != NULL){
 	   char temp[DATA_FIELD_WAS_LT_MAX];
 	   strlcpy(temp,pActionEvent->u.pData,DATA_FIELD_WAS_LT_MAX);

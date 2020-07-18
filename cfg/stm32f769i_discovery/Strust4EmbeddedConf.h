@@ -7,7 +7,7 @@
 
 #ifndef CFG_STRUST4EMBEDDEDCONF_H_
 #define CFG_STRUST4EMBEDDEDCONF_H_
-
+#define S4E_USE_SDCARD          1
 #define BLINKER_THD_STACK_SIZE             1024//512
 #ifndef USE_LCD_TFT
 #define USE_LCD_TFT 			0
@@ -29,6 +29,12 @@
 #endif
 #ifndef S4E_USE_PWM
 #define S4E_USE_PWM				1
+#define PWM_LINE1 		        LINE_ARD_D0
+#define PWM_LINE2 				LINE_ARD_D1
+#define PWM_LINE1_CH    		0
+#define PWM_LINE2_CH    		1
+#define PWM_LINE_AF   			3
+#define PWM_DRIVER 				PWMD8
 #endif
 #ifndef S4E_USE_RGB
 #define S4E_USE_RGB				1

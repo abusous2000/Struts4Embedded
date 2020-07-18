@@ -7,7 +7,18 @@
 
 #ifndef CFG_STRUST4EMBEDDEDCONF_H_
 #define CFG_STRUST4EMBEDDEDCONF_H_
-
+/*
+ * Pins Used by Ethernet
+ *  PA1  - ETH_RMII_REF_CLK
+ *  PA2  - ETH_RMII_MDIO
+ *  PA3  - ETH_RMII_MDINT
+ *	PB11 - GPIOB_PIN11_ETH_TX_EN
+ *	PB12 - GPIOB_PIN12_ETH_TX0
+ *	PB13 - GPIOB_PIN13_ETH_TX1
+ *  PC1  - ETH_RMII_MDC
+ *  PC4  - ETH_RMII_RXD0
+ *  PC5  - ETH_RMII_RXD1
+ */
 //#define MAX_ACTION_EVENTS                6
 #define BLINKER_THD_STACK_SIZE             1024//512
 
@@ -122,6 +133,5 @@
 
 
 #define SDMMC_ALREADY_CONFIG            1
-#define STM32_SDC_USE_SDMMC1            1
 #endif
 #endif /* CFG_STRUST4EMBEDDED_H_ */

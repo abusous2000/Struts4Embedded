@@ -91,14 +91,9 @@ MCU  = cortex-m4
 # Imported source files and paths.
 CHIBIOS  := ../../..
 STRUTS4EMBEDDED :=../Struts4Embedded/source/Struts4Embedded
-CHIBIOS_CONTRIB  :=/home/abusous2000/Downloads/Temp/ChibiOS-Contrib
 BOARD_NAME := stm32f429i_discovery
-CONFDIR  := ./cfg/$(BOARD_NAME)
-BUILDDIR := ./build/$(BOARD_NAME)
-DEPDIR   := ./.dep/$(BOARD_NAME)
-#To define macros (selective chprintf) add the following plus defining in your main.c the following var BaseSequentialStream *GlobalDebugChannel = (BaseSequentialStream *)&PORTAB_SD;
-CH_CUMMUNITY := ../../../community/os/various/
-ALLINC  += $(CH_CUMMUNITY)
+STRUTS4EMBEDDED :=$(CHIBIOS)/demos/STM32/Struts4Embedded/source/Struts4Embedded
+include $(STRUTS4EMBEDDED)/CommonS4EVars.mk
 
 # Licensing files.
 include $(CHIBIOS)/os/license/license.mk

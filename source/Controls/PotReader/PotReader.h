@@ -14,7 +14,7 @@
 #ifndef S4E_USE_POT
 #define S4E_USE_POT 0
 #endif
-#if S4E_USE_POT == 1
+#if S4E_USE_POT != 0
 #ifndef ADC_POT_TIM
 #define ADC_POT_TIM                 GPTD4
 #endif

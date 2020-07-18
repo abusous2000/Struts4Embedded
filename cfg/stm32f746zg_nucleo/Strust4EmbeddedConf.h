@@ -8,47 +8,70 @@
 #ifndef CFG_STRUST4EMBEDDEDCONF_H_
 #define CFG_STRUST4EMBEDDEDCONF_H_
 
+#ifndef S4E_USE_SDCARD
+#define S4E_USE_SDCARD 			0
+#endif
+
 #define BLINKER_THD_STACK_SIZE             1024//512
 #ifndef USE_LCD_TFT
 #define USE_LCD_TFT 			0
 #endif
+
 #ifndef S4E_USE_JOYSTICK
 #define S4E_USE_JOYSTICK        1
 #endif
+
 #ifndef S4E_USE_BLINKER_THD
 #define S4E_USE_BLINKER_THD     1
 #endif
+
 #ifndef S4E_USE_WIFI_MODULE_THD
 #define S4E_USE_WIFI_MODULE_THD 0
 #endif
+
 #ifndef S4E_USE_SSD1306_LCD
 #define S4E_USE_SSD1306_LCD     1
 #endif
+
 #ifndef S4E_USE_POT
 #define S4E_USE_POT             1
 #endif
+
 #ifndef S4E_USE_PWM
 #define S4E_USE_PWM				0
+#define PWM_LINE1 		        LINE_ARD_D0
+#define PWM_LINE2 				LINE_ARD_D1
+#define PWM_LINE1_CH    		0
+#define PWM_LINE2_CH    		1
+#define PWM_LINE_AF   			3
+#define PWM_DRIVER 				PWMD8
 #endif
+
 //With This board, you cannot used ARD_11 & ETH, there is a conflict
 #ifndef S4E_USE_BUZZER
-#define S4E_USE_BUZZER				0
+#define S4E_USE_BUZZER			0
 #endif
+
 #ifndef S4E_USE_RGB
 #define S4E_USE_RGB				0
 #endif
+
 #ifndef S4E_USE_MQTT
 #define S4E_USE_MQTT			1
 #endif
+
 #ifndef S4E_USE_WEB_SERVER
 #define S4E_USE_WEB_SERVER		0
 #endif
+
 #ifndef S4E_USE_FAULT_HANDLER
 #define S4E_USE_FAULT_HANDLER   1
 #endif
+
 #if S4E_USE_WEB_SERVER == 1 || S4E_USE_MQTT  == 1
 #define S4E_USE_ETHERNET		1
 #endif
+
 #define SSID_KEY						"ssid"
 #define SSID_VALUE						"ROR194"
 #define APP_NAME_KEY					"appName"

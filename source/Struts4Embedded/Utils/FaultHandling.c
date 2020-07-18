@@ -7,7 +7,7 @@
 
 #include "Strust4EmbeddedConf.h"
 
-#if S4E_USE_FAULT_HANDLER == 1
+#if S4E_USE_FAULT_HANDLER != 0
 #define FAULT_INFO_HOOK _fault_info_hook
 #include "fault_handlers.h"
 

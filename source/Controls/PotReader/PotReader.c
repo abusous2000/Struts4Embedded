@@ -9,7 +9,7 @@
 #include "Strust4EmbeddedConf.h"
 #include "ActionEventsThd.h"
 
-#if S4E_USE_POT == 1
+#if S4E_USE_POT != 0
 
 
 #define ADC_GRP1_NUM_CHANNELS   1
@@ -146,10 +146,13 @@ void checkOnPotVolumeChange(void){
   int8_t   potValue   = POT_VALUE_BTWN_0_TO_100;
   int8_t   delta      = potValue- lastPotValue;
 
-  if ( setVolumeActionEvent == NULL )
+  if ( setVolumeActionEvent == NULL ){
 	  setVolumeActionEvent = getActionEvent(SET_VOLUME_AE_NAME);
+	  if ( setVolumeActionEvent == NULL )
+		  dbgprintf("AE %s not found",SET_VOLUME_AE_NAME);
+  }
   //ignore changes within 1% margin of error
-  if ( ABS(delta) > 1 ){
+  if ( ABS(delta) > 2 && setVolumeActionEvent){
 	  lastPotValue = potValue;
 	  triggerActionEvent(setVolumeActionEvent->name,NULL,potValue,"pot");
   }

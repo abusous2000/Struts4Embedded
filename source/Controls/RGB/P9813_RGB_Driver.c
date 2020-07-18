@@ -1,6 +1,6 @@
 #include "P9813_RGB_Driver.h"
 
-#if S4E_USE_RGB == 1
+#if S4E_USE_RGB != 0
 
 #define _CLK_PULSE_DELAY    2
 #define _CL_RED             0
@@ -9,7 +9,7 @@
 
 static CPalTypedef IOData={        .line=LINE_IO_DATA,             .mode=RGB_LED_GPIO_MODE};
 static CPalTypedef IOClk ={        .line=LINE_IO_CLOCK,            .mode=RGB_LED_GPIO_MODE};
-static CPalTypedef *pIOData, *pIOClk;
+static CPalTypedef *pIOData = NULL, *pIOClk = NULL;
 //io_data(D5)
 static uint8_t numOfLEDs;
 static bool    driverInit = false;

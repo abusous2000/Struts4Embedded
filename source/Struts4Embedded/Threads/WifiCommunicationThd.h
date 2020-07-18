@@ -3,7 +3,7 @@
 
 #include "Strust4EmbeddedConf.h"
 
-#if S4E_USE_WIFI_MODULE_THD == 1
+#if S4E_USE_WIFI_MODULE_THD != 0
 #include "JsonParser.h"
 #ifndef WIFI_SD
 #define WIFI_SD                 SD5

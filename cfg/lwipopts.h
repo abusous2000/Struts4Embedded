@@ -84,10 +84,10 @@
 #define LWIP_SO_SNDTIMEO                1
 #define LWIP_SO_RCVTIMEO                1
 
-#define DOCKER_BROKER 					IPADDR4_INIT_BYTES(172, 17, 0, 2)
+#define MQTT_BROKER 					IPADDR4_INIT_BYTES(172, 17, 0, 2)
 #define MQTT_DASHBOARD_BROKER 			IPADDR4_INIT_BYTES(18,195,236,123)
 #define HOST_IP_ADDRESS					IPADDR4_INIT_BYTES(10, 42, 0, 10)
-#define DOCKER_BROKER_PORT				1883
+#define MQTT_BROKER_PORT				1883
 #define MAX_TOPIC_NAME          		128
 #if !defined(LWIP_IPADDR)
 #define LWIP_IPADDR(p)                  IP4_ADDR(p, 10, 42, 0, 10)//IP4_ADDR(p, 192, 168, 1, 10)

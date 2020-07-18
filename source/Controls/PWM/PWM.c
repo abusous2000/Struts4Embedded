@@ -5,7 +5,7 @@
  *      Author: abusous2000
  */
 #include "Strust4EmbeddedConf.h"
-#if S4E_USE_PWM == 1
+#if S4E_USE_PWM != 0
 #include "PWM.h"
 
 
@@ -19,24 +19,30 @@ static void pwmc1cb(PWMDriver *pwmp) {
 static void pwmc2cb(PWMDriver *pwmp) {
   (void)pwmp;
 }
+static void pwmc3cb(PWMDriver *pwmp) {
+  (void)pwmp;
+}
+static void pwmc4cb(PWMDriver *pwmp) {
+  (void)pwmp;
+}
 static PWMConfig pwmcfg = {
-  TIM8_FREQ,                                    /* 10kHz PWM clock frequency.   */
-  TIM8_FREQ,                                    /* Initial PWM period 1s.       */
+  TIM_FREQ,                                    /* 10kHz PWM clock frequency.   */
+  TIM_FREQ,                                    /* Initial PWM period 1s.       */
   pwmcb,
   {
    {PWM_OUTPUT_ACTIVE_HIGH, pwmc1cb},
    {PWM_OUTPUT_ACTIVE_HIGH, pwmc2cb},
-   {PWM_OUTPUT_DISABLED, NULL},
-   {PWM_OUTPUT_DISABLED, NULL}
+   {PWM_OUTPUT_DISABLED, pwmc3cb},
+   {PWM_OUTPUT_DISABLED, pwmc4cb}
   },
   0,
   0
 };
 
 void setPWMDutyCycle(uint32_t dc1, uint32_t dc2){
-  pwmEnableChannel(&PWM_DRIVER, 0, PWM_PERCENTAGE_TO_WIDTH(&PWM_DRIVER, dc1));
+  pwmEnableChannel(&PWM_DRIVER, PWM_LINE1_CH, PWM_PERCENTAGE_TO_WIDTH(&PWM_DRIVER, dc1));
 //  pwmEnableChannelNotification(&PWM_DRIVER, 0);
-  pwmEnableChannel(&PWM_DRIVER, 1, PWM_PERCENTAGE_TO_WIDTH(&PWM_DRIVER, dc2));
+  pwmEnableChannel(&PWM_DRIVER, PWM_LINE2_CH, PWM_PERCENTAGE_TO_WIDTH(&PWM_DRIVER, dc2));
 //  pwmEnableChannelNotification(&PWM_DRIVER, 0);
 }
 void reInitPWM(uint32_t  frequency, pwmcnt_t    period , double dc1, double dc2){
@@ -47,8 +53,11 @@ void reInitPWM(uint32_t  frequency, pwmcnt_t    period , double dc1, double dc2)
    * -set up channel notification if required
    * Visit this link for details: https://gamazeps.github.io/posts/stm_pwm_driver.html
    */
-  palSetLineMode(LINE_ARD_D1, PAL_MODE_ALTERNATE(3));//PC6
-  palSetLineMode(LINE_ARD_D0, PAL_MODE_ALTERNATE(3));//PC7
+
+  //you need to oscilloscope to monitor these ports
+  palSetLineMode(PWM_LINE1, PWM_LINE_AF);
+  palSetLineMode(PWM_LINE2, PWM_LINE_AF);
+
 
   pwmcfg.period    = period;
   if ( PWM_DRIVER.state != PWM_STOP ){
@@ -66,7 +75,7 @@ void reInitPWM(uint32_t  frequency, pwmcnt_t    period , double dc1, double dc2)
 }
 
 void initPWM(void){
-  reInitPWM(TIM8_FREQ, TIM8_FREQ,.5f, 0.2f);
+  reInitPWM(TIM_FREQ, TIM_FREQ,.5f, 0.2f);
 }
 
 #endif

@@ -1,5 +1,5 @@
 #include "Strust4EmbeddedConf.h"
-#if S4E_USE_MQTT == 1
+#if S4E_USE_MQTT != 0
 #include "ch.h"
 #include "hal.h"
 #include "CommonHelper.h"

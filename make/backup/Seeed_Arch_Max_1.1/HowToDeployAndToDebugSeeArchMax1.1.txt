@@ -1,0 +1,16 @@
+For some reason, this is the only way I was able to make it work. 
+It is little not normal... but at least it enables you to debug
+
+ 1-install pyocd vi pip
+   pip install -U pyocd
+   python2.7 what worked form me. See this for details
+ 2-copy ch.bin to Seed's DAPLINK drive; as any mbed app deployment
+   2.2.press & hold the reset button for few seconds
+   2.1-sometimes you have to unplug the board from power
+   2.3 always before debugging, look at the serial console to make sure that u see the newer code
+ 3-run pyocd gdb
+ 4-Then from ChibiStodio open debugger as normal
+ 5-Always verify that you are running the latest code
+ 6-Monitor serial USB for debug output
+
+now every time you change your code, u need to copy the ch.bin file to Seeed manual as in step 2.

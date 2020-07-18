@@ -27,7 +27,7 @@
  */
 #include "Strust4EmbeddedConf.h"
 
-#if S4E_USE_WEB_SERVER == 1
+#if S4E_USE_WEB_SERVER != 0
 #include "ch.h"
 #include "hal.h"
 #include <dbgtrace.h>

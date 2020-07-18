@@ -5,7 +5,7 @@
  *      Author: abusous2000
  */
 #include "Strust4EmbeddedConf.h"
-#if S4E_USE_SDCARD == 1
+#if S4E_USE_SDCARD != 0
 
 #ifndef SOURCE_SDCARD_SDCARD_H_
 #define SOURCE_SDCARD_SDCARD_H_
@@ -24,7 +24,9 @@
 #define SDMMCD3_LINE 	LINE_SD_D3		//  PAL_LINE(GPIOB,4)
 #define SDMMCCK_LINE 	LINE_SD_CLK		//  PAL_LINE(GPIOD,6)
 #define SDMMCMD_LINE 	LINE_SD_CMD		//  PAL_LINE(GPIOD,7)
+#ifdef LINE_SD_DETECT
 #define SDMMMC_DETECT   LINE_SD_DETECT	////PAL_LINE(GPIOI,15)
+#endif
 
 #endif
 
@@ -47,12 +49,16 @@
 #define SDMMMC_DETECT_AF    12		//  PAL_LINE(GPIOC, 13U)
 
 #endif
-#if STM32_SDC_USE_SDMMC1 == 1
-#define PROTTABLE_SDC SDCD1
-#elif STM32_SDC_USE_SDMMC2 == 1
-#define PROTTABLE_SDC SDCD2
+#if HAL_USE_MMC_SPI == 0
+	#if STM32_SDC_USE_SDMMC1 != 0
+	#define PROTTABLE_SDC SDCD1
+	#elif STM32_SDC_USE_SDMMC2 != 0
+	#define PROTTABLE_SDC SDCD2
+	#endif
+    #define SDIO_NOT_CONFIGURED TRUE
 #endif
-#define SDIO_NOT_CONFIGURED TRUE
+
+
 #define READ_FILES_FROM_FOLDER "readFilesFromFolder"
 
 

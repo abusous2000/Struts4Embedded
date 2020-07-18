@@ -5,7 +5,7 @@
  *      Author: abusous2000
  */
 #include "Strust4EmbeddedConf.h"
-#if S4E_USE_ETHERNET == 1
+#if S4E_USE_ETHERNET != 0
 #include "ch.h"
 #include "hal.h"
 #include "Strust4Embedded.h"
@@ -19,7 +19,7 @@ CC_WEAK void onDefaultMQTTBrokerConnect(MqttConnection_Typedef *pMqttConnection)
 
 CC_WEAK void onDefaultMQTTBrokerDisconnect(MqttConnection_Typedef *pMqttConnection){(void)pMqttConnection;
 }
-#if S4E_USE_MQTT == 1
+#if S4E_USE_MQTT != 0
 static struct mqtt_connect_client_info_t clientInfo = {
   .client_id=MQTT_CLIENT_ID,
   .client_user=NULL,
@@ -49,8 +49,8 @@ static void onBrokerConnection(MqttConnection_Typedef *pMqttConnection);
 static MqttPublishInfo_Typedef   defaultMQTTTopicInfo      = {.topic=DEFAULT_MQTT_PUBLISH_TOPIC, .qos = 0, .retain = 0};
 static MqttSubscribeInfo_Typedef subscribeInfo             = {.topic=MQTT_CMD_SUBSCRIBE_TOPIC, .onMessage=onMessage, .qos = 0};
 //static MqttSubscribeInfo_Typedef subscribeInfo2 = {.topic=MQTT_SUBSCRIBE_TOPIC2,.onMessage=onMessage,.qos = 0};
-static MqttConnection_Typedef defaultBroker      = {.brokerIpAddr=DOCKER_BROKER,
-                                              	   .brokerPort=DOCKER_BROKER_PORT,
+static MqttConnection_Typedef defaultBroker      = {.brokerIpAddr=MQTT_BROKER,
+                                              	   .brokerPort=MQTT_BROKER_PORT,
 												   .defaultOnMessage=defaultOnMessage,
 												   .onConnection=onBrokerConnection,
 												   .onDisconnection=onBrokerDisconnection,
@@ -58,7 +58,7 @@ static MqttConnection_Typedef defaultBroker      = {.brokerIpAddr=DOCKER_BROKER,
 												   .payload=NULL,
 												   .pClientInfo=&clientInfo};
 static MqttConnection_Typedef mqttDashboardBroker   = {.brokerIpAddr=MQTT_DASHBOARD_BROKER,
-                                              	   .brokerPort=DOCKER_BROKER_PORT,
+                                              	   .brokerPort=MQTT_BROKER_PORT,
 												   .defaultOnMessage=defaultOnMessage,
 												   .onConnection=onBrokerConnection,
 												   .onDisconnection=onBrokerDisconnection,
@@ -128,11 +128,11 @@ void sendToDefaultMQTTQueue(char *payload){
 void initMQTTClient(void){
     lwipInit(NULL);
 
-#if S4E_USE_WEB_SERVER == 1
+#if S4E_USE_WEB_SERVER != 0
     //httpd_init();/*This is LWIP version of a web server*/
     chThdCreateStatic(wa_http_server, sizeof(wa_http_server), NORMALPRIO + 1, http_server, NULL);
 #endif
-#if S4E_USE_MQTT == 1
+#if S4E_USE_MQTT != 0
     defaultBroker.payload = chHeapAlloc(NULL,MAX_MQTT_PAYLOAD);
     chDbgCheck(defaultBroker.payload != NULL);
     mqttBrokerConnect(&defaultBroker);

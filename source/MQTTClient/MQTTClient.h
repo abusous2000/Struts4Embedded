@@ -9,7 +9,7 @@
 #define SOURCE_MQTTCLIENT_MQTTCLIENT_H_
 #include "Strust4EmbeddedConf.h"
 
-#if S4E_USE_ETHERNET == 1
+#if S4E_USE_ETHERNET != 0
 #include "MqttHelper.h"
 #include "ccportab.h"
 #ifdef __cplusplus
@@ -26,6 +26,6 @@ CC_WEAK void onDefaultMQTTBrokerConnect(MqttConnection_Typedef *pMqttConnection)
 #ifdef __cplusplus
 }
 #endif
-#endif/* S4E_USE_ETHERNET == 1 */
+#endif/* S4E_USE_ETHERNET  != 0 */
 
 #endif /* SOURCE_MQTTCLIENT_MQTTCLIENT_H_ */

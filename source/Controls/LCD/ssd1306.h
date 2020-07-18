@@ -1,16 +1,15 @@
-
+#include "Strust4EmbeddedConf.h"
 #ifndef __SSD1306_H__
 #define __SSD1306_H__
 
 #include "ch.h"
 #include "hal.h"
 #include <dbgtrace.h>
-#include "Strust4EmbeddedConf.h"
 
 #ifndef S4E_USE_SSD1306_LCD
 #define S4E_USE_SSD1306_LCD 0
 #endif
-#if S4E_USE_SSD1306_LCD == 1
+#if S4E_USE_SSD1306_LCD != 0
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/

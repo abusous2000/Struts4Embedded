@@ -83,7 +83,7 @@
         "type": "debug",
         "z": "78fd2299.d76c7c",
         "name": "debugPopulateTrackdDropDown",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -356,7 +356,8 @@
         "wires": [
             [
                 "e4a1d6b6.cf9e68",
-                "59fe37d9.3d2868"
+                "59fe37d9.3d2868",
+                "bc1c63fe.c33298"
             ]
         ]
     },
@@ -370,7 +371,7 @@
         "retain": "",
         "broker": "b367818b.872ae8",
         "x": 1390,
-        "y": 1180,
+        "y": 1260,
         "wires": []
     },
     {
@@ -396,7 +397,8 @@
         "wires": [
             [
                 "e4a1d6b6.cf9e68",
-                "59fe37d9.3d2868"
+                "59fe37d9.3d2868",
+                "bc1c63fe.c33298"
             ]
         ]
     },
@@ -413,7 +415,8 @@
         "wires": [
             [
                 "e4a1d6b6.cf9e68",
-                "59fe37d9.3d2868"
+                "59fe37d9.3d2868",
+                "bc1c63fe.c33298"
             ],
             [
                 "1360c5a8.f7cf7a"
@@ -451,12 +454,13 @@
         "func": "var newPayload = {actionEvent: \"setRGBLED\",data: msg.payload};\n\nvar newMsg = {payload: newPayload};\n\nreturn [newMsg,{payload: \"RGB SET\"}];",
         "outputs": 2,
         "noerr": 0,
-        "x": 660,
-        "y": 1460,
+        "x": 700,
+        "y": 1480,
         "wires": [
             [
                 "e4a1d6b6.cf9e68",
-                "59fe37d9.3d2868"
+                "59fe37d9.3d2868",
+                "bc1c63fe.c33298"
             ],
             [
                 "1360c5a8.f7cf7a"
@@ -537,7 +541,7 @@
         "raw": false,
         "topic": "Change",
         "name": "Change",
-        "x": 860,
+        "x": 820,
         "y": 1340,
         "wires": []
     },
@@ -681,7 +685,8 @@
         "wires": [
             [
                 "e4a1d6b6.cf9e68",
-                "59fe37d9.3d2868"
+                "59fe37d9.3d2868",
+                "bc1c63fe.c33298"
             ]
         ]
     },
@@ -760,8 +765,8 @@
         "qos": "0",
         "retain": "",
         "broker": "b367818b.872ae8",
-        "x": 1410,
-        "y": 1060,
+        "x": 1390,
+        "y": 1120,
         "wires": []
     },
     {
@@ -787,7 +792,8 @@
         "wires": [
             [
                 "59fe37d9.3d2868",
-                "e4a1d6b6.cf9e68"
+                "e4a1d6b6.cf9e68",
+                "bc1c63fe.c33298"
             ]
         ]
     },
@@ -842,7 +848,8 @@
         "y": 80,
         "wires": [
             [
-                "d3191855.a0a3a8"
+                "d3191855.a0a3a8",
+                "cf8c599.bf180a8"
             ]
         ]
     },
@@ -908,7 +915,9 @@
         "wires": [
             [
                 "ca512b72.77619",
-                "d2d87f1f.f6173"
+                "d2d87f1f.f6173",
+                "1540d6b0.33bbf9",
+                "d5618ee4.f097d"
             ]
         ]
     },
@@ -922,7 +931,64 @@
         "retain": "",
         "broker": "b367818b.872ae8",
         "x": 1550,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "bc1c63fe.c33298",
+        "type": "mqtt out",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "topic": "dev/cmd/STM32F407/mp3Player",
+        "qos": "0",
+        "retain": "",
+        "broker": "b367818b.872ae8",
+        "x": 1390,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "1540d6b0.33bbf9",
+        "type": "mqtt out",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "topic": "dev/cmd/STM32F746G/mp3Player",
+        "qos": "0",
+        "retain": "",
+        "broker": "b367818b.872ae8",
+        "x": 1550,
         "y": 160,
+        "wires": []
+    },
+    {
+        "id": "d5618ee4.f097d",
+        "type": "mqtt out",
+        "z": "78fd2299.d76c7c",
+        "name": "",
+        "topic": "dev/cmd/STM32F407/mp3Player",
+        "qos": "0",
+        "retain": "",
+        "broker": "b367818b.872ae8",
+        "x": 1550,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "cf8c599.bf180a8",
+        "type": "ui_toast",
+        "z": "78fd2299.d76c7c",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "topic": "Change",
+        "name": "Change",
+        "x": 1260,
+        "y": 60,
         "wires": []
     },
     {

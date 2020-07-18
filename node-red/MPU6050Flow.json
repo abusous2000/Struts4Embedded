@@ -1,0 +1,381 @@
+[
+    {
+        "id": "ffb4b61c.911fa8",
+        "type": "tab",
+        "label": "MPU6050",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "a4a4c06b.b42b28",
+        "type": "mqtt in",
+        "z": "ffb4b61c.911fa8",
+        "name": "TriggerFrom MQTT",
+        "topic": "dev/update/+/mpu6050",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "c9ac4ed0.14a108",
+        "x": 110,
+        "y": 200,
+        "wires": [
+            [
+                "e1b35fd.64d8ba",
+                "f7cef940.d66ae8"
+            ]
+        ]
+    },
+    {
+        "id": "f7cef940.d66ae8",
+        "type": "debug",
+        "z": "ffb4b61c.911fa8",
+        "name": "debugMQTTInboundMsg",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 590,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "e1b35fd.64d8ba",
+        "type": "json",
+        "z": "ffb4b61c.911fa8",
+        "name": "To JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 300,
+        "y": 380,
+        "wires": [
+            [
+                "c6040e09.818b7",
+                "3a727fa8.f1c1e8",
+                "2496f061.0bb6c",
+                "6ae25243.4c848c"
+            ]
+        ]
+    },
+    {
+        "id": "3a727fa8.f1c1e8",
+        "type": "ui_text",
+        "z": "ffb4b61c.911fa8",
+        "group": "d7238d97.c56468",
+        "order": 11,
+        "width": 7,
+        "height": 1,
+        "name": "",
+        "label": "Acceleration X",
+        "format": "{{msg.payload.XA}}",
+        "layout": "row-spread",
+        "x": 740,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "2c32d1cd.88ac46",
+        "type": "ui_chart",
+        "z": "ffb4b61c.911fa8",
+        "name": "Pitch, Roll, & Yaw",
+        "group": "d7238d97.c56468",
+        "order": 1,
+        "width": 13,
+        "height": 6,
+        "label": "Pitch, Roll, & Yaw",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "120",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "1",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#f83913",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#ff05a6",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 810,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c6040e09.818b7",
+        "type": "function",
+        "z": "ffb4b61c.911fa8",
+        "name": "Format Data to Chart",
+        "func": "var pitch    = {topic: \"Pitch\",  payload: msg.payload.Pitch};\nvar roll     = {topic: \"Roll\",   payload: msg.payload.Roll};\nvar yaw      = {topic: \"Yaw\",    payload: msg.payload.Yaw};\n\n\n\n\nreturn [pitch,roll,yaw];",
+        "outputs": 3,
+        "noerr": 0,
+        "x": 520,
+        "y": 580,
+        "wires": [
+            [
+                "2c32d1cd.88ac46"
+            ],
+            [
+                "2c32d1cd.88ac46"
+            ],
+            [
+                "2c32d1cd.88ac46"
+            ]
+        ]
+    },
+    {
+        "id": "2496f061.0bb6c",
+        "type": "ui_text",
+        "z": "ffb4b61c.911fa8",
+        "group": "d7238d97.c56468",
+        "order": 11,
+        "width": 7,
+        "height": 1,
+        "name": "",
+        "label": "Acceleration Y",
+        "format": "{{msg.payload.YA}}",
+        "layout": "row-spread",
+        "x": 740,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "53eb7d0e.7a4284",
+        "type": "ui_button",
+        "z": "ffb4b61c.911fa8",
+        "name": "DMP",
+        "group": "d7238d97.c56468",
+        "order": 6,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "DMP",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "{\"actionEvent\":\"setAlgorithm\",\"data\":\"DMP\"}",
+        "payloadType": "json",
+        "topic": "",
+        "x": 250,
+        "y": 820,
+        "wires": [
+            [
+                "5fbd305c.eb56"
+            ]
+        ]
+    },
+    {
+        "id": "dd9fb0e9.840258",
+        "type": "ui_button",
+        "z": "ffb4b61c.911fa8",
+        "name": "RAW",
+        "group": "d7238d97.c56468",
+        "order": 6,
+        "width": "0",
+        "height": "0",
+        "passthru": false,
+        "label": "Raw",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "{\"actionEvent\":\"setAlgorithm\",\"data\":\"RAW\"}",
+        "payloadType": "json",
+        "topic": "",
+        "x": 250,
+        "y": 720,
+        "wires": [
+            [
+                "17f2ec0d.50535c"
+            ]
+        ]
+    },
+    {
+        "id": "72860a6.2f80274",
+        "type": "ui_button",
+        "z": "ffb4b61c.911fa8",
+        "name": "Toggle Pause",
+        "group": "d7238d97.c56468",
+        "order": 4,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "Toggle Pause",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "{\"actionEvent\":\"togglePause\"}",
+        "payloadType": "json",
+        "topic": "dev/cmd/STM32F429ZI/mpu6050",
+        "x": 220,
+        "y": 900,
+        "wires": [
+            [
+                "7a786219.8979ec"
+            ]
+        ]
+    },
+    {
+        "id": "a2055dc6.75f168",
+        "type": "mqtt out",
+        "z": "ffb4b61c.911fa8",
+        "name": "",
+        "topic": "dev/cmd/STM32F429ZI/mpu6050",
+        "qos": "0",
+        "retain": "",
+        "broker": "c9ac4ed0.14a108",
+        "x": 720,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "ffd0444c.3c8f7",
+        "type": "ui_toast",
+        "z": "ffb4b61c.911fa8",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "topic": "Change",
+        "name": "Change",
+        "x": 660,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "7a786219.8979ec",
+        "type": "function",
+        "z": "ffb4b61c.911fa8",
+        "name": "Pausing MPU",
+        "func": "\nreturn [msg,{payload: \"Toggling Pause\"}];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 420,
+        "y": 900,
+        "wires": [
+            [
+                "a2055dc6.75f168"
+            ],
+            [
+                "ffd0444c.3c8f7"
+            ]
+        ]
+    },
+    {
+        "id": "5fbd305c.eb56",
+        "type": "function",
+        "z": "ffb4b61c.911fa8",
+        "name": "set DMP",
+        "func": "\nreturn [msg,{payload: \"DMP Chosen\"}];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 400,
+        "y": 820,
+        "wires": [
+            [
+                "a2055dc6.75f168"
+            ],
+            [
+                "ffd0444c.3c8f7"
+            ]
+        ]
+    },
+    {
+        "id": "17f2ec0d.50535c",
+        "type": "function",
+        "z": "ffb4b61c.911fa8",
+        "name": "set Raw",
+        "func": "\nreturn [msg,{payload: \"Raw Chosen\"}];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 420,
+        "y": 740,
+        "wires": [
+            [
+                "a2055dc6.75f168"
+            ],
+            [
+                "ffd0444c.3c8f7"
+            ]
+        ]
+    },
+    {
+        "id": "6ae25243.4c848c",
+        "type": "ui_text",
+        "z": "ffb4b61c.911fa8",
+        "group": "d7238d97.c56468",
+        "order": 11,
+        "width": 7,
+        "height": 1,
+        "name": "",
+        "label": "Current Algorithm",
+        "format": "{{msg.payload.algorithm}}",
+        "layout": "row-spread",
+        "x": 750,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "c9ac4ed0.14a108",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "localhost",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": false,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "d7238d97.c56468",
+        "type": "ui_group",
+        "z": "",
+        "name": "MPU6050 with STM32F429ZI",
+        "tab": "58d627d6.bfa2b",
+        "order": 1,
+        "disp": true,
+        "width": "18",
+        "collapse": false
+    },
+    {
+        "id": "58d627d6.bfa2b",
+        "type": "ui_tab",
+        "z": "",
+        "name": "MPUC6050",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]

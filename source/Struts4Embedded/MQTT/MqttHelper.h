@@ -5,8 +5,7 @@
  *      Author: abusous2000
  */
 #include "Strust4EmbeddedConf.h"
-
-#if S4E_USE_MQTT == 1
+#if S4E_USE_MQTT != 0
 #ifndef SOURCE_MQTT_MQTTHELPER_H_
 #define SOURCE_MQTT_MQTTHELPER_H_
 #include "ch.h"

@@ -79,10 +79,10 @@ void initStruts4EmbeddedFramework(void){
 	if ( sysProperties != NULL )
 		return;
 	sysProperties = hashmap_new(20);
-
+#ifndef STM32F407xx
 	pPrintfMutex = &printfMutex;
 	chMtxObjectInit(pPrintfMutex);
-
+#endif
 	putSysProperty(&ssid);
 	putSysProperty(&pwd);
 	putSysProperty(&app);
