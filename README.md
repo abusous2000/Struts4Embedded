@@ -35,6 +35,7 @@ Simply clone each use case's repository from github into *ChibiOS/demo/STM32* fo
 - The MP3 Player expects the files to be played to be in folder */music*; which you can override in *main.c*
 - If you test with either STM32F407VET6 Blackboard, Seeed Arch Max 1.1 or STM32F407 Discovery boards, then use the relevant board files provided here in *[./make/make/backup/](https://github.com/abusous2000/Struts4Embedded/tree/master/make/backup)* folder; it contain the the board files that were used. 
 - Every project was compiled & tested with C++ & STL Templates as well. However, please note the size of C++ binaries shall increase by at least 300k, and your RAM usage increases as well. The make files, used different links, and if you get a link error, you can copy them from *[./make/make/backup/](https://github.com/abusous2000/Struts4Embedded/tree/master/make/backup)*.
+
 # Licencing
 Basically Apache 2.0 has been adopted, therefore please be free to use as you see fit and I shall welcome your critical feedback. I hope this framework will help others in speeding up the development process using a tested & well designed framework. Therefore please be free to use and upgrade as you see fit.
 
