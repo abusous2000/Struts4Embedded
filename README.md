@@ -29,8 +29,8 @@ I created this architectural diagram for the MP3 player use case with STM32F769i
 The framework was tested using the following development boards: STM32F407 Discovery, [STM32F407VET6 Blackboard](https://os.mbed.com/users/hudakz/code/STM32F407VET6_Hello/shortlog/), [Seeed Arch Max 1.1](https://www.seeedstudio.com/Arch-Max-v1-1-p-2632.html), ST32F746 & STM32F769i discovery boards, STM32F446re-Nucleo, STM32F429zi-Nucleo, & STM32F746zg-Nucleo.
 
 # Projects Setup
+- If you don't already have ChibiOS 20.3.x, please download [ChibiOS 20.3.x](https://osdn.net/projects/chibios/releases/72607) 1st, and from now on its where it is installed, it will be referred to by *ChibiOS*
 - Clone each use case's repository from github into you *ChibiOS/demo/STM32* folder, and then import the make projects into ChibiStudio like any other project. 
-- Download [ChibiOS 20.3.x](https://osdn.net/projects/chibios/releases/72607), and from now on this will be knows as *ChibiOS*
 - *LWIP* zip file is expected to be expanded in *ChibiOS/ext* folder; same goes for *FATFS*.
 - If you decide to use uGFX, then please clone the modified version of [uGFX v2.7](https://github.com/abusous2000/uGFX-2.7) in *ChibiOS/ext* folder; this version has been modified slightly. Note that recent versions were very hard to integrate with ChibiOS.
 - In *ChiboOS/* root folder; please clone [ChibiOS-Contrib](https://github.com/ChibiOS/ChibiOS-Contrib); S4E is dependent on it.
