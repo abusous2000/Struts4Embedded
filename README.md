@@ -17,7 +17,7 @@ I created this architectural diagram for the MP3 player use case with STM32F769i
 # Supported Boards
 The framework was tested using the following development boards: STM32F407 Discovery, [STM32F407VET6 Blackboard](https://os.mbed.com/users/hudakz/code/STM32F407VET6_Hello/shortlog/), [Seeed Arch Max 1.1](https://www.seeedstudio.com/Arch-Max-v1-1-p-2632.html), ST32F746 & STM32F769i discovery boards, STM32F446re-Nucleo, STM32F429zi-Nucleo, & STM32F746zg-Nucleo.
 
-# How to Test, Build & Deploy?
+# Projects Setup
 Simply clone each use case's repository from github into *ChibiOS/demo/STM32* folder, and then import the make projects into ChibiStudio like any other project. Please take a note of the following; they will shorten your start-up time: 
 
 - Download [ChibiOS 20.3.x](https://osdn.net/projects/chibios/releases/72607), and from now on this will be knows as *ChibiOS*
@@ -32,7 +32,7 @@ Simply clone each use case's repository from github into *ChibiOS/demo/STM32* fo
 - Make sure that you test Node-Red UI Dashboard as the last step. Therefore,  1st make sure that your MQTT broker is receiving and send a message to the embedded application. It should be noted that I tested with Node-Red V1.0.4
 - Node-Red Flows can be found in *[./node-red](https://github.com/abusous2000/Struts4Embedded/tree/master/node-red)* folder, and this current deployment is dependent on the following node modules: dashboard, contrib-fs, elasticsearch7, sqlite3, rbe, tail & binance. Therefore please install them before importing the flows.
 - *Mosquito MQTT Broker* was used as the primary MQTT broker; other online MQTT brokers (i.e. Dashboard Broker) were tested and they were just fine. Please inspect *[./conf/lwipopts.h](https://github.com/abusous2000/Struts4Embedded/blob/master/cfg/lwipopts.h#L87)* for MQTT broker and network parameters.
-- See folder *[./source/ESP8266WiFiModule](https://github.com/abusous2000/Struts4Embedded/tree/master/source/ESP8266WiFiModule)* for the Arduino sketch that runs the Web Service (web Server) on ESP8266. Please change to your WiFi's SSID & password at the top of the [sketch](https://github.com/abusous2000/Struts4Embedded/blob/master/source/ESP8266WiFiModule/ESP8266WiFiModule.ino).
+- See folder *[./source/ESP8266WiFiModule](https://github.com/abusous2000/Struts4Embedded/tree/master/source/ESP8266WiFiModule)* for the Arduino sketch that runs the Web Service (web Server) on ESP8266. Please change to your WiFi's SSID & password at the top of the [sketch](https://github.com/abusous2000/Struts4Embedded/blob/master/source/ESP8266WiFiModule/ESP8266WiFiModule.ino#L23).
 - The MP3 Player expects the files to be played to be in folder */music*; which you can override in *main.c*
 - If you test with either STM32F407VET6 Blackboard, Seeed Arch Max 1.1 or STM32F407 Discovery boards, then use the relevant board files provided here in *[./make/make/backup/](https://github.com/abusous2000/Struts4Embedded/tree/master/make/backup)* folder; it contain the the board files that were used. 
 - Every project was compiled & tested with C++ & STL Templates as well. However, please note the size of C++ binaries shall increase by at least 300k, and your RAM usage increases as well. The make files, used different links, and if you get a link error, you can copy them from *[./make/make/backup/](https://github.com/abusous2000/Struts4Embedded/tree/master/make/backup)*. I recomend copy all _./Struts4Embedded/make/*.ld_ file to *ChibiOS//os/common/startup/ARMCMx/compilers/GCC/ld*
