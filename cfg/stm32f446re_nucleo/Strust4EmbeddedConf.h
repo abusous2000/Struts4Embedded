@@ -8,6 +8,7 @@
 #ifndef CFG_STRUST4EMBEDDEDCONF_H_
 #define CFG_STRUST4EMBEDDEDCONF_H_
 
+#define PPM_FRAME_DECODER		1
 #ifndef S4E_USE_SDCARD
 #define S4E_USE_SDCARD 			0
 #endif
@@ -100,4 +101,12 @@
 #define ADC_POT_TIM                     GPTD3 ///See p. 386 in RM
 #define ADC_POT                     	ADCD1
 #define ADC_CHANNEL_IN 					ADC_CHANNEL_IN0
+
+#define PPM_DECODING_DEBUG				0
+#define MAX_FRAMES_TO_COLLECT     		10
+#define PORTABLE_ICU_LINE 				PAL_LINE(GPIOB, 6U) //D10
+#define PORTABLE_ICUD 					ICUD4
+#define PORTABLE_ICU_AF  				2
+#define PORTABLE_ICU_CHANNEL 			ICU_CHANNEL_1
+
 #endif /* CFG_STRUST4EMBEDDED_H_ */

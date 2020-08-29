@@ -115,9 +115,9 @@
 #define MPU_INT_PORT					GPIOA
 #define MPU_INT_PIN						10
 
-#define PPM_DECODING_DEBUG				1
+#define PPM_DECODING_DEBUG				0
 #define MAX_FRAMES_TO_COLLECT     		10
-#define PORTABLE_ICU_LINE 				PAL_LINE(GPIOA, 0U) //PE10
+#define PORTABLE_ICU_LINE 				PAL_LINE(GPIOA, 0U) //PA0-Right pin Rail..3rd left from bottom
 #define PORTABLE_ICUD 					ICUD5
 #define PORTABLE_ICU_AF  				2
 #define PORTABLE_ICU_CHANNEL 			ICU_CHANNEL_1

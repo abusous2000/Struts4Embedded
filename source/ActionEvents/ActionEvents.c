@@ -138,11 +138,21 @@ static int32_t setPWMParams(ActionEvent_Typedef 	*pActionEvent){(void)pActionEve
    return MSG_OK;
 }
 #if PPM_FRAME_DECODER != 0
+static uint8_t  				lastCh3Value = 0;
 void onChannelPPMValueChange (uint8_t ch, uint8_t currentValue, uint8_t newValue){
 	ButtonStats_Typedef buttonStatus;
 
 	dbgprintf("OnChangeChannelValue: %d\t%d\t%d\r\n", ch, currentValue, newValue);
 	switch(ch){
+		case RC_CH3:{
+			uint32_t  currentValue =  100 *(newValue-RC_MIN_VALUE)/(RC_MAX_VALUE - RC_MIN_VALUE);
+			int8_t   delta         = currentValue- lastCh3Value;
+
+			if ( delta > 2 )
+				triggerActionEvent(SET_VOLUME_AE_NAME,NULL,currentValue,"RC");
+		}
+		break;
+
 		case RC_SWB:
 			buttonStatus = getRCButtonStatus(newValue);
 			if ( buttonStatus != BUTTON_STATE_UNKNOWN)

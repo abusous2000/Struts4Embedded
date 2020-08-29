@@ -30,12 +30,33 @@
 #define RC_MID_VALUE                    66
 #endif
 
+#define RC_CH1							0
+#define RC_CH2							1
+#define RC_CH3							2
+#define RC_CH4							3
+
 #ifndef RC_SWA
 #define RC_SWA 							4
 #endif
 
 #ifndef RC_SWB
 #define RC_SWB 							5
+#endif
+
+#ifndef RC_SWC
+#define RC_SWC 							6
+#endif
+
+#ifndef RC_SWD
+#define RC_SWD 							7
+#endif
+
+#ifndef RC_SWE
+#define RC_SWE 							8
+#endif
+
+#ifndef RC_SWF
+#define RC_SWF 							9
 #endif
 
 #define TimeFromCycles2US(x)        	((x * 1000000)/FREQUENCY_USED)
