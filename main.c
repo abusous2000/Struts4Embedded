@@ -9,6 +9,9 @@
 #include "PotReader.h"
 #include "MQTTClient.h"
 #include "SDCard.h"
+#include "PPMFrameDecoder.h"
+
+
 #ifdef USE_USBCFG
 #include "usbcfg.h"
 static void initUSBCFG(void);
@@ -73,7 +76,9 @@ int main(void) {
 #if S4E_USE_ETHERNET == 1
   initMQTTClient();
 #endif
-
+#if PPM_FRAME_DECODER != 0
+ initPPMFrameDecoder();
+#endif
 #if S4E_USE_SDCARD == 1
   SDCardDriverITF_Typedef *pSDCardDriverITF 			= getSDCardDriver();
 

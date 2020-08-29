@@ -5,6 +5,7 @@
 #include "Strust4Embedded.h"
 #include "P9813_RGB_Driver.h"
 #include "PWM.h"
+#include "PPMFrameDecoder.h"
 
 static int8_t 		mute 	   			= 0;
 static int8_t       pause               = 0;
@@ -136,7 +137,26 @@ static int32_t setPWMParams(ActionEvent_Typedef 	*pActionEvent){(void)pActionEve
 
    return MSG_OK;
 }
+#if PPM_FRAME_DECODER != 0
+void onChannelPPMValueChange (uint8_t ch, uint8_t currentValue, uint8_t newValue){
+	ButtonStats_Typedef buttonStatus;
 
+	dbgprintf("OnChangeChannelValue: %d\t%d\t%d\r\n", ch, currentValue, newValue);
+	switch(ch){
+		case RC_SWB:
+			buttonStatus = getRCButtonStatus(newValue);
+			if ( buttonStatus != BUTTON_STATE_UNKNOWN)
+				triggerActionEvent(TOGGLE_PAUSE_AE_NAME,NULL,buttonStatus,"RC");
+			break;
+		case RC_SWA:
+			buttonStatus = getRCButtonStatus(newValue);
+			if ( buttonStatus != BUTTON_STATE_UNKNOWN)
+				triggerActionEvent(TOGGLE_MUTE_AE_NAME,NULL,buttonStatus,"RC");
+			break;
+	}
+
+}
+#endif
 static int32_t newHTMLLoaded(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
     dbgprintf("newHTMLLoaded\r\n");
 #if S4E_USE_RGB > 0
