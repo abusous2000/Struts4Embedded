@@ -40,11 +40,11 @@ static int32_t toggleMute(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent
 static int32_t togglePausePlay(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
   getHeapUsageInfo();
   if ( pause == 0 ){
- 	 dbgprintf("***Pausing...\r\n");
+ 	 dbgprintf("***Pausing....\r\n");
 	 pause = 1;
   }
   else{
-	 dbgprintf("***Resuming...\r\n");
+	 dbgprintf("***Resuming....\r\n");
 	 pause = 0;
   }
   return MSG_OK;
