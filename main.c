@@ -77,9 +77,7 @@ int main(void) {
 #if S4E_USE_ETHERNET == 1
   initMQTTClient();
 #endif
-#if PPM_FRAME_DECODER != 0
- initPPMFrameDecoder();
-#endif
+
 #if S4E_USE_SDCARD == 1
   SDCardDriverITF_Typedef *pSDCardDriverITF 			= getSDCardDriver();
 
