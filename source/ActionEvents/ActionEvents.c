@@ -6,6 +6,7 @@
 #include "P9813_RGB_Driver.h"
 #include "PWM.h"
 #include "PPMFrameDecoder.h"
+#include "EByteLora.h"
 
 static int8_t 		mute 	   			= 0;
 static int8_t       pause               = 0;
@@ -32,12 +33,34 @@ static int32_t updateWifiHtml(ActionEvent_Typedef 	*pActionEvent){(void)pActionE
 #endif
    return MSG_OK;
 }
+#if S4E_USE_EBYTE_LORA != 0
+static void eByteLoraSendFrame(int8_t buttonPressed){
+	EByteLoRaFrame_TypeDef   myLoraFrame={0};
+	MyMessage_TypeDef		 myPayload = {0};
+
+	myPayload.volume  = volume;
+		myPayload.buttons = 1 << buttonPressed;
+	eBytePopulateFrame(&myLoraFrame,&myPayload,sizeof(myPayload),POT_JOYSTICK_MSG_TYPE,NULL);
+	eByteSendMsg(&myLoraFrame);
+	dbgprintf("FrameID:%d\tVolume:%d\tButtons:%0xX\r\n", myLoraFrame.frameID, myPayload.volume, myPayload.buttons);
+
+}
+#endif
+
+
 static int32_t toggleMute(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
   mute= !mute;
+
+#if S4E_USE_EBYTE_LORA != 0
+  eByteLoraSendFrame(MUTE_BUTTON);
+#endif
   return MSG_OK;
 }
 
 static int32_t togglePausePlay(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
+#if S4E_USE_EBYTE_LORA != 0
+  eByteLoraSendFrame(MUTE_BUTTON);
+#endif
   getHeapUsageInfo();
   if ( pause == 0 ){
  	 dbgprintf("***Pausing....\r\n");
@@ -59,6 +82,10 @@ void updateDutyCycleBasedOnVolume(void){
 
 static int32_t setVolume(ActionEvent_Typedef   *pActionEvent){(void)pActionEvent;
   volume = pActionEvent->dataType==CHAR_DTYPE? atoi(pActionEvent->u.pData): (int8_t)pActionEvent->u.data;
+#if S4E_USE_EBYTE_LORA != 0
+  eByteLoraSendFrame(NONE_BUTTON);
+#endif
+
   updateDutyCycleBasedOnVolume();
 
   return MSG_OK;
@@ -68,19 +95,28 @@ static int32_t volumeDown(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent
    volume -= 5;
    volume = volume<0?0:volume;
    updateDutyCycleBasedOnVolume();
-   return MSG_OK;
+#if S4E_USE_EBYTE_LORA != 0
+  eByteLoraSendFrame(NONE_BUTTON);
+#endif
+  return MSG_OK;
 }
 static int32_t volumeUp(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
    volume += 5;
    volume = volume>100?100:volume;
 
    updateDutyCycleBasedOnVolume();
-   return MSG_OK;
+#if S4E_USE_EBYTE_LORA != 0
+  eByteLoraSendFrame(NONE_BUTTON);
+#endif
+  return MSG_OK;
 }
 
 static int32_t nextTrack(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
    dbgprintf("Next track\r\n");
-   return MSG_OK;
+#if S4E_USE_EBYTE_LORA != 0
+  eByteLoraSendFrame(NEXT_TRACK_BUTTON);
+#endif
+  return MSG_OK;
 }
 
 int32_t setRGBLED(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;

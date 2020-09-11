@@ -10,6 +10,7 @@
 #include "MQTTClient.h"
 #include "SDCard.h"
 #include "PPMFrameDecoder.h"
+#include "EByteLora.h"
 
 
 #ifdef USE_USBCFG
@@ -87,6 +88,14 @@ int main(void) {
       pSDCardDriverITF->processFiles(pSDCardDriverITF);
   else
 	  dbgprintf("Failed to mount SD card\r\n");
+#endif
+
+#if PPM_FRAME_DECODER != 0
+ initPPMFrameDecoder();
+#endif
+
+#if S4E_USE_EBYTE_LORA != 0
+  initEByteLoraThread();
 #endif
   while (true) {
       chThdSleepMilliseconds(250);

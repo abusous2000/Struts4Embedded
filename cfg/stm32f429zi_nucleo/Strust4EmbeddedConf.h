@@ -122,4 +122,32 @@
 #define PORTABLE_ICU_AF  				2
 #define PORTABLE_ICU_CHANNEL 			ICU_CHANNEL_1
 
+//This is the receiver/client
+#define S4E_USE_EBYTE_LORA              1
+#define EBYTE_LORA_SERVER               0
+#define PORTAB_EBYTE_LORA_SD 			SD6
+
+#define EBYTE_LORA_TX 	    			LINE_ARD_D1 //PG14
+#define EBYTE_LORA_RX 	    			LINE_ARD_D0 //PG9
+#define EBYTE_LORA_M0 	    			LINE_ARD_D4
+#define EBYTE_LORA_M1 	    			LINE_ARD_D5
+#define EBYTE_LORA_AUX 	    			LINE_ARD_D6
+#define EBYTE_LORA_MODE      			PAL_MODE_OUTPUT_PUSHPULL | PAL_STM32_OSPEED_MID2
+#define EBYTE_LORA_AF       			8
+
+
+#define DEFAULT_OPTION_FIXED_TRANS		1
+#if DEFAULT_OPTION_FIXED_TRANS != 0
+#define DEFAULT_ADDRESS_HIGH			2
+#define DEFAULT_ADDRESS_LOW				0
+#define DEFAULT_CHANNEL					6
+#endif
+
+#define DEFAULT_TO_ADDRESS_HIGH			1
+#define DEFAULT_TO_ADDRESS_LOW			0
+#define DEFAULT_TO_CHANNE				5
+
+#define EBYTE_LORA_HOST_ID              2
+#define EBYTE_LORA_SAVE_PARAMS		    1
+#define EBYTE_LORA_100MW
 #endif /* CFG_STRUST4EMBEDDED_H_ */
