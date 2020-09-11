@@ -7,6 +7,7 @@
 
 #ifndef CFG_STRUST4EMBEDDEDCONF_H_
 #define CFG_STRUST4EMBEDDEDCONF_H_
+
 #define PPM_FRAME_DECODER		1
 #ifndef S4E_USE_SDCARD
 #define S4E_USE_SDCARD 			0
@@ -31,7 +32,7 @@
 #endif
 
 #ifndef S4E_USE_SSD1306_LCD
-#define S4E_USE_SSD1306_LCD     1
+#define S4E_USE_SSD1306_LCD     0
 #endif
 
 #ifndef S4E_USE_POT
@@ -42,7 +43,7 @@
 #endif
 
 #ifndef S4E_USE_BUZZER
-#define S4E_USE_BUZZER				0
+#define S4E_USE_BUZZER			0
 #endif
 
 #ifndef S4E_USE_RGB
