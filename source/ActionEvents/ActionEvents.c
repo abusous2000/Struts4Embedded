@@ -12,6 +12,29 @@ static int8_t 		mute 	   			= 0;
 static int8_t       pause               = 0;
 static int8_t 		volume     			= 80;
 
+#if S4E_USE_EBYTE_LORA != 0
+void eByteProcessReceivedMsg(EByteLoRaFrame_TypeDef	*pEByteLoRaFrame, MyMessage_TypeDef *pMyPayload){
+  	dbgprintf("+++FrameID:%d\tHostID:%d\tAddH:%d\tAddL:%d\tChannel:%d\tMsgTypeId:%d\tVolume:%d\tButtons:%d\r\n",
+  			  pEByteLoRaFrame->frameID,  	pEByteLoRaFrame->hostID,     pEByteLoRaFrame->fromAddressHigh, 	pEByteLoRaFrame->fromAddressLow,
+			  pEByteLoRaFrame->fromChannel, pEByteLoRaFrame->msgTypeID,  pMyPayload->volume,          		pMyPayload->buttons);
+  	if ( pMyPayload->volume )
+			triggerActionEvent(SET_VOLUME_AE_NAME,NULL,pMyPayload->volume,SOURCE_EVENT_LORA);
+  	if ( pMyPayload->buttons ){
+  	 	if ( pMyPayload->buttons & 0b1)
+  			triggerActionEvent(TOGGLE_MUTE_AE_NAME,NULL,pMyPayload->buttons,SOURCE_EVENT_LORA);
+  	  	else
+  		if ( pMyPayload->buttons & 0b10)
+  			triggerActionEvent(TOGGLE_PAUSE_AE_NAME,NULL,pMyPayload->buttons,SOURCE_EVENT_LORA);
+   	}
+
+  	eByteSendAckMsg(pEByteLoRaFrame);
+#ifdef LINE_LED_RED
+	palToggleLine(LINE_LED_RED);
+#endif
+
+	return;
+}
+#endif
 int8_t isPaused(void){
 	return pause;
 }

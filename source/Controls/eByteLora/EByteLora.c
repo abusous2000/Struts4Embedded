@@ -74,7 +74,6 @@ static void eByteSetMode(uint8_t mode) {
 	// most of my projects uses 10 ms, but 40ms is safer
 
 	chThdSleepMilliseconds(PIN_RECOVER);
-
 	switch(mode){
 		case MODE_NORMAL:
 			palClearLine(EBYTE_LORA_M0);
