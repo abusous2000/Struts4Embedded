@@ -132,7 +132,6 @@
 #define EBYTE_LORA_M0 	    			LINE_ARD_D4
 #define EBYTE_LORA_M1 	    			LINE_ARD_D5
 #define EBYTE_LORA_AUX 	    			LINE_ARD_D6
-#define EBYTE_LORA_MODE      			PAL_MODE_OUTPUT_PUSHPULL | PAL_STM32_OSPEED_MID2
 #define EBYTE_LORA_AF       			8
 
 

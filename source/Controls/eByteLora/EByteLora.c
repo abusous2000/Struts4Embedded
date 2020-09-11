@@ -99,11 +99,12 @@ static void eByteSetMode(uint8_t mode) {
 }
 static void eByteCompleteTask(unsigned long timeout) {
 	systime_t startTime = chVTGetSystemTime();
-
+#ifdef EBYTE_LORA_AUX
 	while (palReadLine(EBYTE_LORA_AUX) == PAL_LOW) {
 		if (TIME_I2MS(chVTGetSystemTimeX() - startTime)  > timeout)
 			break;
 	}
+#endif
    chThdSleepMilliseconds(20);
 }
 void eByteReset(void) {
@@ -221,8 +222,9 @@ bool eByteInit(void){
 	palSetLineMode(EBYTE_LORA_RX, PAL_MODE_ALTERNATE(EBYTE_LORA_AF) | PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL);
 	palSetLineMode(EBYTE_LORA_M0, EBYTE_LORA_MODE);
 	palSetLineMode(EBYTE_LORA_M1, EBYTE_LORA_MODE);
+#ifdef EBYTE_LORA_AUX
 	palSetLineMode(EBYTE_LORA_AUX, PAL_MODE_INPUT);
-
+#endif
 	chThdSleepMilliseconds(5);
 	sdStart(&PORTAB_EBYTE_LORA_SD, &eBytecfg);
 	rc = eByteReadModelData();
