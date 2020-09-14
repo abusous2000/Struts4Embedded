@@ -150,4 +150,24 @@
 #define EBYTE_LORA_HOST_ID              2
 #define EBYTE_LORA_SAVE_PARAMS		    1
 #define EBYTE_LORA_100MW
+
+#define GO_TO_SLEEP_MACROS      	   SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;\
+									   PWR->CR  |= (PWR_CR_PDDS | PWR_CR_LPDS | PWR_CR_CSBF  | PWR_CR_CWUF);\
+									   PWR->CSR |= (PWR_CSR_WUF | PWR_CSR_BRR | PWR_CSR_EWUP | PWR_CSR_BRE);\
+									   RTC->ISR &= ~(RTC_ISR_ALRBF | RTC_ISR_ALRAF | RTC_ISR_WUTF | RTC_ISR_TAMP1F |\
+													RTC_ISR_TSOVF | RTC_ISR_TSF);
+
+#define RTC_ALARM_1_FLAGS   			RTC_ALRM_MSK4  |\
+										RTC_ALRM_MSK3  |\
+										RTC_ALRM_MSK2  |\
+										RTC_ALRM_ST(0) |\
+										RTC_ALRM_SU(0)
+
+#define RTC_ALARM_2_FLAGS  				RTC_ALRM_MSK4  |\
+										RTC_ALRM_MSK3  |\
+										RTC_ALRM_MSK2  |\
+										RTC_ALRM_ST(5) |\
+										RTC_ALRM_SU(1)
+
+#define CCM_RAM_SECTION 				ram5
 #endif /* CFG_STRUST4EMBEDDED_H_ */

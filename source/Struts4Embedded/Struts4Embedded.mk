@@ -15,6 +15,7 @@ ALLCSRC += $(STRUTS4EMBEDDED)/Threads/WifiCommunicationThd.c \
            $(STRUTS4EMBEDDED)/Utils/emlist.c \
            $(STRUTS4EMBEDDED)/Utils/FaultHandling.c \
            $(STRUTS4EMBEDDED)/Utils/CommonHelper.c \
+           $(STRUTS4EMBEDDED)/Utils/RTCHelper.c \
            $(STRUTS4EMBEDDED)/hal/CPal.c \
            $(STRUTS4EMBEDDED)/web/web.c \
            $(STRUTS4EMBEDDED)/MQTT/MqttHelper.c

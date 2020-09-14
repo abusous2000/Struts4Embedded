@@ -9,6 +9,8 @@
 #define VOLUME_UP_AE_NAME                   "volumeUp"
 #define VOLUME_DOWN_AE_NAME                 "volumeDown"
 #define SET_VOLUME_AE_NAME                  "setVolume"
+#define SET_UNIX_TIME_AE_NAME				"setUnixtime"
+#define GO_TO_SLEEP_AE_NAME                 "goToSleep"
 #define UPDATE_WIFI_HTML_AE_NAME            "updateWiFi"
 #define LOAD_SYS_PROPERTIES_AE_NAME         "loadSysProperties"
 #define SET_RGB_LED_AE_NAME                 "setRGBLED"

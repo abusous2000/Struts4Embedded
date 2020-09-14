@@ -7,6 +7,7 @@
 #include "PWM.h"
 #include "PPMFrameDecoder.h"
 #include "EByteLora.h"
+#include "RTCHelper.h"
 
 static int8_t 		mute 	   			= 0;
 static int8_t       pause               = 0;
@@ -243,6 +244,24 @@ static int32_t performanceInfo(ActionEvent_Typedef 	*pActionEvent){(void)pAction
 
    return MSG_OK;
 }
+static int32_t setUnixtime(ActionEvent_Typedef 	*pActionEvent){
+	#if HAL_USE_RTC != 0
+	if ( pActionEvent->u.pData != NULL){
+		rtcSetTimeUnixSecFromString(pActionEvent->u.pData);
+		dbgprintf("New RTC Date:%s", rtcGetTimeAsString());
+	}
+	#endif
+
+   return MSG_OK;
+}
+static int32_t goToSleep(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
+	#if HAL_USE_RTC != 0
+	rtcGoToSleep();
+	#endif
+
+   return MSG_OK;
+}
+
 static ActionEvent_Typedef actionEventToggleMute 	 	= {.name=TOGGLE_MUTE_AE_NAME,  			.eventSource="Center",      	.action=toggleMute,			.view=toggleMuteView,		.dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventNextTrack  	 	= {.name=NEXT_TRACK_AE_NAME,			.eventSource="Up",          	.action=nextTrack,          .nextActionEventName=TOGGLE_MUTE_AE_NAME,		.dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventTogglePausePlay	= {.name=TOGGLE_PAUSE_AE_NAME,			.eventSource="Down",        	.action=togglePausePlay};
@@ -253,8 +272,10 @@ static ActionEvent_Typedef actionEventUpdateWifiHTML 	= {.name=UPDATE_WIFI_HTML_
 static ActionEvent_Typedef actionEventLoadSysProperties = {.name=LOAD_SYS_PROPERTIES_AE_NAME,	.eventSource="wifi",            .action=loadSysProperties,  .view=loadSysPropertiesView,.dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventSetRGBLED         = {.name=SET_RGB_LED_AE_NAME,			.eventSource="wifi",            .action=setRGBLED, 			.view=setRGBLEDView,		.dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventSetMototsParams   = {.name=SET_MOTORS_PARAMS_AE_NAME,	    .eventSource="wifi",            .action=setPWMParams, 		.view=setPWMParamsView,		.dataType = INT_DTYPE};
-static ActionEvent_Typedef actionEventNewHTMLLoaded	 	= {.name=NEW_HTML_LOADED_AE_NAME,  		.eventSource="wifi",      	    .action=newHTMLLoaded, 	   .view=NULL,				    .dataType = INT_DTYPE};
+static ActionEvent_Typedef actionEventNewHTMLLoaded	 	= {.name=NEW_HTML_LOADED_AE_NAME,  		.eventSource="wifi",      	    .action=newHTMLLoaded, 	    .view=NULL,				    .dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventPerformanceInfo 	= {.name=PERFORMANCE_INFO_AE_NAME,  	.eventSource="wifi",      	    .action=performanceInfo, 	.view=NULL,				    .dataType = INT_DTYPE};
+static ActionEvent_Typedef actionEventSetUnixtime      	= {.name=SET_UNIX_TIME_AE_NAME,			.eventSource="WiFi",   		    .action=setUnixtime, 		.view=NULL,			        .dataType = CHAR_DTYPE};
+static ActionEvent_Typedef actionEventGoToSleep      	= {.name=GO_TO_SLEEP_AE_NAME,			.eventSource="WiFi",   		    .action=goToSleep, 		    .view=NULL,			        .dataType = INT_DTYPE};
 ActionEvent_Typedef *gActionEvents[MAX_ACTION_EVENTS] ={&actionEventToggleMute,
 		                                                &actionEventNextTrack,
 														&actionEventTogglePausePlay,
@@ -266,5 +287,7 @@ ActionEvent_Typedef *gActionEvents[MAX_ACTION_EVENTS] ={&actionEventToggleMute,
                                                         &actionEventSetRGBLED,
 														&actionEventSetMototsParams,
 														&actionEventNewHTMLLoaded,
-														&actionEventPerformanceInfo};
+														&actionEventPerformanceInfo,
+														&actionEventSetUnixtime,
+														&actionEventGoToSleep};
 
