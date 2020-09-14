@@ -96,9 +96,7 @@ int main(void) {
 #if S4E_USE_EBYTE_LORA != 0
   initEByteLoraThread();
 #endif
-#if HAL_USE_RTC != 0
-  s4eRTCInit();
-#endif
+
   while (true) {
       chThdSleepMilliseconds(250);
   }

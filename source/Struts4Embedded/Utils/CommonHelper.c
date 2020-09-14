@@ -90,7 +90,9 @@ void initStruts4EmbeddedFramework(void){
 	putSysProperty(&reloadHost);
 	putSysProperty(&fp);
 	putSysProperty(&workerThds);
-
+#if HAL_USE_RTC != 0
+    s4eRTCInit();
+#endif
 	return;
 }
 void putSysProperty(NameValuePairStaticTypeDef *pNVP){
