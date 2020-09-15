@@ -29,6 +29,6 @@
 #include "JsonParser.h"
 #include "hashmap.h"
 #include "emlist.h"
-
+#include "RTCHelper.h"
 
 #endif /* CFG_STRUST4EMBEDDED_H_ */

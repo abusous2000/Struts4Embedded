@@ -64,22 +64,22 @@ int main(void) {
   initActonEventThd();
 
   initButtonsLEDs();
-#if S4E_USE_BLINKER_THD == TRUE
+#if S4E_USE_BLINKER_THD != 0
   initBlinkerThd(pGreenLedPAL);
 #endif
 
-#if S4E_USE_WIFI_MODULE_THD == TRUE
+#if S4E_USE_WIFI_MODULE_THD != 0
   sdStart(&WIFI_SD, &wifiSerialvfg);
   initWifiCommunicationThd();
 #endif
-#if S4E_USE_PWM == TRUE
+#if S4E_USE_PWM != 0
   initPWM();
 #endif
-#if S4E_USE_ETHERNET == 1
+#if S4E_USE_MQTT != 0
   initMQTTClient();
 #endif
 
-#if S4E_USE_SDCARD == 1
+#if S4E_USE_SDCARD != 0
   SDCardDriverITF_Typedef *pSDCardDriverITF 			= getSDCardDriver();
 
   pSDCardDriverITF->init(pSDCardDriverITF);
@@ -101,21 +101,21 @@ int main(void) {
       chThdSleepMilliseconds(250);
   }
 }
-#if S4E_USE_SDCARD == 1
+#if S4E_USE_SDCARD != 0
 static NameValuePairStaticTypeDef readFilesFromFolder=  {.key=READ_FILES_FROM_FOLDER,	.value="/music"};
 #endif
 static void initDrivers(void){
   initStruts4EmbeddedFramework();
-#if S4E_USE_SDCARD == 1
+#if S4E_USE_SDCARD != 0
   putSysProperty(&readFilesFromFolder);
 #endif
-#if S4E_USE_RGB == 1
+#if S4E_USE_RGB != 0
   initP9813RGBDriver(TOTAL_NUM_OF_LEDS);
 #endif
-#if S4E_USE_POT == TRUE
+#if S4E_USE_POT != 0
   initPotReader();
 #endif
-#if S4E_USE_SSD1306_LCD == TRUE
+#if S4E_USE_SSD1306_LCD != 0
   ssd130InitAndConfig("Struts4Embedded!");
 #endif
 }
@@ -124,7 +124,7 @@ void periodicSysTrigger(uint32_t i){(void)i;
 #if S4E_USE_POT == TRUE
    checkOnPotVolumeChange();
 #endif
-#if S4E_USE_MQTT == 1
+#if S4E_USE_MQTT != 0
    if ( i > 0 && i % 8 == 0 )
 	   publishStatusToBroker();
 #endif
@@ -146,4 +146,3 @@ static void initUSBCFG(void){
 	sdStart(&PORTAB_SD_VCP, &myserialcfg);
 }
 #endif
-

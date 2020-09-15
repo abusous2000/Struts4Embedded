@@ -18,7 +18,9 @@
 #include <string.h>
 #include "hashmap.h"
 
-#define MAX_MQTT_PAYLOAD 		MQTT_VAR_HEADER_BUFFER_LEN
+#ifndef GET_TIME_TOPIC_NAME
+#define GET_TIME_TOPIC_NAME      "dev/getTime"
+#endif
 
 struct MqttConnection_Typedef;
 struct MqttSubscribeInfo_Typedef;

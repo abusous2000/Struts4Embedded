@@ -124,5 +124,17 @@
 										PWR->CSR2  	|= (PWR_CSR2_WUPF6 | PWR_CSR2_EWUP6);\
 										RTC->ISR 	&= ~(RTC_ISR_ALRBF | RTC_ISR_ALRAF | RTC_ISR_WUTF | RTC_ISR_TAMP1F |\
 														RTC_ISR_TSOVF | RTC_ISR_TSF);
+#define RTC_ALARM_1_FLAGS2   			RTC_ALRM_MSK4  |\
+										RTC_ALRM_MSK3  |\
+										RTC_ALRM_MSK2  |\
+										RTC_ALRM_ST(0) |\
+										RTC_ALRM_SU(0)
 
+#define RTC_ALARM_2_FLAGS2  			RTC_ALRM_MSK4  |\
+										RTC_ALRM_MSK3  |\
+										RTC_ALRM_MSK2  |\
+										RTC_ALRM_ST(5) |\
+										RTC_ALRM_SU(1)
+
+#define CCM_RAM_SECTION 				ram5
 #endif /* CFG_STRUST4EMBEDDED_H_ */

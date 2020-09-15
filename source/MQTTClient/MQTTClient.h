@@ -21,8 +21,8 @@ void sendToDefaultMQTTQueue(char *payload);
 void sendToTopicMQTTQueue(MqttPublishInfo_Typedef *pPublishInfo, char *payload);
 bool isDefaultMQTTBrokerConnected(void);
 void publishStatusToBroker(void);
-CC_WEAK void onDefaultMQTTBrokerDisconnect(MqttConnection_Typedef *pMqttConnection);
-CC_WEAK void onDefaultMQTTBrokerConnect(MqttConnection_Typedef *pMqttConnection);
+void onDefaultMQTTBrokerDisconnect(MqttConnection_Typedef *pMqttConnection);
+void onDefaultMQTTBrokerConnect(MqttConnection_Typedef *pMqttConnection);
 #ifdef __cplusplus
 }
 #endif

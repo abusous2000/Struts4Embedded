@@ -9,12 +9,17 @@
 #include "ch.h"
 #include "hal.h"
 #include "Strust4Embedded.h"
+#include "MQTTClient.h"
 #include "lwipthread.h"
 #include "ccportab.h"
 
 //A weak/virtual function that could be overridden in other modules & called once every 1 seconds
-
+const char *getTimeMsg = "{\"output\":1,\"getTime\":\"unixtime\"}";
 CC_WEAK void onDefaultMQTTBrokerConnect(MqttConnection_Typedef *pMqttConnection){(void)pMqttConnection;
+	MqttPublishInfo_Typedef   getUnixTimeMQTTTopicInfo      = {.topic=GET_TIME_TOPIC_NAME, .qos = 0, .retain = 0};
+
+	chThdSleepMilliseconds(20);
+	sendToTopicMQTTQueue(&getUnixTimeMQTTTopicInfo,(char *)getTimeMsg);
 }
 
 CC_WEAK void onDefaultMQTTBrokerDisconnect(MqttConnection_Typedef *pMqttConnection){(void)pMqttConnection;
@@ -105,7 +110,7 @@ bool isDefaultMQTTBrokerConnected(void){
 
 
 void publishStatusToBroker(void){
-	char 					_payload[MAX_TOPIC_NAME] ={0};
+	char 					_payload[256] ={0};
 	MqttConnection_Typedef  *pMqttConnection=&defaultBroker;
 	chsnprintf(_payload,sizeof(_payload),"{\"track\":\"Crazy 4 u\",\"status\":\"Playing\",\"vol\":%d,\"seconds_remaining\":%d,\"timeRemaining\":\"%3:30\"}",
 	                                          getCurrentVolume(),

@@ -5,6 +5,15 @@
 static mutex_t printfMutex;
 mutex_t *pPrintfMutex = NULL;
 
+void removeChar(char *str, char garbage) {
+
+    char *src, *dst;
+    for (src = dst = str; *src != '\0'; src++) {
+        *dst = *src;
+        if (*dst != garbage) dst++;
+    }
+    *dst = '\0';
+}
 void _print_message(const char *str){
 	dbgprintf("%s\r\n",str);
 }

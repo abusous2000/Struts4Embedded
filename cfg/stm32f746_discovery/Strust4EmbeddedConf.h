@@ -108,4 +108,12 @@
 #define TIM_TGRO_EVENT_EXTSEL 		    12 //See table 98 in RM on pages 451 & 471 for details
 #define ADC_CHANNEL_IN 					ADC_CHANNEL_IN0
 #define ADC_POT                     	ADCD3
+
+#define GO_TO_SLEEP_MACROS      		SCB->SCR 	|= SCB_SCR_SLEEPDEEP_Msk;\
+										PWR->CR1  	|= (PWR_CR1_PDDS | PWR_CR1_LPDS | PWR_CR1_CSBF);\
+										PWR->CR2  	|= (PWR_CR2_CWUPF1 | PWR_CR2_CWUPF6);\
+										PWR->CSR2  	|= (PWR_CSR2_WUPF6 | PWR_CSR2_EWUP6);\
+										RTC->ISR 	&= ~(RTC_ISR_ALRBF | RTC_ISR_ALRAF | RTC_ISR_WUTF | RTC_ISR_TAMP1F |\
+														RTC_ISR_TSOVF | RTC_ISR_TSF);
+
 #endif /* CFG_STRUST4EMBEDDED_H_ */

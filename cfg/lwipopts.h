@@ -89,6 +89,7 @@
 #define HOST_IP_ADDRESS					IPADDR4_INIT_BYTES(10, 42, 0, 10)
 #define MQTT_BROKER_PORT				1883
 #define MAX_TOPIC_NAME          		128
+#define MAX_MQTT_PAYLOAD 				MQTT_VAR_HEADER_BUFFER_LEN
 #if !defined(LWIP_IPADDR)
 #define LWIP_IPADDR(p)                  IP4_ADDR(p, 10, 42, 0, 10)//IP4_ADDR(p, 192, 168, 1, 10)
 #define LWIP_GATEWAY(p)                 IP4_ADDR(p, 10, 42, 0, 1)//IP4_ADDR(p, 192, 168, 1, 1)

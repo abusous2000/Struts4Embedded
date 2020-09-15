@@ -31,6 +31,7 @@ void onUpdateSysProperties(char *payload);
 void handlePayload(ActionEventPayload_Typedef *pAEPayload, char *eventSouce);
 bool handleActionPayloads(char *jsonPayload, char *eventSouce);
 void *chibios_calloc(int num,int size);
+void removeChar(char *str, char garbage);
 #ifdef __cplusplus
 }
 #endif
