@@ -86,14 +86,14 @@ static void onBrokerConnection(MqttConnection_Typedef *pMqttConnection){
 	onDefaultMQTTBrokerConnect(pMqttConnection);
     return;
 }
-#define MAX_RETRY_AFTER_BROKER_DISCONNECTS  10000
+#define MAX_RETRY_AFTER_BROKER_DISCONNECTS  3
 static void onBrokerDisconnection(MqttConnection_Typedef *pMqttConnection, mqtt_connection_status_t status){
     pMqttConnection->error++;
 	dbgprintf("+++Thd:%s-->Disconnected from Broker:%d:%d for reason:%d\n",chThdGetSelfX()->name, pMqttConnection->brokerIpAddr,pMqttConnection->brokerPort, status);
 	mqttBrokerDisconnect(pMqttConnection);
 
     if ( pMqttConnection->error < MAX_RETRY_AFTER_BROKER_DISCONNECTS ){
-    	sysinterval_t timeout = 250+250*(pMqttConnection->error%10);
+    	sysinterval_t timeout = 50+10*(pMqttConnection->error%10);
     	dbgprintf("+++Thd:%s-->Reconnecting......Errors=%d...retrying in %d ms\r\n",chThdGetSelfX()->name, pMqttConnection->error,timeout);
     	chThdSleepMilliseconds(timeout);
     	mqttBrokerConnect(pMqttConnection);
@@ -107,19 +107,23 @@ static void onBrokerDisconnection(MqttConnection_Typedef *pMqttConnection, mqtt_
 bool isDefaultMQTTBrokerConnected(void){
     return isMQTTBrokerConnected(&defaultBroker);
 }
-
-
-void publishStatusToBroker(void){
-	char 					_payload[256] ={0};
-	MqttConnection_Typedef  *pMqttConnection=&defaultBroker;
-	chsnprintf(_payload,sizeof(_payload),"{\"track\":\"Crazy 4 u\",\"status\":\"Playing\",\"vol\":%d,\"seconds_remaining\":%d,\"timeRemaining\":\"%3:30\"}",
-	                                          getCurrentVolume(),
-											  getCurrentVolume()+55);
-	if ( isMQTTBrokerConnected(pMqttConnection) )
-		mqttBrokerPublishMessage(pMqttConnection,&defaultMQTTTopicInfo,_payload);
+void reconnectDefaultMQTTBroker(void){
+	if ( isDefaultMQTTBrokerConnected() == false )
+		mqttBrokerConnect(&defaultBroker);
 }
+
 void sendToTopicMQTTQueue(MqttPublishInfo_Typedef *pPublishInfo, char *payload){
 	MqttConnection_Typedef *pMqttConnection=&defaultBroker;
+
+	if ( isMQTTBrokerConnected(pMqttConnection) ){
+		 err_t err = mqttBrokerPublishMessage(pMqttConnection,pPublishInfo,payload);
+		 if ( err != ERR_OK){
+			 if ( ++pMqttConnection->error >= MAX_RETRY_AFTER_BROKER_DISCONNECTS)
+				mqttBrokerDisconnect(pMqttConnection);
+		 }
+	}
+	else
+		 pMqttConnection->error = 0;
 
 	if ( isMQTTBrokerConnected(pMqttConnection) )
 		mqttBrokerPublishMessage(pMqttConnection,pPublishInfo,payload);
@@ -127,6 +131,16 @@ void sendToTopicMQTTQueue(MqttPublishInfo_Typedef *pPublishInfo, char *payload){
 void sendToDefaultMQTTQueue(char *payload){
 	sendToTopicMQTTQueue(&defaultMQTTTopicInfo,payload);
 }
+
+void publishStatusToBroker(void){
+	char 					_payload[256] ={0};
+	MqttConnection_Typedef  *pMqttConnection=&defaultBroker;
+	chsnprintf(_payload,sizeof(_payload),"{\"track\":\"Crazy 4 u\",\"status\":\"Playing\",\"vol\":%d,\"seconds_remaining\":%d,\"timeRemaining\":\"%3:30\"}",
+	                                          getCurrentVolume(),
+											  getCurrentVolume()+55);
+	sendToDefaultMQTTQueue(_payload);
+}
+
 
 #endif/*S4E_USE_MQTT*/
 

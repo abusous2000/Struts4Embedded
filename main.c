@@ -98,7 +98,11 @@ int main(void) {
 #endif
 
   while (true) {
-      chThdSleepMilliseconds(250);
+	  chThdSleepMilliseconds(1500);
+	  #if S4E_USE_MQTT != 0
+	  if ( !isDefaultMQTTBrokerConnected() )
+		  reconnectDefaultMQTTBroker();
+	  #endif
   }
 }
 #if S4E_USE_SDCARD != 0

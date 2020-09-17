@@ -23,6 +23,7 @@ bool isDefaultMQTTBrokerConnected(void);
 void publishStatusToBroker(void);
 void onDefaultMQTTBrokerDisconnect(MqttConnection_Typedef *pMqttConnection);
 void onDefaultMQTTBrokerConnect(MqttConnection_Typedef *pMqttConnection);
+void reconnectDefaultMQTTBroker(void);
 #ifdef __cplusplus
 }
 #endif

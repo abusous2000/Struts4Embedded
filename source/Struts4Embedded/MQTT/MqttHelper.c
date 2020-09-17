@@ -111,8 +111,9 @@ err_t mqttBrokerPublishMessage(MqttConnection_Typedef *pMqttConnection, MqttPubl
 	pPublishInfo->pMqttConnection = pMqttConnection;
     err_t err = mqtt_publish(pMqttConnection->client, pPublishInfo->topic, payload, strlen(payload),
     						 pPublishInfo->qos, pPublishInfo->retain, mqttPublishRequestResultCB, pPublishInfo);
-    if ( err != ERR_OK)
+    if ( err != ERR_OK){
     	dbgprintf("+++Thd:%s-->Publish err: %d\r\n", chThdGetSelfX()->name, err);
+    }
 
     return err;
 }

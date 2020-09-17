@@ -100,7 +100,7 @@ void initStruts4EmbeddedFramework(void){
 	putSysProperty(&fp);
 	putSysProperty(&workerThds);
 #if HAL_USE_RTC != 0
-    s4eRTCInit();
+    RTCInit();
 #endif
 	return;
 }

@@ -110,5 +110,5 @@
 										RTC_ALRM_ST(5) |\
 										RTC_ALRM_SU(1)
 
-#define CCM_RAM_SECTION 				ram5
+#define BACKUP_CCM_RAM_SECTION			ram5
 #endif /* CFG_STRUST4EMBEDDED_H_ */

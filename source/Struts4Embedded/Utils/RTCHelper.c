@@ -10,15 +10,22 @@
 #if HAL_USE_RTC != 0
 #include "stdlib.h"
 #include "string.h"
+#include "ccportab.h"
 #include "Strust4Embedded.h"
 
-static uint8_t rebooted PLACE_IN_RAM_SECTION(CCM_RAM_SECTION)  = 0;
-static time_t unix_time;
-static RTCDateTime timespec;
 
+#ifndef BACKUP_CCM_RAM_SECTION
+#error Plz define this macro BACKUP_CCM_RAM_SECTION
+#endif
 #ifndef GO_TO_SLEEP_MACROS
 #error Plz define this macro GO_TO_SLEEP_MACROS
 #endif
+
+
+static uint8_t goingToSleepCnt PLACE_IN_RAM_SECTION(BACKUP_CCM_RAM_SECTION)  = 0;
+static time_t unix_time;
+static RTCDateTime timespec;
+
 
 
 #ifdef RTC_ALARM_1_FLAGS
@@ -32,9 +39,16 @@ static const RTCAlarm alarm2 = {
 };
 #endif
 
+uint8_t getGoingToSleepCnt(void){
+	return goingToSleepCnt;
+}
+CC_WEAK void onRTCSleep(void){
+	dbgprintf("Going sleep in 10ms...:goingToSleepCnt:%d\r\n",getGoingToSleepCnt());
+    chThdSleepMilliseconds(10);
+}
 void rtcGoToSleep(void) {
-  dbgprintf("Going sleep...%d\r\n",++(rebooted));
-  chThdSleepMilliseconds(500);
+ ++(goingToSleepCnt);
+  onRTCSleep();
   chSysLock();
   GO_TO_SLEEP_MACROS
   __WFI();
@@ -101,30 +115,59 @@ void rtcDumpStorage(void) {
   }
 }
 #endif
+CC_WEAK void onRTCAlarmA(void){
+
+}
+CC_WEAK void onRTCAlarmB(void){
+
+}
+static uint32_t systemWakeup  = false;
+
+bool getRTCSystemWakeup(void){
+	return systemWakeup;
+}
+
+void setRTCSystemWakeup(bool value){
+	systemWakeup = value;
+	if ( !value )
+		goingToSleepCnt = 0;
+}
+CC_WEAK void onRTCSystemWakeup(void){
+	setRTCSystemWakeup(true);
+}
+
 /*
  * RTC callback.
  */
 static void alarmcb(RTCDriver *rtcp, rtcevent_t event) {
   (void)rtcp;
+  switch((uint8_t)event){
+  	  case RTC_EVENT_WAKEUP:
+  		  onRTCSystemWakeup();
+		  break;
+	  case RTC_EVENT_ALARM_A:
+		  onRTCAlarmA();
+		  break;
+	  case RTC_EVENT_ALARM_B:
+		  onRTCAlarmB();
+		  break;
+  }
 
-  if (event == RTC_EVENT_ALARM_A) {
-	  NULL;
-  }
-  else if (event == RTC_EVENT_ALARM_B) {
-	  NULL;
-  }
+  return;
 }
 
 
-void s4eRTCInit(void){
+void RTCInit(void){
+	systemWakeup = WAKEUP_HARD_REST_CHECK;
+	dbgprintf("Hard Rest(0)/Wakeup(2):%d\r\n",  systemWakeup);
+	CLEAR_WAKEUP_FLAG;
 	#ifdef RTC_ALARM_1_FLAGS
 	rtcSetAlarm(&RTCD1, 0, &alarm1);
-	rtcSetCallback(&RTCD1, alarmcb);
 	#endif
 	#ifdef RTC_ALARM_1_FLAGS
 	rtcSetAlarm(&RTCD1, 1, &alarm2);
-	rtcSetCallback(&RTCD1, alarmcb);
 	#endif
+	rtcSetCallback(&RTCD1, alarmcb);
 
 	#if RTC_HAS_STORAGE
 	  psWrite(&RTCD1, 0U, 12U, (const uint8_t *)"Hello World!");
