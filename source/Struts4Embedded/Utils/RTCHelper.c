@@ -13,10 +13,14 @@
 #include "ccportab.h"
 #include "Strust4Embedded.h"
 
+#ifndef WAKEUP_HARD_REST_CHECK
+#error Plz define this macro WAKEUP_HARD_REST_CHECK
+#endif
 
 #ifndef BACKUP_CCM_RAM_SECTION
 #error Plz define this macro BACKUP_CCM_RAM_SECTION
 #endif
+
 #ifndef GO_TO_SLEEP_MACROS
 #error Plz define this macro GO_TO_SLEEP_MACROS
 #endif
@@ -127,13 +131,9 @@ bool getRTCSystemWakeup(void){
 	return systemWakeup;
 }
 
-void setRTCSystemWakeup(bool value){
-	systemWakeup = value;
-	if ( !value )
-		goingToSleepCnt = 0;
-}
+
 CC_WEAK void onRTCSystemWakeup(void){
-	setRTCSystemWakeup(true);
+
 }
 
 /*
@@ -160,6 +160,8 @@ static void alarmcb(RTCDriver *rtcp, rtcevent_t event) {
 void RTCInit(void){
 	systemWakeup = WAKEUP_HARD_REST_CHECK;
 	dbgprintf("Hard Rest(0)/Wakeup(2):%d\r\n",  systemWakeup);
+	if ( systemWakeup )
+		onRTCSystemWakeup();
 	CLEAR_WAKEUP_FLAG;
 	#ifdef RTC_ALARM_1_FLAGS
 	rtcSetAlarm(&RTCD1, 0, &alarm1);
