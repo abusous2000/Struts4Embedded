@@ -162,6 +162,8 @@ void RTCInit(void){
 	dbgprintf("Hard Rest(0)/Wakeup(2):%d\r\n",  systemWakeup);
 	if ( systemWakeup )
 		onRTCSystemWakeup();
+	else
+		goingToSleepCnt = 0;
 	CLEAR_WAKEUP_FLAG;
 	#ifdef RTC_ALARM_1_FLAGS
 	rtcSetAlarm(&RTCD1, 0, &alarm1);
