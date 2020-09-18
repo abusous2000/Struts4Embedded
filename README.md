@@ -19,6 +19,7 @@ In this release, *three IOT use cases* were provided as a proof of concepts to h
 
 It should be noted; that all three use case:
 - were demonstrated using FATFS (w/ SDIO and SPI), ADC; GPT, 5-Button JoyStick, SSD1306 OLED (via I2C), I2S, SAI in a [reusable helper modules](https://github.com/abusous2000/Struts4Embedded/tree/master/source/MQTTClient); that you can [include/exclude](https://github.com/abusous2000/Struts4Embedded/blob/master/cfg/stm32f407_discovery/Strust4EmbeddedConf.h#L27) as you see fit. See *[./source](https://github.com/abusous2000/Struts4Embedded/tree/master/source)* folder for details
+- Also demonstrated, how to send S4E wireless control signals (via *[FlySky-i6s](https://github.com/abusous2000/Struts4Embedded/tree/master/source/Controls/PPMFrameDecoder)* RC or vial *[eByte Lora](https://github.com/abusous2000/Struts4Embedded/tree/master/source/Controls/eByteLora)*). 
 - easily any of the use cases could be modified/extended to fit other embedded projects. 
 
 # Architectural Overview
@@ -52,7 +53,12 @@ The framework was tested using the following development boards: STM32F407 Disco
    - configure RC output to be PPM & i-Bus in the system config menu & make sure it is already bounded to the receiver. 
    - All you need is to wire 3 pins: ground, 5V, and PPM. 
    - Note that current configuration by default ignores every other 9 frames, which could be [adjusted by changing MAX_FRAMES_TO_COLLECT](https://github.com/abusous2000/Struts4Embedded/blob/master/source/Controls/PPMFrameDecoder/PPMFrameDecoder.h#L67). This is needed because PPM frames are coming fast; & this is needed to reach steady state quickly else flickering states will be reported (especially for buttons).
-   - Also note that if use SD-Card; you may have to power it externally and not from the board itself. The is true in the case STM32F4-Discovery.
+   - Also note that if use SD-Card; you may have to power the receiver externally and not directly powered from the board's pins (unless the board is powered externally and not from USB).
+- If you decide to use *[eByte Lora](https://github.com/abusous2000/Struts4Embedded/tree/master/source/Controls/eByteLora)* to send control signals via *[eByte Lora Modules](https://www.aliexpress.com/i/4000516220084.html)*, please note the following:
+   - The library is designed to send a [Lora Frame](https://github.com/abusous2000/Struts4Embedded/blob/master/source/Controls/eByteLora/EByteLora.h#L224), that includes a payload.
+   - the payload could be [overridden in the configuration file](https://github.com/abusous2000/Struts4Embedded/blob/master/cfg/stm32f446re_nucleo/Strust4EmbeddedConf.h#L113). By the default the payload send the state of [8 buttons plus the state of one POT value](https://github.com/abusous2000/Struts4Embedded/blob/master/source/Controls/eByteLora/EByteLora.h#L238). This easily could be extended or overridden in the config file.
+   - by default the maximum payload size is limited to 40 bytes. Easily you can override this in the config file. Note that eByte limits the total frame size to 512.
+
 - The MP3 Player expects the files to be played to be in folder */music*; which you can override in *main.c*. The audio driver could be found in *[./source/AudioDriver](https://github.com/abusous2000/MP3PlayerUsingSTM32F7/tree/master/source/AudioDriver)*.
 - If you test with either STM32F407VET6 Blackboard, Seeed Arch Max 1.1 or STM32F407 Discovery boards, then use the relevant board files provided here in *[./make/make/backup/](https://github.com/abusous2000/Struts4Embedded/tree/master/make/backup)* folder; it contain the board files that were used. 
 - Every project was compiled & tested with [C++ & STL Templates](https://github.com/abusous2000/Struts4Embedded/blob/master/main.cpp) as well. However, please note the size of C++ binaries shall increase by at least 300k, and your RAM usage increases as well. The make files, used different links, and if you get a link error, you can copy them from *[./make/make/backup/](https://github.com/abusous2000/Struts4Embedded/tree/master/make/backup)*. I recommend copying all _./Struts4Embedded/make/*.ld_ files to *ChibiOS/os/common/startup/ARMCMx/compilers/GCC/ld*
