@@ -21,6 +21,7 @@
 #define SOURCE_EVENT_WIFI					"WiFi"
 #define SOURCE_EVENT_MQTT					"MQTT"
 #define SOURCE_EVENT_LCD					"LCD"
+#define SOURCE_EVENT_IR					"IR"
 #define SOURCE_EVENT_RC						"RC"
 #define SOURCE_EVENT_LORA					"LoRa"
 #define DATA_FIELD_WAS_LT_MAX               100

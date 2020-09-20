@@ -168,6 +168,11 @@
 										RTC_ALRM_MSK2  |\
 										RTC_ALRM_ST(5) |\
 										RTC_ALRM_SU(1)
+#define WAKEUP_HARD_REST_CHECK          (uint32_t)(PWR->CSR & PWR_CSR_SBF)
+#define CLEAR_WAKEUP_FLAG			    PWR->CR  	|= (PWR_CR_CSBF)
 
+
+
+#define BACKUP_CCM_RAM_SECTION 			ram5
 #define BACKUP_CCM_RAM_SECTION 				ram5
 #endif /* CFG_STRUST4EMBEDDED_H_ */
