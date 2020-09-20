@@ -37,7 +37,6 @@ static void icuwidthcbRAW(ICUDriver *icup) {
 	  chSysLockFromISR();
 	  chEvtBroadcastFlagsI(&IR_receiver, 0);
 	  chSysUnlockFromISR();
-
 }
 static void icuwidthcb(ICUDriver *icup) {
 
@@ -99,7 +98,7 @@ static ActionEvent_Typedef 		*pToggleMuteAE			= NULL;
 static ActionEvent_Typedef 		*pToggleSleepAE			= NULL;
 static ActionEvent_Typedef 		*pNextTrackAE			= NULL;
 static ActionEvent_Typedef 		*pPrevTrackAE			= NULL;
-
+//Plz don't change this method. Just override in your code; that is why it is a weak method
 CC_WEAK void handlIREvent(IR_CMD_t command, bool repeatFlag){
 	   switch(command){
 	    case BTN_POWER:
