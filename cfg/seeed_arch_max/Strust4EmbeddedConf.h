@@ -22,6 +22,13 @@
  *  PC4  - ETH_RMII_RXD0
  *  PC5  - ETH_RMII_RXD1
  */
+
+#define S4E_USE_PPM_FRAME_DECODER 		0
+#define S4E_USE_EBYTE_LORA 		0
+#define EBYTE_LORA_SERVER       0
+#define S4E_USE_IR_RECEIVER		0
+
+
 #ifndef S4E_USE_SDCARD
 #define S4E_USE_SDCARD 			1
 #endif
@@ -49,6 +56,15 @@
 
 #ifndef S4E_USE_SSD1306_LCD
 #define S4E_USE_SSD1306_LCD     1
+
+#define SSD1306_I2C_SCL_LINE    PAL_LINE(GPIOB, GPIOB_ARD_D15)
+#define SSD1306_I2C_SDA_LINE   	PAL_LINE(GPIOB, GPIOB_ARD_D14)
+#define SSD1306_SA0_LINE        PAL_LINE(GPIOB, GPIOB_ARD_D8)
+#define SSD1306_RESET_LINE      PAL_LINE(GPIOB, GPIOB_ARD_D7)
+#define SSD1306_I2C_AF       	4
+#define SSD1306_I2C_LINE_MODE	PAL_MODE_ALTERNATE(SSD1306_I2C_AF)  | PAL_STM32_OSPEED_HIGHEST|  PAL_STM32_OTYPE_OPENDRAIN
+#define SSD1306_LINE_MODE   	PAL_STM32_MODE_OUTPUT  | PAL_STM32_PUPDR_PULLUP
+
 #endif
 
 #ifndef S4E_USE_POT
@@ -122,16 +138,7 @@
 #define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/seeed_arch_max/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithSeeedArchMax"
 
-#define SSD1306_I2C_AF       			4
-#define SSD1306_I2C_SCL_PORT 			GPIOB
-#define SSD1306_I2C_SCL_PIN  			GPIOB_ARD_D15//PB15
-#define SSD1306_I2C_SDA_PORT 			GPIOB
-#define SSD1306_I2C_SDA_PIN  			GPIOB_ARD_D14//PB14
-#define SSD1306_SA0_PORT 				GPIOB
-#define SSD1306_SA0_PIN    				GPIOB_ARD_D8//PB8
-#define SSD1306_RESET_PORT				GPIOB
-#define SSD1306_RESET_PIN				GPIOB_ARD_D7//PB7
-//brown, black, red, & orange
+#//brown, black, red, & orange
 #define LINE_LED_GREEN                  LINE_LED//PAL_LINE(GPIOA, 6U)-PA6
 //#define LINE_LED_RED                    PAL_LINE(GPIOA, 7U)
 //For this to work, plz connect Pin20 to Pin13 in the Zigbee header on the waveshare accessory sheild

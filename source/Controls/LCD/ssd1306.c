@@ -292,21 +292,21 @@ void ssd130InitAndConfig(char *appName){
 
 
   //look at the schematic, these pins are already externally pulled up, see p. 41 in the user manual
-  palSetPadMode(SSD1306_I2C_SCL_PORT, SSD1306_I2C_SCL_PIN,   PAL_MODE_ALTERNATE(SSD1306_I2C_AF)  | PAL_STM32_OSPEED_HIGHEST|  PAL_STM32_OTYPE_OPENDRAIN );//PB8-->I2C1_SCL
-  palSetPadMode(SSD1306_I2C_SDA_PORT, SSD1306_I2C_SDA_PIN,   PAL_MODE_ALTERNATE(SSD1306_I2C_AF)  | PAL_STM32_OSPEED_HIGHEST|  PAL_STM32_OTYPE_OPENDRAIN);//PB9-->I2C1_SDA
+  palSetLineMode(SSD1306_I2C_SCL_LINE,   SSD1306_I2C_LINE_MODE );//PB8-->I2C1_SCL
+  palSetLineMode(SSD1306_I2C_SDA_LINE,   SSD1306_I2C_LINE_MODE);//PB9-->I2C1_SDA
 
   //To control LCD, see Arduino driver for the Accessory Shield
-  palSetPadMode(SSD1306_SA0_PORT,   SSD1306_SA0_PIN,   PAL_STM32_MODE_OUTPUT  | PAL_STM32_PUPDR_PULLUP );//PJ4-->SA0
-  palSetPadMode(SSD1306_RESET_PORT, SSD1306_RESET_PIN,   PAL_STM32_MODE_OUTPUT  | PAL_STM32_PUPDR_PULLDOWN );//Reset
+  palSetLineMode(SSD1306_SA0_LINE,   SSD1306_LINE_MODE );//PJ4-->SA0
+  palSetLineMode(SSD1306_RESET_LINE, SSD1306_LINE_MODE );//Reset
   i2cStop(&I2CD_LCD);
   i2cStart(&I2CD_LCD, &i2ccfg);
   //Pay attention to the way these pins are set and cleared; without them the LCD wouldn't work
-  palClearPad(SSD1306_SA0_PORT,  SSD1306_SA0_PIN);//SA0
-  palSetPad(SSD1306_RESET_PORT,  SSD1306_RESET_PIN);
+  palClearLine(SSD1306_SA0_LINE);//SA0
+  palSetLine(SSD1306_RESET_LINE);
   chThdSleepMilliseconds(2);
-  palClearPad(SSD1306_RESET_PORT, SSD1306_RESET_PIN);
+  palClearLine(SSD1306_RESET_LINE);
   chThdSleepMilliseconds(10);
-  palSetPad(SSD1306_RESET_PORT,   SSD1306_RESET_PIN);
+  palSetLine(SSD1306_RESET_LINE);
 
 
   ssd1306ObjectInit(&SSD1306D1);

@@ -32,6 +32,7 @@ int32_t updateWifiHtmlView(ActionEvent_Typedef 	*pActionEvent);
 int32_t setRGBLEDView(ActionEvent_Typedef 	*pActionEvent);
 int32_t setPWMParamsView(ActionEvent_Typedef 	*pActionEvent);
 int8_t isPaused(void);
+void eByteLoraSendFrame(int8_t buttonPressed);
 #ifdef __cplusplus
 }
 #endif

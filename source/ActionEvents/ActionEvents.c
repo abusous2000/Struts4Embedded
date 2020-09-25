@@ -92,7 +92,7 @@ static int32_t updateWifiHtml(ActionEvent_Typedef 	*pActionEvent){(void)pActionE
    return MSG_OK;
 }
 #if EBYTE_LORA_SERVER != 0
-static void eByteLoraSendFrame(int8_t buttonPressed){
+void eByteLoraSendFrame(int8_t buttonPressed){
 	EByteLoRaFrame_TypeDef   myLoraFrame={0};
 	MyMessage_TypeDef		 myPayload = {0};
 
@@ -231,7 +231,7 @@ static int32_t setPWMParams(ActionEvent_Typedef 	*pActionEvent){(void)pActionEve
 
    return MSG_OK;
 }
-#if PPM_FRAME_DECODER != 0
+#if S4E_USE_PPM_FRAME_DECODER != 0
 static uint8_t  				lastCh3Value = 0;
 void onChannelPPMValueChange (uint8_t ch, uint8_t currentValue, uint8_t newValue){
 	ButtonStats_Typedef buttonStatus;
@@ -284,6 +284,8 @@ static int32_t setUnixtime(ActionEvent_Typedef 	*pActionEvent){
 		rtcSetTimeUnixSecFromString(pActionEvent->u.pData);
 		dbgprintf("New RTC Date:%s", rtcGetTimeAsString());
 	}
+#else
+	(void)pActionEvent;
 	#endif
 
    return MSG_OK;

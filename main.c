@@ -13,7 +13,6 @@
 #include "EByteLora.h"
 #include "RTCHelper.h"
 
-
 #ifdef USE_USBCFG
 #include "usbcfg.h"
 static void initUSBCFG(void);
@@ -89,7 +88,7 @@ int main(void) {
 	  dbgprintf("Failed to mount SD card\r\n");
 #endif
 
-#if PPM_FRAME_DECODER != 0
+#if S4E_USE_PPM_FRAME_DECODER != 0
  initPPMFrameDecoder();
 #endif
 
@@ -125,13 +124,20 @@ static void initDrivers(void){
 }
 void publishStatusToBroker(void);
 void periodicSysTrigger(uint32_t i){(void)i;
-#if S4E_USE_POT == TRUE
+
+   #if S4E_USE_POT == TRUE
    checkOnPotVolumeChange();
-#endif
-#if S4E_USE_MQTT != 0
-   if ( i > 0 && i % 8 == 0 )
+   #endif
+
+   if ( i > 0 && i % 8 == 0 ){
+	   #if S4E_USE_MQTT != 0
 	   publishStatusToBroker();
-#endif
+	   #endif
+	   #if S4E_USE_EBYTE_LORA != 0 && EBYTE_LORA_SERVER != 0
+	   eByteLoraSendFrame(NONE_BUTTON);
+       #endif
+   }
+
 }
 #ifdef USE_USBCFG
 static void initUSBCFG(void){

@@ -7,7 +7,7 @@
  */
 
 #include "Strust4EmbeddedConf.h"
-#if PPM_FRAME_DECODER != 0
+#if S4E_USE_PPM_FRAME_DECODER != 0
 #include "ch.h"
 #include "hal.h"
 #include <string.h>

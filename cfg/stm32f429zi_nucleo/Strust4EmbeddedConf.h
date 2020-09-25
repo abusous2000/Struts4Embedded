@@ -8,7 +8,9 @@
 #ifndef CFG_STRUST4EMBEDDEDCONF_H_
 #define CFG_STRUST4EMBEDDEDCONF_H_
 
-#define PPM_FRAME_DECODER		1
+#define S4E_USE_PPM_FRAME_DECODER	0
+#define S4E_USE_IR_RECEIVER     0
+
 #ifndef S4E_USE_SDCARD
 #define S4E_USE_SDCARD 			0
 #endif
@@ -33,12 +35,22 @@
 
 #ifndef S4E_USE_SSD1306_LCD
 #define S4E_USE_SSD1306_LCD     0
+#define SSD1306_I2C_SCL_LINE    PAL_LINE(GPIOB, GPIOB_ARD_D15)
+#define SSD1306_I2C_SDA_LINE   	PAL_LINE(GPIOB, GPIOB_ARD_D14)
+#define SSD1306_SA0_LINE        PAL_LINE(GPIOA, GPIOA_ARD_D8)
+#define SSD1306_RESET_LINE      PAL_LINE(GPIOA, GPIOA_ARD_D7)
+#define SSD1306_I2C_AF       	4
+#define SSD1306_I2C_LINE_MODE	PAL_MODE_ALTERNATE(SSD1306_I2C_AF)  | PAL_STM32_OSPEED_HIGHEST|  PAL_STM32_OTYPE_OPENDRAIN
+#define SSD1306_LINE_MODE   	PAL_STM32_MODE_OUTPUT  | PAL_STM32_PUPDR_PULLUP
+
 #endif
 
 #ifndef S4E_USE_POT
 #define S4E_USE_POT             1
 #endif
 #ifndef S4E_USE_PWM
+#define PWM_LINE1 		        LINE_ARD_D0
+#define PWM_LINE2 				LINE_ARD_D1
 #define S4E_USE_PWM             0
 #endif
 
@@ -47,6 +59,9 @@
 #endif
 
 #ifndef S4E_USE_RGB
+
+#define LINE_IO_DATA			LINE_ARD_D5
+#define LINE_IO_CLOCK			LINE_ARD_D6
 #define S4E_USE_RGB             0
 #endif
 
@@ -90,15 +105,6 @@
 #define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/STM32F429ZI/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithStm32F429ZI"
 
-#define SSD1306_I2C_AF       			4
-#define SSD1306_I2C_SCL_PORT 			GPIOB
-#define SSD1306_I2C_SCL_PIN  			GPIOB_ARD_D15
-#define SSD1306_I2C_SDA_PORT 			GPIOB
-#define SSD1306_I2C_SDA_PIN  			GPIOB_ARD_D14
-#define SSD1306_SA0_PORT 				GPIOF
-#define SSD1306_SA0_PIN    				GPIOF_ARD_D8
-#define SSD1306_RESET_PORT				GPIOF
-#define SSD1306_RESET_PIN				GPIOF_ARD_D7
 #define LINE_LED_GREEN                  LINE_LED1
 #define LINE_LED_BLUE                   LINE_LED2
 #define LINE_LED_RED                    LINE_LED3

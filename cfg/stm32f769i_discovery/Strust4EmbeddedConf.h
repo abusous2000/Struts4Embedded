@@ -7,6 +7,11 @@
 
 #ifndef CFG_STRUST4EMBEDDEDCONF_H_
 #define CFG_STRUST4EMBEDDEDCONF_H_
+
+#define S4E_USE_PPM_FRAME_DECODER  0
+#define S4E_USE_IR_RECEIVER		0
+#define S4E_USE_EBYTE_LORA 		0
+#define EBYTE_LORA_SERVER       0
 #define S4E_USE_SDCARD          1
 #define BLINKER_THD_STACK_SIZE             1024//512
 #ifndef USE_LCD_TFT
@@ -23,6 +28,15 @@
 #endif
 #ifndef S4E_USE_SSD1306_LCD
 #define S4E_USE_SSD1306_LCD     1
+
+#define SSD1306_I2C_SCL_LINE    PAL_LINE(GPIOB, GPIOB_ARD_D15)
+#define SSD1306_I2C_SDA_LINE   	PAL_LINE(GPIOB, GPIOB_ARD_D14)
+#define SSD1306_SA0_LINE        PAL_LINE(GPIOJ, GPIOJ_ARD_D8)
+#define SSD1306_RESET_LINE      PAL_LINE(GPIOJ, GPIOJ_ARD_D7)
+#define SSD1306_I2C_AF       	4
+#define SSD1306_I2C_LINE_MODE	PAL_MODE_ALTERNATE(SSD1306_I2C_AF)  | PAL_STM32_OSPEED_HIGHEST|  PAL_STM32_OTYPE_OPENDRAIN
+#define SSD1306_LINE_MODE   	PAL_STM32_MODE_OUTPUT  | PAL_STM32_PUPDR_PULLUP
+
 #endif
 #ifndef S4E_USE_POT
 #define S4E_USE_POT             1
@@ -37,6 +51,8 @@
 #define PWM_DRIVER 				PWMD8
 #endif
 #ifndef S4E_USE_RGB
+#define LINE_IO_DATA			LINE_ARD_D5
+#define LINE_IO_CLOCK			LINE_ARD_D6
 #define S4E_USE_RGB				1
 #endif
 #ifndef S4E_USE_MQTT
@@ -77,17 +93,6 @@
 #define DEFAULT_MQTT_PUBLISH_TOPIC      "dev/update/STM32F769i/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithStm32F769i"
 
-
-#define SSD1306_I2C_AF       			4
-#define SSD1306_I2C_SCL_PORT 			GPIOB
-#define SSD1306_I2C_SCL_PIN  			GPIOB_ARD_D15
-#define SSD1306_I2C_SDA_PORT 			GPIOB
-#define SSD1306_I2C_SDA_PIN  			GPIOB_ARD_D14
-#define SSD1306_SA0_PORT 				GPIOJ
-#define SSD1306_SA0_PIN    				GPIOJ_ARD_D8
-#define SSD1306_RESET_PORT				GPIOJ
-#define SSD1306_RESET_PIN				GPIOJ_ARD_D7
-
 #define TIM_TGRO_EVENT_EXTSEL 		    12 //See table 98 in RM on pages 451 & 471 for details
 #define ADC_POT                     	ADCD2
 #define ADC_CHANNEL_IN 					ADC_CHANNEL_IN6
@@ -95,7 +100,7 @@
 #define GO_TO_SLEEP_MACROS      		SCB->SCR 	|= SCB_SCR_SLEEPDEEP_Msk;\
 										PWR->CR1  	|= (PWR_CR1_PDDS | PWR_CR1_LPDS | PWR_CR1_CSBF);\
 										PWR->CR2  	|= (PWR_CR2_CWUPF1 | PWR_CR2_CWUPF6);\
-										PWR->CSR2  	|= (PWR_CSR2_WUPF6 | PWR_CSR2_EWUP6);\
+										PWR->CSR2  	|= (PWR_CSR2_WUPF1 | PWR_CSR2_EWUP1);\
 										RTC->ISR 	&= ~(RTC_ISR_ALRBF | RTC_ISR_ALRAF | RTC_ISR_WUTF | RTC_ISR_TAMP1F |\
 														RTC_ISR_TSOVF | RTC_ISR_TSF);
 #define RTC_ALARM_1_FLAGS2   			RTC_ALRM_MSK4  |\
@@ -109,6 +114,10 @@
 										RTC_ALRM_MSK2  |\
 										RTC_ALRM_ST(5) |\
 										RTC_ALRM_SU(1)
+#define WAKEUP_HARD_REST_CHECK          (uint32_t)(PWR->CSR1 & PWR_CSR1_SBF)
+#define CLEAR_WAKEUP_FLAG			    PWR->CR1  	|= (PWR_CR1_CSBF)
 
-#define BACKUP_CCM_RAM_SECTION			ram5
+
+
+#define BACKUP_CCM_RAM_SECTION 			ram5
 #endif /* CFG_STRUST4EMBEDDED_H_ */

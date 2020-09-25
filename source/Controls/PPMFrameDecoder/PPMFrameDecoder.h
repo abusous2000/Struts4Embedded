@@ -4,7 +4,7 @@
  *  Created on: Aug 27, 2020
  *      Author: abusous2000
  */
-#if PPM_FRAME_DECODER != 0
+#if S4E_USE_PPM_FRAME_DECODER != 0
 #include "Strust4EmbeddedConf.h"
 #ifndef SOURCE_CONTROLS_PPMFRAMEDECODER_H_
 #define SOURCE_CONTROLS_PPMFRAMEDECODER_H_

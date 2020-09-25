@@ -17,19 +17,19 @@ all:
 #	+@make --no-print-directory -f make/stm32f429i_discovery-C++.make all	
 	@echo === Building for stm32f429zi-nucleo ===============================
 	+@make --no-print-directory -f make/stm32f429zi_nucleo.make all
-	+@make --no-print-directory -f make/stm32f429zi_nucleo-C++.make all	
+#	+@make --no-print-directory -f make/stm32f429zi_nucleo-C++.make all	
 	@echo === Building for stm32f446re-nucleo ===============================
 	+@make --no-print-directory -f make/stm32f446re_nucleo.make all
 #	+@make --no-print-directory -f make/stm32f446re_nucleo-C++.make all	
 #	@echo === Building for STM32F746-Discovery ===============================
-#	+@make --no-print-directory -f make/stm32f746_discovery-C++.make all
 #	+@make --no-print-directory -f make/stm32f746_discovery.make all
+#	+@make --no-print-directory -f make/stm32f746_discovery-C++.make all
 #	@echo === Building for STM32F746zg-nucleo ===============================
-#	+@make --no-print-directory -f make/stm32f746zg_nucleo-C++.make all
 #	+@make --no-print-directory -f make/stm32f746zg_nucleo.make all
+#	+@make --no-print-directory -f make/stm32f746zg_nucleo-C++.make all
 #	@echo === Building for STM32F769i-Discovery ===============================	
-#	+@make --no-print-directory -f make/stm32f769i_discovery-C++.make all	
 #	+@make --no-print-directory -f make/stm32f769i_discovery.make all	
+#	+@make --no-print-directory -f make/stm32f769i_discovery-C++.make all	
 	@echo ====================================================================
 	@echo
 

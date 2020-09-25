@@ -21,6 +21,10 @@
  */
 //#define MAX_ACTION_EVENTS                6
 #define BLINKER_THD_STACK_SIZE             1024//512
+#define S4E_USE_PPM_FRAME_DECODER 		0
+#define S4E_USE_EBYTE_LORA 		0
+#define EBYTE_LORA_SERVER       0
+#define S4E_USE_IR_RECEIVER		0
 
 #ifndef S4E_USE_SDCARD
 #define S4E_USE_SDCARD 			1
