@@ -11,9 +11,10 @@
 #include "ssd1306.h"
 #include "Strust4Embedded.h"
 
-static void updateScreen(void){
+void updateScreen(void){
+#if S4E_USE_SSD1306_LCD != 0
    char  buff[20]={0};
-#if S4E_USE_SSD1306_LCD > 0
+
    chsnprintf(buff, sizeof(buff),"Vol:%d",getCurrentVolume());
    LCD_Display_String(buff,30, false);
    chsnprintf(buff, sizeof(buff),"Mute:%d",getCurrentMute());

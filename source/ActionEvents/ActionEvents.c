@@ -8,12 +8,31 @@
 #include "PPMFrameDecoder.h"
 #include "EByteLora.h"
 #include "RTCHelper.h"
+#include "ssd1306.h"
 
 static int8_t 		mute 	   			= 0;
 static int8_t       pause               = 0;
 static int8_t 		volume     			= 80;
 
 #if S4E_USE_EBYTE_LORA != 0
+
+void eByteOnMsgReply(EByteLoRaFrame_TypeDef   *pEByteLoRaFrame){
+	EByteLoRaMsgReceived_TypeDef  myLoRaMsgReceived={0};
+
+	memcpy(&myLoRaMsgReceived, pEByteLoRaFrame->payload, pEByteLoRaFrame->payloadSize);
+	dbgprintf("Host ID:%d\tAddH:%d\tAddL:%d\tChannel:%d\tMsgTypeID:%d\tConfirming FrameID:%d\r\n",
+			   pEByteLoRaFrame->hostID, 	   pEByteLoRaFrame->fromAddressHigh, pEByteLoRaFrame->fromAddressLow,
+			   pEByteLoRaFrame->fromChannel,   pEByteLoRaFrame->msgTypeID,       myLoRaMsgReceived.frameID );
+
+	#if S4E_USE_SSD1306_LCD != 0
+	   char  buff[20]={0};
+	   chsnprintf(buff, sizeof(buff),"Frame:%d Confirmed",myLoRaMsgReceived.frameID );
+	   LCD_Display_String(buff,52, false);
+
+	   LCD_Display_Update();
+	#endif
+
+}
 void eByteProcessReceivedMsg(EByteLoRaFrame_TypeDef	*pEByteLoRaFrame, MyMessage_TypeDef *pMyPayload){
   	dbgprintf("+++FrameID:%d\tHostID:%d\tAddH:%d\tAddL:%d\tChannel:%d\tMsgTypeId:%d\tVolume:%d\tButtons:%d\r\n",
   			  pEByteLoRaFrame->frameID,  	pEByteLoRaFrame->hostID,     pEByteLoRaFrame->fromAddressHigh, 	pEByteLoRaFrame->fromAddressLow,
@@ -21,11 +40,26 @@ void eByteProcessReceivedMsg(EByteLoRaFrame_TypeDef	*pEByteLoRaFrame, MyMessage_
   	if ( pMyPayload->volume )
 			triggerActionEvent(SET_VOLUME_AE_NAME,NULL,pMyPayload->volume,SOURCE_EVENT_LORA);
   	if ( pMyPayload->buttons ){
-  	 	if ( pMyPayload->buttons & 0b1)
-  			triggerActionEvent(TOGGLE_MUTE_AE_NAME,NULL,pMyPayload->buttons,SOURCE_EVENT_LORA);
-  	  	else
-  		if ( pMyPayload->buttons & 0b10)
-  			triggerActionEvent(TOGGLE_PAUSE_AE_NAME,NULL,pMyPayload->buttons,SOURCE_EVENT_LORA);
+  		switch(pMyPayload->buttons ){
+			case TOGGLE_MUTE_BUTTON:
+				triggerActionEvent(TOGGLE_MUTE_AE_NAME,NULL,pMyPayload->buttons,SOURCE_EVENT_LORA);
+				break;
+			case TOGGLE_PAUSE_BUTTON:
+				triggerActionEvent(TOGGLE_PAUSE_AE_NAME,NULL,pMyPayload->buttons,SOURCE_EVENT_LORA);
+				break;
+			case NEXT_TRACK_BUTTON:
+				triggerActionEvent(NEXT_TRACK_AE_NAME,NULL,pMyPayload->buttons,SOURCE_EVENT_LORA);
+				break;
+			case PREV_TRACK_BUTTON:
+				triggerActionEvent(NEXT_TRACK_AE_NAME,NULL,pMyPayload->buttons,SOURCE_EVENT_LORA);
+				break;
+			case VOLUME_UP_BUTTON:
+				triggerActionEvent(VOLUME_UP_AE_NAME,NULL,pMyPayload->buttons,SOURCE_EVENT_LORA);
+				break;
+			case VOLUME_DOWN_BUTTON:
+				triggerActionEvent(VOLUME_DOWN_AE_NAME,NULL,pMyPayload->buttons,SOURCE_EVENT_LORA);
+				break;
+  		}
    	}
 
   	eByteSendAckMsg(pEByteLoRaFrame);
@@ -57,13 +91,13 @@ static int32_t updateWifiHtml(ActionEvent_Typedef 	*pActionEvent){(void)pActionE
 #endif
    return MSG_OK;
 }
-#if S4E_USE_EBYTE_LORA != 0
+#if EBYTE_LORA_SERVER != 0
 static void eByteLoraSendFrame(int8_t buttonPressed){
 	EByteLoRaFrame_TypeDef   myLoraFrame={0};
 	MyMessage_TypeDef		 myPayload = {0};
 
 	myPayload.volume  = volume;
-		myPayload.buttons = 1 << buttonPressed;
+	myPayload.buttons = buttonPressed?1 << buttonPressed:0;
 	eBytePopulateFrame(&myLoraFrame,&myPayload,sizeof(myPayload),POT_JOYSTICK_MSG_TYPE,NULL);
 	eByteSendMsg(&myLoraFrame);
 	dbgprintf("FrameID:%d\tVolume:%d\tButtons:%0xX\r\n", myLoraFrame.frameID, myPayload.volume, myPayload.buttons);
@@ -75,15 +109,15 @@ static void eByteLoraSendFrame(int8_t buttonPressed){
 static int32_t toggleMute(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
   mute= !mute;
 
-#if S4E_USE_EBYTE_LORA != 0
-  eByteLoraSendFrame(MUTE_BUTTON);
+#if EBYTE_LORA_SERVER != 0
+  eByteLoraSendFrame(TOGGLE_MUTE_BUTTON);
 #endif
   return MSG_OK;
 }
 
 static int32_t togglePausePlay(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
-#if S4E_USE_EBYTE_LORA != 0
-  eByteLoraSendFrame(MUTE_BUTTON);
+#if EBYTE_LORA_SERVER != 0
+  eByteLoraSendFrame(TOGGLE_PAUSE_BUTTON);
 #endif
   getHeapUsageInfo();
   if ( pause == 0 ){
@@ -106,7 +140,7 @@ void updateDutyCycleBasedOnVolume(void){
 
 static int32_t setVolume(ActionEvent_Typedef   *pActionEvent){(void)pActionEvent;
   volume = pActionEvent->dataType==CHAR_DTYPE? atoi(pActionEvent->u.pData): (int8_t)pActionEvent->u.data;
-#if S4E_USE_EBYTE_LORA != 0
+#if EBYTE_LORA_SERVER != 0
   eByteLoraSendFrame(NONE_BUTTON);
 #endif
 
@@ -119,8 +153,8 @@ static int32_t volumeDown(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent
    volume -= 5;
    volume = volume<0?0:volume;
    updateDutyCycleBasedOnVolume();
-#if S4E_USE_EBYTE_LORA != 0
-  eByteLoraSendFrame(NONE_BUTTON);
+#if EBYTE_LORA_SERVER != 0
+  eByteLoraSendFrame(VOLUME_DOWN_BUTTON);
 #endif
   return MSG_OK;
 }
@@ -129,15 +163,15 @@ static int32_t volumeUp(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
    volume = volume>100?100:volume;
 
    updateDutyCycleBasedOnVolume();
-#if S4E_USE_EBYTE_LORA != 0
-  eByteLoraSendFrame(NONE_BUTTON);
+#if EBYTE_LORA_SERVER != 0
+  eByteLoraSendFrame(VOLUME_UP_BUTTON);
 #endif
   return MSG_OK;
 }
 
 static int32_t nextTrack(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
    dbgprintf("Next track\r\n");
-#if S4E_USE_EBYTE_LORA != 0
+#if EBYTE_LORA_SERVER != 0
   eByteLoraSendFrame(NEXT_TRACK_BUTTON);
 #endif
   return MSG_OK;
@@ -263,7 +297,7 @@ static int32_t goToSleep(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
 }
 
 static ActionEvent_Typedef actionEventToggleMute 	 	= {.name=TOGGLE_MUTE_AE_NAME,  			.eventSource="Center",      	.action=toggleMute,			.view=toggleMuteView,		.dataType = INT_DTYPE};
-static ActionEvent_Typedef actionEventNextTrack  	 	= {.name=NEXT_TRACK_AE_NAME,			.eventSource="Up",          	.action=nextTrack,          .nextActionEventName=TOGGLE_MUTE_AE_NAME,		.dataType = INT_DTYPE};
+static ActionEvent_Typedef actionEventNextTrack  	 	= {.name=NEXT_TRACK_AE_NAME,			.eventSource="Up",          	.action=nextTrack,          							.dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventTogglePausePlay	= {.name=TOGGLE_PAUSE_AE_NAME,			.eventSource="Down",        	.action=togglePausePlay};
 static ActionEvent_Typedef actionEventVolumeDown   	 	= {.name=VOLUME_DOWN_AE_NAME,			.eventSource="Left",        	.action=volumeDown,         .view=volumeView,			.dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventVolumeUp       	= {.name=VOLUME_UP_AE_NAME,				.eventSource="Right",       	.action=volumeUp,			.view=volumeView,			.dataType = INT_DTYPE};

@@ -6,7 +6,7 @@
 
 
 
-#define DEBOUNCING_PULSE_WIDTH_MIN 1
+#define DEBOUNCING_PULSE_WIDTH_MIN 10
 static systime_t lastPulseTime;
 static void *lastButton;
 static void joystickCBHandler(void *arg) {
@@ -44,7 +44,7 @@ static CPalTypedef downKey={    .line=LINE_JOY_DOWN,        .mode=BUTTON_MODE2, 
 static CPalTypedef leftKey={    .line=LINE_JOY_LEFT,        .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)VOLUME_DOWN_AE_NAME};
 static CPalTypedef rightKey={   .line=LINE_JOY_RIGHT,       .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)VOLUME_UP_AE_NAME};
 
-//For this to work, plz connect Pin20 to Pin15 in the Zigbee header on the waveshare accessory sheild
+//For this to work, plz connect Pin20 to Pin15 in the Zigbee header on the waveshare accessory shield
 #ifdef EASYLINK_BUTTON
 static CPalTypedef easyLinkKey={.line=EASYLINK_BUTTON,  	.mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE,.cb=joystickCBHandler, .arg=(void*)TOGGLE_PAUSE_AE_NAME};
 #endif

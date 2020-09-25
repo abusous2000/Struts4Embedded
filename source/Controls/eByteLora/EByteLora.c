@@ -358,7 +358,9 @@ static THD_FUNCTION(eByteLoraThread, arg) {(void)arg;
 			eByteSendPeriodicMsg();
 			#endif
 			eByteProcessReplyMsgs();
+			#if EBYTE_LORA_SEND_PERIODIC_MSG != 0
 			chThdSleepMilliseconds(EBYTE_LORA_SLEEP_MS_BTWN_MSGS);
+			#endif
 		#else
 			EByteLoRaFrame_TypeDef   myLoraMsgPayload = {0};
 			MyMessage_TypeDef		      myPayload        = {0};

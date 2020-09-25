@@ -5,6 +5,7 @@
 
 #define TOGGLE_MUTE_AE_NAME                 "toggleMute"
 #define NEXT_TRACK_AE_NAME                  "nextTrack"
+#define PREV_TRACK_AE_NAME                  "prevTrack"
 #define TOGGLE_PAUSE_AE_NAME                "togglePause"
 #define VOLUME_UP_AE_NAME                   "volumeUp"
 #define VOLUME_DOWN_AE_NAME                 "volumeDown"

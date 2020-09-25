@@ -8,7 +8,7 @@
 #ifndef CFG_STRUST4EMBEDDEDCONF_H_
 #define CFG_STRUST4EMBEDDEDCONF_H_
 
-#define PPM_FRAME_DECODER		0
+
 #ifndef S4E_USE_SDCARD
 #define S4E_USE_SDCARD 			0
 #endif
@@ -102,6 +102,7 @@
 #define ADC_POT                     	ADCD1
 #define ADC_CHANNEL_IN 					ADC_CHANNEL_IN0
 
+#define PPM_FRAME_DECODER				0
 #define PPM_DECODING_DEBUG				0
 #define MAX_FRAMES_TO_COLLECT     		10
 #define PORTABLE_ICU_LINE 				PAL_LINE(GPIOB, 6U) //D10
@@ -115,7 +116,7 @@
 #define PORTAB_EBYTE_LORA_SD 			SD1
 
 #define EBYTE_LORA_TX 	    			LINE_ARD_D2  //PA10
-#define EBYTE_LORA_RX 	    			LINE_ARD_D8 //PA9
+#define EBYTE_LORA_RX 	    			LINE_ARD_D10 //PA9
 #define EBYTE_LORA_M0 	    			LINE_ARD_D4
 #define EBYTE_LORA_M1 	    			LINE_ARD_D5
 #define EBYTE_LORA_AUX 	    			LINE_ARD_D6
@@ -131,4 +132,6 @@
 
 #define EBYTE_LORA_SAVE_PARAMS		    1
 #define EBYTE_LORA_100MW
+
+#define S4E_USE_IR_RECEIVER				0
 #endif /* CFG_STRUST4EMBEDDED_H_ */
