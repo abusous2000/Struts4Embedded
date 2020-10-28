@@ -169,7 +169,7 @@
 										RTC_ALRM_ST(0) |\
 										RTC_ALRM_SU(0)
 
-#define RTC_ALARM_2_FLAGS2  				RTC_ALRM_MSK4  |\
+#define RTC_ALARM_2_FLAGS2  			RTC_ALRM_MSK4  |\
 										RTC_ALRM_MSK3  |\
 										RTC_ALRM_MSK2  |\
 										RTC_ALRM_ST(5) |\

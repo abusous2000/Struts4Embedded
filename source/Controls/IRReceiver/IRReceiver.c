@@ -226,7 +226,7 @@ CC_WEAK void handlIREvent(IR_CMD_t command, bool repeatFlag){
 static THD_WORKING_AREA(wairReceiverThd, 1024);
 static THD_FUNCTION(irReceiverThd, arg) {
   (void)arg;
-
+   chRegSetThreadName("irReceiverThd");
   pSetVolumeUpAE   	    = getActionEvent(VOLUME_UP_AE_NAME);
   pSetVolumeDownAE   	= getActionEvent(VOLUME_DOWN_AE_NAME);
   pTogglePauseAE 		= getActionEvent(TOGGLE_PAUSE_AE_NAME);

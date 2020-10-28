@@ -351,6 +351,7 @@ CC_WEAK void eByteProcessReceivedMsg(EByteLoRaFrame_TypeDef	*pEByteLoRaFrame, My
 
 static THD_WORKING_AREA(waEByteLoraThread, EBYTE_LORA_THD_STACK_SIZE);
 static THD_FUNCTION(eByteLoraThread, arg) {(void)arg;
+	chRegSetThreadName("eByteLoraThd");
     eByteInit();
 	while (true) {
 		#if EBYTE_LORA_SERVER != 0

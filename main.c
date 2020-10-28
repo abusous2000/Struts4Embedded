@@ -13,6 +13,12 @@
 #include "EByteLora.h"
 #include "RTCHelper.h"
 
+
+#if INCLUDE_SEGGER_JLINK != 0
+#include "SEGGER_SYSVIEW_ChibiOS.h"
+#include "SEGGER_RTT_streams.h"
+#endif
+
 #ifdef USE_USBCFG
 #include "usbcfg.h"
 static void initUSBCFG(void);
@@ -48,6 +54,24 @@ void initMain(void);
 void initMain(void){
  halInit();
  chSysInit();
+
+#if INCLUDE_SEGGER_JLINK != 0
+ /*
+  * This is optional. You need to initialize this if you will be using the
+  * RTT sequential streams (RTTD0). You *don't* need to use them; you can
+  * use RTT directly (call SEGGER_RTT_xxxx) without any initialization.
+  *
+  *
+  * Initialize RTT (channel 0). The output can be seen on Telnet por 19201.
+  */
+ rttInit();
+ rttSetUpFlags(&RTTD0, RTT_MODE_FLAGS_BLOCK_IF_FIFO_FULL);
+
+ /*
+  * Start SystemView
+  */
+ SYSVIEW_ChibiOS_Start(STM32_SYSCLK, STM32_SYSCLK, "I#44=OSTick,I#54=USART2");
+#endif
 }
 #endif
 int main(void) {

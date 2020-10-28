@@ -9,15 +9,15 @@
 #define CFG_STRUST4EMBEDDEDCONF_H_
 /*
  * Pins Used by Ethernet
- *  PA1  - ETH_RMII_REF_CLK
- *  PA2  - ETH_RMII_MDIO
- *  PA3  - ETH_RMII_MDINT
- *	PB11 - GPIOB_PIN11_ETH_TX_EN
- *	PB12 - GPIOB_PIN12_ETH_TX0
- *	PB13 - GPIOB_PIN13_ETH_TX1
- *  PC1  - ETH_RMII_MDC
- *  PC4  - ETH_RMII_RXD0
- *  PC5  - ETH_RMII_RXD1
+MDIO	<=>		PA2 --black
+MDC	<=>			PC1---white
+nINT/RETCLK	<=>	PA1---Eggplant
+CRS	<=>			PA7---Gray
+RX0	<=>			PC4---blue
+RX1	<=>			PC5-- green
+TX_EN	<=>		PB11--orange
+TX0	<=>			PB12--yellow
+TX1	<=>			PB13--Eggplant
  */
 //#define MAX_ACTION_EVENTS                6
 #define BLINKER_THD_STACK_SIZE             1024//512

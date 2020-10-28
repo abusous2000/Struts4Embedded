@@ -72,7 +72,7 @@
 #define STM32_CK48MSEL                      STM32_CK48MSEL_PLLALT
 #define STM32_PVD_ENABLE                    FALSE
 #define STM32_PLS                           STM32_PLS_LEV0
-#define STM32_BKPRAM_ENABLE                 FALSE
+#define STM32_BKPRAM_ENABLE                 TRUE
 
 /*
  * IRQ system settings.

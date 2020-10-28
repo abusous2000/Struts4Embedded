@@ -120,7 +120,7 @@
 #define PORTAB_EBYTE_LORA_SD 			SD1
 
 #define EBYTE_LORA_TX 	    			LINE_ARD_D2  //PA10
-#define EBYTE_LORA_RX 	    			LINE_ARD_D10 //PA9
+#define EBYTE_LORA_RX 	    			LINE_ARD_D10 //PB6
 #define EBYTE_LORA_M0 	    			LINE_ARD_D4
 #define EBYTE_LORA_M1 	    			LINE_ARD_D5
 #define EBYTE_LORA_AUX 	    			LINE_ARD_D6
@@ -138,4 +138,29 @@
 #define EBYTE_LORA_100MW
 
 #define S4E_USE_IR_RECEIVER				0
+#define GO_TO_SLEEP_MACROS      	    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;\
+									    PWR->CR  |= (PWR_CR_PDDS | PWR_CR_LPDS | PWR_CR_CSBF  | PWR_CR_CWUF);\
+									    PWR->CSR |= (PWR_CSR_WUF |  PWR_CSR_EWUP1 );\
+									    RTC->ISR &= ~(RTC_ISR_ALRBF | RTC_ISR_ALRAF | RTC_ISR_WUTF | RTC_ISR_TAMP1F |\
+													RTC_ISR_TSOVF | RTC_ISR_TSF);
+
+#define RTC_ALARM_1_FLAGS2   			RTC_ALRM_MSK4  |\
+										RTC_ALRM_MSK3  |\
+										RTC_ALRM_MSK2  |\
+										RTC_ALRM_ST(0) |\
+										RTC_ALRM_SU(0)
+
+#define RTC_ALARM_2_FLAGS2  			RTC_ALRM_MSK4  |\
+										RTC_ALRM_MSK3  |\
+										RTC_ALRM_MSK2  |\
+										RTC_ALRM_ST(5) |\
+										RTC_ALRM_SU(1)
+#define WAKEUP_HARD_REST_CHECK          (uint32_t)(PWR->CSR & PWR_CSR_SBF)
+#define CLEAR_WAKEUP_FLAG			    PWR->CR  	|= (PWR_CR_CSBF)
+
+
+
+#define BACKUP_CCM_RAM_SECTION 			ram5
+
+//#define USER_BUTTON_EVENT               GO_TO_SLEEP_AE_NAME
 #endif /* CFG_STRUST4EMBEDDED_H_ */
