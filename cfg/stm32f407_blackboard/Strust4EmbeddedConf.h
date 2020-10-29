@@ -9,15 +9,15 @@
 #define CFG_STRUST4EMBEDDEDCONF_H_
 /*
  * Pins Used by Ethernet
-MDIO	<=>		PA2 --black
-MDC	<=>			PC1---white
-nINT/RETCLK	<=>	PA1---Eggplant
-CRS	<=>			PA7---Gray
-RX0	<=>			PC4---blue
-RX1	<=>			PC5-- green
-TX_EN	<=>		PB11--orange
-TX0	<=>			PB12--yellow
-TX1	<=>			PB13--Eggplant
+MDIO	<=>		PA2 --black   -12L
+MDC	<=>			PC1---white   -16R
+nINT/RETCLK	<=>	PA1---Eggplant-13R
+CRS	<=>			PA7---Gray    -10R
+RX0	<=>			PC4---blue    -9L
+RX1	<=>			PC5-- green   -9R
+TX_EN	<=>		PB11--orange  -2L
+TX0	<=>			PB12--yellow  -2R
+TX1	<=>			PB13--Eggplant-1L
  */
 //#define MAX_ACTION_EVENTS                6
 #define BLINKER_THD_STACK_SIZE             1024//512
@@ -46,6 +46,13 @@ TX1	<=>			PB13--Eggplant
 #endif
 #ifndef S4E_USE_POT
 #define S4E_USE_POT             1
+#define TIM_TGRO_EVENT_EXTSEL 	0x08 //See p. 386 in RM
+#define ADC_POT_TIM             GPTD3 ///See p. 386 in RM
+#define ADC_POT                 ADCD1
+#define ADC_CHANNEL_IN 			ADC_CHANNEL_IN3//See Table 10 in user manual or datasheet
+//#define LINE_ARD_D2           PAL_LINE(GPIOA, 10U)
+#define POT_GPIO_PIN            PAL_LINE(GPIOA, 3U)
+
 #endif
 #ifndef S4E_USE_PWM
 #define S4E_USE_PWM             0
@@ -107,12 +114,6 @@ TX1	<=>			PB13--Eggplant
 #define LINE_LED_GREEN                  PAL_LINE(GPIOA, 6U)
 //#define LINE_LED_RED                    PAL_LINE(GPIOA, 7U)
 
-#define TIM_TGRO_EVENT_EXTSEL 		    0x08 //See p. 386 in RM
-#define ADC_POT_TIM                     GPTD3 ///See p. 386 in RM
-#define ADC_POT                     	ADCD1
-#define ADC_CHANNEL_IN 					ADC_CHANNEL_IN3//See Table 10 in user manual or datasheet
-//#define LINE_ARD_D2                 PAL_LINE(GPIOA, 10U)
-#define POT_GPIO_PIN                    PAL_LINE(GPIOA, 3U)
 
 #define MPU_SCL_PIN						PAL_LINE(GPIOB, 10U)//LINE_ARD_D15
 #define MPU_SDA_PIN						PAL_LINE(GPIOB, 11U)//LINE_ARD_D14
