@@ -160,6 +160,7 @@ void periodicSysTrigger(uint32_t i){(void)i;
 	   #if S4E_USE_EBYTE_LORA != 0 && EBYTE_LORA_SERVER != 0
 	   eByteLoraSendFrame(NONE_BUTTON);
        #endif
+	   SEGGER_SYSVIEW_PrintfHost("RTT %d\r\n", i);
    }
 
 }
