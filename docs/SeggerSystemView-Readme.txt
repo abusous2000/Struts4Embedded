@@ -1,5 +1,5 @@
 -Make sure to turn off debugger before running SystemView
--turn off printfs in chconf.h by setting to DEBUG_TRACE_PRINT FALSE, esle UART will be consuming so much of the timeline
+-turn off printfs in chconf.h by setting to DEBUG_TRACE_PRINT FALSE, else UART will be consuming so much of the time-line
 -in chconf.h set INCLUDE_SEGGER_JLINK to 1 in 
 -Add #include "chHooks.h" in chconf.h post CH_CFG_THREAD_EXTRA_FIELDS (remove what was in included in chHooks.h)
 -Target Connection CORTEX-M4

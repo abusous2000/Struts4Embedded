@@ -58,7 +58,7 @@ static CPalTypedef centerKey={  .line=USER_BUTTON,      .mode=BUTTON_MODE1, .ris
   static CPalTypedef upKey={      .line=USER2_BUTTON,          .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)NEXT_TRACK_AE_NAME};
   #endif
   #if defined(USER3_BUTTON)
-  static CPalTypedef downKey={    .line=USER3_BUTTON,        .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)TOGGLE_PAUSE_AE_NAME};
+  static CPalTypedef downKey={    .line=USER3_BUTTON,        .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)GO_TO_SLEEP_AE_NAME};
   #endif
 #endif
 

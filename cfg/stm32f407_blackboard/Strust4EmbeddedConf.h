@@ -126,6 +126,7 @@ TX1	<=>			PB13--Eggplant-1L
 #define USER_BUTTON                     PAL_LINE(GPIOA, 0U)
 #define USER2_BUTTON                    PAL_LINE(GPIOE, 4U)//K0
 #define USER3_BUTTON                    PAL_LINE(GPIOE, 3U)//K1
+#endif
 
 #include "board.h"
 #define SDMMCD0_LINE 					LINE_SD_D0		//  PAL_LINE(GPIOG,9)
@@ -138,5 +139,30 @@ TX1	<=>			PB13--Eggplant-1L
 
 
 #define SDMMC_ALREADY_CONFIG            1
-#endif
+
+
+#define GO_TO_SLEEP_MACROS      	   SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;\
+									   PWR->CR  |= (PWR_CR_PDDS | PWR_CR_LPDS | PWR_CR_CSBF  | PWR_CR_CWUF);\
+									   PWR->CSR |= (PWR_CSR_WUF |  PWR_CSR_EWUP );\
+									   RTC->ISR &= ~(RTC_ISR_ALRBF | RTC_ISR_ALRAF | RTC_ISR_WUTF | RTC_ISR_TAMP1F |\
+													RTC_ISR_TSOVF | RTC_ISR_TSF);
+
+#define RTC_ALARM_1_FLAGS2   			RTC_ALRM_MSK4  |\
+										RTC_ALRM_MSK3  |\
+										RTC_ALRM_MSK2  |\
+										RTC_ALRM_ST(0) |\
+										RTC_ALRM_SU(0)
+
+#define RTC_ALARM_2_FLAGS2  			RTC_ALRM_MSK4  |\
+										RTC_ALRM_MSK3  |\
+										RTC_ALRM_MSK2  |\
+										RTC_ALRM_ST(5) |\
+										RTC_ALRM_SU(1)
+#define WAKEUP_HARD_REST_CHECK          (uint32_t)(PWR->CSR & PWR_CSR_SBF)
+#define CLEAR_WAKEUP_FLAG			    PWR->CR  	|= (PWR_CR_CSBF)
+
+
+
+#define BACKUP_CCM_RAM_SECTION 			ram5
+
 #endif /* CFG_STRUST4EMBEDDED_H_ */

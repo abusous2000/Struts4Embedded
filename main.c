@@ -70,7 +70,7 @@ void initMain(void){
  /*
   * Start SystemView
   */
- SYSVIEW_ChibiOS_Start(STM32_SYSCLK, STM32_SYSCLK, "I#44=OSTick,I#54=USART2");
+ SYSVIEW_ChibiOS_Start(STM32_SYSCLK, STM32_SYSCLK, "I#44=OSTick,I#54=USART2,I#76=ADC,I#56=Button,I#77=ETH/MAC");
 #endif
 }
 #endif
