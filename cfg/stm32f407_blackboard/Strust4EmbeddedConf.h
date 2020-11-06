@@ -51,7 +51,7 @@ TX1	<=>			PB13--Eggplant-1L
 #define ADC_POT                 ADCD1
 #define ADC_CHANNEL_IN 			ADC_CHANNEL_IN3//See Table 10 in user manual or datasheet
 //#define LINE_ARD_D2           PAL_LINE(GPIOA, 10U)
-#define POT_GPIO_PIN            PAL_LINE(GPIOA, 3U)
+#define POT_GPIO_PIN            PAL_LINE(GPIOA, 3U)//PA3
 
 #endif
 #ifndef S4E_USE_PWM
@@ -96,7 +96,9 @@ TX1	<=>			PB13--Eggplant-1L
 #define MAX_THD_NAME_SIZE          		25
 #define MAX_NUM_OF_WORKER_THDS			4
 //Note that for this board, serial output uses PA2 & PA3 (w/ AF 7) which is in conflict with Ethernet with PA2
-#define PORTAB_SD                       SD2
+#define PORTAB_SD                       SD1
+#define LINE_UART_SD_TX                 PAL_LINE(GPIOA, 9)//PA9
+#define LINE_UART_SD_RX                 PAL_LINE(GPIOA, 10)//PA10
 #define MQTT_CMD_SUBSCRIBE_TOPIC   		"dev/cmd/STM32F407BlackBoard/mp3Player"
 #define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/STM32F407BlackBoard/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithSTM32F407BlackBoard"
@@ -111,8 +113,8 @@ TX1	<=>			PB13--Eggplant-1L
 #define SSD1306_RESET_PORT				GPIOF
 #define SSD1306_RESET_PIN				GPIOF_ARD_D7
 //brown, black, red, & orange
-#define LINE_LED_GREEN                  PAL_LINE(GPIOA, 6U)
-//#define LINE_LED_RED                    PAL_LINE(GPIOA, 7U)
+#define LINE_LED_GREEN                  PAL_LINE(GPIOA, 6U)//PA6
+
 
 
 #define MPU_SCL_PIN						PAL_LINE(GPIOB, 10U)//LINE_ARD_D15
@@ -123,18 +125,18 @@ TX1	<=>			PB13--Eggplant-1L
 #define MPU_INT_PORT					GPIOA
 #define MPU_INT_PIN						10
 #ifndef LINE_JOY_UP
-#define USER_BUTTON                     PAL_LINE(GPIOA, 0U)
-#define USER2_BUTTON                    PAL_LINE(GPIOE, 4U)//K0
-#define USER3_BUTTON                    PAL_LINE(GPIOE, 3U)//K1
+#define USER_BUTTON                     PAL_LINE(GPIOA, 0U)//PA0
+#define USER2_BUTTON                    PAL_LINE(GPIOE, 4U)//PE4-K0
+#define USER3_BUTTON                    PAL_LINE(GPIOE, 3U)//PE3-K1
 #endif
 
 #include "board.h"
-#define SDMMCD0_LINE 					LINE_SD_D0		//  PAL_LINE(GPIOG,9)
-#define SDMMCD1_LINE 					LINE_SD_D1		//  PAL_LINE(GPIOG,10)
-#define SDMMCD2_LINE 					LINE_SD_D2		//  PAL_LINE(GPIOB,3)
-#define SDMMCD3_LINE 					LINE_SD_D3		//  PAL_LINE(GPIOB,4)
-#define SDMMCCK_LINE 					LINE_SD_CLK		//  PAL_LINE(GPIOD,6)
-#define SDMMCMD_LINE 					LINE_SD_CMD		//  PAL_LINE(GPIOD,7)
+#define SDMMCD0_LINE 					LINE_SD_D0		//PC8
+#define SDMMCD1_LINE 					LINE_SD_D1		//PC9
+#define SDMMCD2_LINE 					LINE_SD_D2		//PC10
+#define SDMMCD3_LINE 					LINE_SD_D3		//PC11
+#define SDMMCCK_LINE 					LINE_SD_CLK		//PC12
+#define SDMMCMD_LINE 					LINE_SD_CMD		//PD2
 //#define SDMMMC_DETECT   				LINE_SD_DETECT	////PAL_LINE(GPIOI,15)
 
 

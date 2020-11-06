@@ -414,7 +414,11 @@
  *          buffers.
  */
 #if !defined(SERIAL_BUFFERS_SIZE) || defined(__DOXYGEN__)
-#define SERIAL_BUFFERS_SIZE                 82
+	#if INCLUDE_SEGGER_JLINK != 0
+	#define SERIAL_BUFFERS_SIZE                 512
+	#else
+	#define SERIAL_BUFFERS_SIZE                 82
+	#endif
 #endif
 
 /*===========================================================================*/

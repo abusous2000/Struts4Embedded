@@ -44,7 +44,7 @@ static const SerialConfig wifiSerialvfg = {
 };
 #endif
 
-#if DEBUG_TRACE_PRINT == 1
+#if DEBUG_TRACE_PRINT != 0
 BaseSequentialStream *GlobalDebugChannel = (BaseSequentialStream *)&PORTAB_SD;
 #endif
 void initWifiModuleServer(void);
@@ -70,16 +70,20 @@ void initMain(void){
  /*
   * Start SystemView
   */
- SYSVIEW_ChibiOS_Start(STM32_SYSCLK, STM32_SYSCLK, "I#44=OSTick,I#54=USART2,I#76=ADC,I#56=Button,I#77=ETH/MAC");
+ SYSVIEW_ChibiOS_Start(STM32_SYSCLK, STM32_SYSCLK, "I#44=OSTick,I#53=USART1,I#54=USART2,I#76=ADC,I#56=Button,I#77=ETH/MAC");
 #endif
 }
 #endif
 int main(void) {
   initMain();
-#if HAL_USE_SERIAL == 1
+#if HAL_USE_SERIAL != 0
 	#ifdef USE_USBCFG
 	  initUSBCFG();
 	#else
+      #if defined(BOARD_SEEED_ARCH_MAX) && STM32_SERIAL_USE_USART1 != 0
+	  palSetLineMode(LINE_UART_SD_TX,  PAL_MODE_ALTERNATE(7)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL);
+	  palSetLineMode(LINE_UART_SD_RX, PAL_MODE_ALTERNATE(7)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL);
+      #endif
 	  sdStart(&PORTAB_SD, &myserialcfg);
 	#endif
 #endif

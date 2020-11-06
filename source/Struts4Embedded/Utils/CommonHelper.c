@@ -88,7 +88,7 @@ void initStruts4EmbeddedFramework(void){
 	if ( sysProperties != NULL )
 		return;
 	sysProperties = hashmap_new(20);
-#ifndef STM32F407xx
+#if !defined(STM32F407xx) || defined(BOARD_SEEED_ARCH_MAX)
 	pPrintfMutex = &printfMutex;
 	chMtxObjectInit(pPrintfMutex);
 #endif

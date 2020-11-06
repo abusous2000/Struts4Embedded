@@ -31,7 +31,7 @@
 #define _CHIBIOS_RT_CONF_
 #define _CHIBIOS_RT_CONF_VER_6_1_
 #define bool_t						bool
-#define DEBUG_TRACE_PRINT     		TRUE
+#define DEBUG_TRACE_PRINT     		TRUE//FALSE
 #define CHPRINTF_USE_FLOAT    		TRUE
 #define PORT_ENABLE_GUARD_PAGES     TRUE
 #define INCLUDE_SEGGER_JLINK 		1
