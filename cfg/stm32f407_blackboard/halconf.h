@@ -27,13 +27,15 @@
 
 #ifndef HALCONF_H
 #define HALCONF_H
+#define FAULT_INFO_HOOK 			        _fault_info_hook
+#define SERIAL_BUFFERS_SIZE                 256
 
 #define _CHIBIOS_HAL_CONF_
 #define _CHIBIOS_HAL_CONF_VER_7_1_
 
 #include "mcuconf.h"
 #if !defined(CHPRINTF_USE_FLOAT) || defined(__DOXYGEN__)
-#define CHPRINTF_USE_FLOAT                         TRUE
+#define CHPRINTF_USE_FLOAT                   TRUE
 #endif
 /**
  * @brief   Enables the PAL subsystem.
@@ -165,7 +167,7 @@
  * @brief   Enables the SPI subsystem.
  */
 #if !defined(HAL_USE_SPI) || defined(__DOXYGEN__)
-#define HAL_USE_SPI                         FALSE
+#define HAL_USE_SPI                         TRUE//FALSE
 #endif
 
 /**
@@ -414,11 +416,7 @@
  *          buffers.
  */
 #if !defined(SERIAL_BUFFERS_SIZE) || defined(__DOXYGEN__)
-	#if INCLUDE_SEGGER_JLINK != 0
-	#define SERIAL_BUFFERS_SIZE                 512
-	#else
-	#define SERIAL_BUFFERS_SIZE                 82
-	#endif
+#define SERIAL_BUFFERS_SIZE                 256
 #endif
 
 /*===========================================================================*/

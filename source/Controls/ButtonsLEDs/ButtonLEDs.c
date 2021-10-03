@@ -4,7 +4,9 @@
 #include "Strust4Embedded.h"
 #include "ButtonLEDs.h"
 
-
+#ifndef BUTTON_EDGE_MODE
+#define BUTTON_EDGE_MODE  PAL_EVENT_MODE_RISING_EDGE
+#endif
 
 #define DEBOUNCING_PULSE_WIDTH_MIN 10
 static systime_t lastPulseTime;
@@ -38,7 +40,9 @@ CPalTypedef 		  			*pRedLedPAL;
 static CPalTypedef redLedPAL={  .line=LINE_LED_RED,       	.mode=LED_MODE};
 #endif
 #if S4E_USE_JOYSTICK != 0
+#ifdef LINE_JOY_CENTER
 static CPalTypedef centerKey={  .line=LINE_JOY_CENTER,      .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)TOGGLE_MUTE_AE_NAME};
+#endif
 static CPalTypedef upKey={      .line=LINE_JOY_UP,          .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)NEXT_TRACK_AE_NAME};
 static CPalTypedef downKey={    .line=LINE_JOY_DOWN,        .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)TOGGLE_PAUSE_AE_NAME};
 static CPalTypedef leftKey={    .line=LINE_JOY_LEFT,        .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)VOLUME_DOWN_AE_NAME};
@@ -75,7 +79,9 @@ void initButtonsLEDs(void) {
 #endif
 
 #if S4E_USE_JOYSTICK != 0
+  #ifdef LINE_JOY_CENTER
   pCenterKey   = initCPalInstance(&centerKey);pCenterKey->init(&centerKey);
+  #endif
   #ifndef STM32F446xx
   //These two lines, has interrupt conflict with STM32F446xx
   pUpKey       = initCPalInstance(&upKey);pUpKey->init(&upKey);
@@ -91,7 +97,9 @@ void initButtonsLEDs(void) {
 //  pEasyLinkKey0= initCPalInstance(&easyLinkKey0);pEasyLinkKey0->init(&easyLinkKey0);
 //  pEasyLinkKey1= initCPalInstance(&easyLinkKey1);pEasyLinkKey1->init(&easyLinkKey1);
 #elif defined(USER_BUTTON)
+   #ifdef LINE_JOY_CENTER
    pCenterKey   = initCPalInstance(&centerKey);pCenterKey->init(&centerKey);
+   #endif
    #if defined(USER2_BUTTON)
    pUpKey       = initCPalInstance(&upKey);pUpKey->init(&upKey);
    #endif

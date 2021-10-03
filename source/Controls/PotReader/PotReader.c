@@ -85,8 +85,8 @@ static const ADCConversionGroup adcgrpcfg = {
   /***Figure out where ur channels belongs to which SMPR[1-2] and to which SQR[1-3],
    *see line 412 @hal_adc_lld.h header file for details
   */
-  .smpr1=0,              					/* SMPR1 */
-  .smpr2=ADC_SMPR2_SMP_AN6(ADC_SAMPLE_144), /* SMPR2 *///Define number of cycles for N6. See header file & RM on p. 473-4 for details
+  .smpr1=ADC_SMPR2_SMP1,              					/* SMPR1 */
+  .smpr2=ADC_SMPR2_SMP2, /* SMPR2 *///Define number of cycles for N6. See header file & RM on p. 473-4 for details
   .htr=0,                                   /* HTR  */ //no thresholds for analog watch dogs */
   .ltr=0,                                   /* LTR  */
   .sqr1=0,                                  /* SQR1 */
@@ -115,7 +115,7 @@ void initPotReader(void) {
    */
   adcStartConversion(&ADC_POT, &adcgrpcfg, adcBuffer, ADC_GRP1_BUF_DEPTH);
   /*Here is back trace for the clock
-   * #define STM32_HSECLK                8000000U
+   * #define STM32_HSECLK                8000000U or 2500000
 	 #define STM32_PLLCLKIN              (STM32_HSECLK / STM32_PLLM_VALUE)= 25000000U / 25
 	 #define STM32_PLLVCO                (STM32_PLLCLKIN * STM32_PLLN_VALUE)= (25000000U / 25) * 432
 

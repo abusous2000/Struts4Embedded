@@ -12,7 +12,7 @@
 #include "PPMFrameDecoder.h"
 #include "EByteLora.h"
 #include "RTCHelper.h"
-
+#include "w25qxx.h"
 
 #if INCLUDE_SEGGER_JLINK != 0
 #include "SEGGER_SYSVIEW_ChibiOS.h"
@@ -26,7 +26,7 @@ static void initUSBCFG(void);
 
 static void initDrivers(void);
 
-
+#if DEBUG_TRACE_PRINT != 0
 /*VCP Serial configuration*/
 static const SerialConfig myserialcfg = {
   115200,
@@ -34,6 +34,7 @@ static const SerialConfig myserialcfg = {
   USART_CR2_STOP1_BITS,
   0
 };
+#endif
 #if S4E_USE_WIFI_MODULE_THD
 /* WiFi Serial configuration. */
 static const SerialConfig wifiSerialvfg = {
@@ -70,7 +71,8 @@ void initMain(void){
  /*
   * Start SystemView
   */
- SYSVIEW_ChibiOS_Start(STM32_SYSCLK, STM32_SYSCLK, "I#44=OSTick,I#53=USART1,I#54=USART2,I#76=ADC,I#56=Button,I#77=ETH/MAC");
+ SYSVIEW_ChibiOS_Start(STM32_SYSCLK, STM32_SYSCLK, "I#44=OSTick,I#53=USART1,I#54=USART2,I#76=ADC,I#22=K_UP,I#23=Button,I#26=K0,I#77=ETH/MAC");
+// SEGGER_SYSVIEW_NameMarker(1,"setVolume");
 #endif
 }
 #endif
@@ -81,10 +83,12 @@ int main(void) {
 	  initUSBCFG();
 	#else
       #if defined(BOARD_SEEED_ARCH_MAX) && STM32_SERIAL_USE_USART1 != 0
-	  palSetLineMode(LINE_UART_SD_TX,  PAL_MODE_ALTERNATE(7)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL);
-	  palSetLineMode(LINE_UART_SD_RX, PAL_MODE_ALTERNATE(7)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL);
+		  palSetLineMode(LINE_UART_SD_TX, PAL_MODE_ALTERNATE(7)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL);
+		  palSetLineMode(LINE_UART_SD_RX, PAL_MODE_ALTERNATE(7)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL);
       #endif
-	  sdStart(&PORTAB_SD, &myserialcfg);
+      #if DEBUG_TRACE_PRINT != 0
+	      sdStart(&PORTAB_SD, &myserialcfg);
+      #endif
 	#endif
 #endif
   initDrivers();
@@ -132,6 +136,10 @@ int main(void) {
 	  #endif
   }
 }
+#ifndef USE_W25Q_XXXX
+#define USE_W25Q_XXXX  0
+#endif
+
 #if S4E_USE_SDCARD != 0
 static NameValuePairStaticTypeDef readFilesFromFolder=  {.key=READ_FILES_FROM_FOLDER,	.value="/music"};
 #endif
@@ -149,6 +157,18 @@ static void initDrivers(void){
 #if S4E_USE_SSD1306_LCD != 0
   ssd130InitAndConfig("Struts4Embedded!");
 #endif
+#if USE_W25Q_XXXX != 0
+  uint8_t datatemp[20] = {0};
+  W25QXX_Init();
+  W25QXX_Erase_Sector(0);
+//  W25QXX_Erase_Chip();
+  W25QXX_SectorWrite((uint8_t*)"Hello Salah!2",0,14);
+  W25QXX_Read(datatemp,0,12);
+  dbgprintf("From Flash:%s\r\n",datatemp);
+#endif
+#if USERLIB_USE_RF != 0
+  initNRF2401();
+#endif
 }
 void publishStatusToBroker(void);
 void periodicSysTrigger(uint32_t i){(void)i;
@@ -164,10 +184,13 @@ void periodicSysTrigger(uint32_t i){(void)i;
 	   #if S4E_USE_EBYTE_LORA != 0 && EBYTE_LORA_SERVER != 0
 	   eByteLoraSendFrame(NONE_BUTTON);
        #endif
+       #if INCLUDE_SEGGER_JLINK != 0
 	   SEGGER_SYSVIEW_PrintfHost("RTT %d\r\n", i);
+       #endif
    }
 
 }
+
 #ifdef USE_USBCFG
 static void initUSBCFG(void){
 	/*

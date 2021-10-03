@@ -55,7 +55,7 @@ void rtcGoToSleep(void) {
   onRTCSleep();
   chSysLock();
   GO_TO_SLEEP_MACROS
-  __WFI();
+  port_wait_for_interrupt();//Same as  __WFI();
 }
 
 static time_t rtcGetTimeUnixSec(void) {

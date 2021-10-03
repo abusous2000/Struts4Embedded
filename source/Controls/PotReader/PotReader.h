@@ -27,6 +27,13 @@
 #define TIM_PERIOD_CYCLES   		2500         ///5.4KHz/2700=2Hz-->Equation as follows-->update event (in Hz)= Timer Clock /((prescaler+1)*(period+1))
 #define POT_VALUE_BTWN_0_TO_100    ((100*getPotValue())/MAX_ADC_VALUE)
 
+#ifndef ADC_SMPR1_SMP
+#define ADC_SMPR_SMP               0
+#endif
+#ifndef ADC_SMPR2_SMP
+#define ADC_SMPR2_SMP               0
+#endif
+
 #ifdef __cplusplus
  extern "C" {
 #endif

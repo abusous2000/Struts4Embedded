@@ -93,7 +93,8 @@ CHIBIOS  := ../../..
 BOARD_NAME := stm32f407_blackboard
 STRUTS4EMBEDDED :=$(CHIBIOS)/demos/STM32/Struts4Embedded/source/Struts4Embedded
 include $(STRUTS4EMBEDDED)/CommonS4EVars.mk
-INCLUDE_SEGGER_JLINK := "yes"
+INCLUDE_SEGGER_JLINK := "no"
+USE_MAC := "no"
 
 # Licensing files.
 include $(CHIBIOS)/os/license/license.mk
@@ -117,7 +118,9 @@ include $(CHIBIOS)/os/hal/lib/streams/streams.mk
 include $(CHIBIOS_CONTRIB)/os/common/ports/ARMCMx/compilers/GCC/utils/fault_handlers_v7m.mk
 include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
 #STARTUPLD = /os/common/startup/ARMCMx/compilers/GCC/ld
+ifeq ($(USE_MAC),"yes")
 include $(CHIBIOS)/os/various/lwip_bindings/lwip.mk
+endif
 ifeq ($(INCLUDE_SEGGER_JLINK),"yes")
 include $(CHIBIOS_CONTRIB)/os/various/segger_bindings/segger_rtt.mk
 include $(CHIBIOS_CONTRIB)/os/various/segger_bindings/segger_systemview.mk
@@ -158,7 +161,7 @@ CPPWARN = -Wall -Wextra -Wundef
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS =
+UDEFS = -DFAULT_INFO_HOOK=_fault_info_hook -DBOARD_PHY_IDXX=MII_DP83848I_ID
 
 # Define ASM defines here
 UADEFS =

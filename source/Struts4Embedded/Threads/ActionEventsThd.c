@@ -7,7 +7,6 @@ extern ActionEvent_Typedef 	 *gActionEvents[];
 static objects_fifo_t 		 *pMainQueue 				  = NULL;
 static guarded_memory_pool_t guardedDataBufferMemoryPool  = {0};
 static dyn_objects_fifo_t 	 *dynObjMainQueueFIFO		  = NULL;
-static int  				 maxActionEventCount 		  = 0;
 static map_t                 *actionEventsMap             = NULL;
 
 ActionEvent_Typedef *sendActionEvent(char *aeName){
@@ -85,7 +84,11 @@ ActionEvent_Typedef *triggerActionEvent(char *aeName, char *pData, uint32_t data
   chSysLock();
   ActionEvent_Typedef *pAE = triggerActionEventNoLock(aeName,pData,data,eventSource);
   /*##############IMPORTANT###################
-   * YOU MUST CALL chSchRescheduleS() method else you might crash..see comment @chSysUnlock(void) in chsys.h for details
+   * YOU MUST CALL chSchRescheduleS() method else you might crash; see comment @chSysUnlock(void) in chsys.h for details
+   * The following condition can be triggered by the use of i-class functions
+   * in a critical section not followed by a chSchRescheduleS(), this means
+   * that the current thread has a lower priority than the next thread in
+   * the ready list.
    * ##############IMPORTANT###################
    */
   chSchRescheduleS();
@@ -232,7 +235,7 @@ void initActonEventThd(void){
 #else
   //Create as many Worker threads to handle AE as much as you need.
   //Plz note that for some reason, the stack got corrupted when I used the heap to create threads dynamically
-  chThdCreateStatic(waActonEventThd1,  sizeof(waActonEventThd1),  NORMALPRIO+11,     ActonEventThd, "ActonEventWorkerThd_1");
+  chThdCreateStatic(waActonEventThd1,  sizeof(waActonEventThd1),  NORMALPRIO+11,     ActonEventThd, "ActionEventWorkerThd_1");
   //chThdCreateStatic(waActonEventThd1,  sizeof(waActonEventThd2),  NORMALPRIO+11,     ActonEventThd, "ActonEventThd2");
   //chThdCreateStatic(waActonEventThd1,  sizeof(waActonEventThd3),  NORMALPRIO+11,     ActonEventThd, "ActonEventThd3");
 

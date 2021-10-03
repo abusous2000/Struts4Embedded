@@ -30,5 +30,6 @@
 #include "hashmap.h"
 #include "emlist.h"
 #include "RTCHelper.h"
+#include "fault_handlers.h"
 
 #endif /* CFG_STRUST4EMBEDDED_H_ */

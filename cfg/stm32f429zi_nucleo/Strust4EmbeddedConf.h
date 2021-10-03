@@ -113,6 +113,7 @@
 #define ADC_POT_TIM                     GPTD3 ///See p. 386 in RM
 #define ADC_POT                     	ADCD1
 #define ADC_CHANNEL_IN 					ADC_CHANNEL_IN3//See Table 10 in user manual or datasheet
+#define ADC_SMPR2_SMP                   ADC_SMPR2_SMP_AN3(ADC_SAMPLE_144)
 
 #define MPU_SCL_PIN						PAL_LINE(GPIOB, 10U)//LINE_ARD_D15
 #define MPU_SDA_PIN						PAL_LINE(GPIOB, 11U)//LINE_ARD_D14

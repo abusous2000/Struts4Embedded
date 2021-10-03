@@ -93,7 +93,7 @@ CHIBIOS  := ../../..
 BOARD_NAME := stm32f746zg_nucleo
 STRUTS4EMBEDDED :=$(CHIBIOS)/demos/STM32/Struts4Embedded/source/Struts4Embedded
 include $(STRUTS4EMBEDDED)/CommonS4EVars.mk
-
+INCLUDE_SEGGER_JLINK := "yes"
 
 # Licensing files.
 include $(CHIBIOS)/os/license/license.mk
@@ -118,6 +118,10 @@ include $(CHIBIOS_CONTRIB)/os/common/ports/ARMCMx/compilers/GCC/utils/fault_hand
 #include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
 #STARTUPLD = /os/common/startup/ARMCMx/compilers/GCC/ld
 include $(CHIBIOS)/os/various/lwip_bindings/lwip.mk
+ifeq ($(INCLUDE_SEGGER_JLINK),"yes")
+include $(CHIBIOS_CONTRIB)/os/various/segger_bindings/segger_rtt.mk
+include $(CHIBIOS_CONTRIB)/os/various/segger_bindings/segger_systemview.mk
+endif
 # Define linker script file here
 LDSCRIPT= $(STARTUPLD)/STM32F746xG.ld
 #LDSCRIPT= $(STARTUPLD)/STM32F746xG_MAX.ld

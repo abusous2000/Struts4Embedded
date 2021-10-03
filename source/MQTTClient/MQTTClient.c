@@ -70,13 +70,13 @@ static MqttConnection_Typedef mqttDashboardBroker   = {.brokerIpAddr=MQTT_DASHBO
 												   .mapSubscribed=NULL,
 												   .payload=NULL,
 												   .pClientInfo=&clientInfo2};
-static void defaultOnMessage(MqttConnection_Typedef *pMqttConnection, MqttSubscribeInfo_Typedef *pSubscribeInfo){(void)pSubscribeInfo;
+static void defaultOnMessage(MqttConnection_Typedef *pMqttConnection, MqttSubscribeInfo_Typedef *pSubscribeInfo){(void)pSubscribeInfo;(void)pMqttConnection;
     /* Don't trust the publisher, check zero termination */
 	dbgprintf("+++Thd:%s-->Handled by generic message handler. Msg from Topic:%s ==>%.*s\r\n", chThdGetSelfX()->name, pMqttConnection->incommingTopic,pMqttConnection->payload);
 
 	return;
 }
-static void onMessage(MqttConnection_Typedef *pMqttConnection, MqttSubscribeInfo_Typedef *pSubscribeInfo){(void)pSubscribeInfo;
+static void onMessage(MqttConnection_Typedef *pMqttConnection, MqttSubscribeInfo_Typedef *pSubscribeInfo){(void)pSubscribeInfo;(void)pMqttConnection;
     /* Don't trust the publisher, check zero termination */
 	dbgprintf("+++Thd:%s-->Msg from Topic:%s ==>%s\r\n", chThdGetSelfX()->name, pMqttConnection->incommingTopic,pMqttConnection->payload);
 	return;
@@ -87,7 +87,7 @@ static void onBrokerConnection(MqttConnection_Typedef *pMqttConnection){
     return;
 }
 #define MAX_RETRY_AFTER_BROKER_DISCONNECTS  3
-static void onBrokerDisconnection(MqttConnection_Typedef *pMqttConnection, mqtt_connection_status_t status){
+static void onBrokerDisconnection(MqttConnection_Typedef *pMqttConnection, mqtt_connection_status_t status){(void)status;
     pMqttConnection->error++;
 	dbgprintf("+++Thd:%s-->Disconnected from Broker:%d:%d for reason:%d\n",chThdGetSelfX()->name, pMqttConnection->brokerIpAddr,pMqttConnection->brokerPort, status);
 	mqttBrokerDisconnect(pMqttConnection);

@@ -15,7 +15,9 @@ void removeChar(char *str, char garbage) {
     *dst = '\0';
 }
 void _print_message(const char *str){
+	dbgprintf("_____SYSTEM____MESSAGE_____\r\n");
 	dbgprintf("%s\r\n",str);
+	dbgprintf("_____SYSTEM____MESSAGE_____\r\n");
 }
 
 void *chibios_calloc(int num,int size){

@@ -96,6 +96,7 @@
 #define TIM_TGRO_EVENT_EXTSEL 		    12 //See table 98 in RM on pages 451 & 471 for details
 #define ADC_POT                     	ADCD2
 #define ADC_CHANNEL_IN 					ADC_CHANNEL_IN6
+#define ADC_SMPR2_SMP           		ADC_SMPR2_SMP_AN6(ADC_SAMPLE_144)
 
 #define GO_TO_SLEEP_MACROS      		SCB->SCR 	|= SCB_SCR_SLEEPDEEP_Msk;\
 										PWR->CR1  	|= (PWR_CR1_PDDS | PWR_CR1_LPDS | PWR_CR1_CSBF);\

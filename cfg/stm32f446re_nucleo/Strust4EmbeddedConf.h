@@ -105,6 +105,7 @@
 #define ADC_POT_TIM                     GPTD3 ///See p. 386 in RM
 #define ADC_POT                     	ADCD1
 #define ADC_CHANNEL_IN 					ADC_CHANNEL_IN0
+#define ADC_SMPR2_SMP                   ADC_SMPR2_SMP_AN0(ADC_SAMPLE_144)
 
 #define S4E_USE_PPM_FRAME_DECODER		0
 #define PPM_DECODING_DEBUG				0

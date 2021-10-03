@@ -30,8 +30,10 @@
 
 #define _CHIBIOS_HAL_CONF_
 #define _CHIBIOS_HAL_CONF_VER_7_1_
+#define FAULT_INFO_HOOK 			        _fault_info_hook
+#define SERIAL_BUFFERS_SIZE                 256
 
-#include "../stm32f446re_nucleo/mcuconf.h"
+#include "mcuconf.h"
 #if !defined(CHPRINTF_USE_FLOAT) || defined(__DOXYGEN__)
 #define CHPRINTF_USE_FLOAT                         TRUE
 #endif

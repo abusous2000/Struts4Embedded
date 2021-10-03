@@ -9,6 +9,10 @@
 #include "EByteLora.h"
 #include "RTCHelper.h"
 #include "ssd1306.h"
+#if INCLUDE_SEGGER_JLINK != 0
+#include "SEGGER_SYSVIEW_ChibiOS.h"
+#include "SEGGER_RTT_streams.h"
+#endif
 
 static int8_t 		mute 	   			= 0;
 static int8_t       pause               = 0;
@@ -139,12 +143,17 @@ void updateDutyCycleBasedOnVolume(void){
 }
 
 static int32_t setVolume(ActionEvent_Typedef   *pActionEvent){(void)pActionEvent;
+//  SEGGER_SYSVIEW_RecordString(23, "setVolumeStart");
   volume = pActionEvent->dataType==CHAR_DTYPE? atoi(pActionEvent->u.pData): (int8_t)pActionEvent->u.data;
 #if EBYTE_LORA_SERVER != 0
   eByteLoraSendFrame(NONE_BUTTON);
 #endif
 
   updateDutyCycleBasedOnVolume();
+//  SEGGER_SYSVIEW_RecordString(24, "setVolumeStop");
+  #if INCLUDE_SEGGER_JLINK != 0
+  SEGGER_SYSVIEW_PrintfHost("setVolumeStart: %d\r\n", volume);
+  #endif
 
   return MSG_OK;
 }

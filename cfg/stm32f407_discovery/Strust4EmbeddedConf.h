@@ -138,6 +138,8 @@ TX1	<=>			PB13--Eggplant
 #define ADC_POT_TIM                     GPTD3 ///See p. 386 in RM
 #define ADC_POT                     	ADCD1
 #define ADC_CHANNEL_IN 					ADC_CHANNEL_IN3//See Table 10 in user manual or datasheet
+#define ADC_SMPR2_SMP                   ADC_SMPR2_SMP_AN3(ADC_SAMPLE_144)
+
 
 /*
 Possible SD SPI configurations without conflicting with CODEC/I2SD3

@@ -121,6 +121,7 @@
 #define LINE_LED_RED                    PAL_LINE(GPIOB, 14U)//blue
 #define TIM_TGRO_EVENT_EXTSEL 		    12 //See table 98 in RM on pages 451 & 471 for details
 #define ADC_CHANNEL_IN 					ADC_CHANNEL_IN3//ARD_A0--->PA3-->IN3 with ADC123 only...see p. 38 in user manual
+#define ADC_SMPR2_SMP           		ADC_SMPR2_SMP_AN3(ADC_SAMPLE_144)
 #define ADC_POT                     	ADCD1
 
 #define GO_TO_SLEEP_MACROS      		SCB->SCR 	|= SCB_SCR_SLEEPDEEP_Msk;\

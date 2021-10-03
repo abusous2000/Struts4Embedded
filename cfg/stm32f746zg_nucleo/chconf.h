@@ -34,6 +34,7 @@
 #define DEBUG_TRACE_PRINT     		TRUE
 #define CHPRINTF_USE_FLOAT    		TRUE
 #define PORT_ENABLE_GUARD_PAGES     TRUE
+#define INCLUDE_SEGGER_JLINK 		1
 /*===========================================================================*/
 /**
  * @name System timers settings
@@ -659,40 +660,8 @@
  * @note    It is invoked from within @p _thread_init() and implicitly from all
  *          the threads creation APIs.
  */
-#define CH_CFG_THREAD_INIT_HOOK(tp) {                                       \
-  /* Add threads initialization code here.*/                                \
-}
 
-/**
- * @brief   Threads finalization hook.
- * @details User finalization code added to the @p chThdExit() API.
- */
-#define CH_CFG_THREAD_EXIT_HOOK(tp) {                                       \
-  /* Add threads finalization code here.*/                                  \
-}
-
-/**
- * @brief   Context switch hook.
- * @details This hook is invoked just before switching between threads.
- */
-#define CH_CFG_CONTEXT_SWITCH_HOOK(ntp, otp) {                              \
-  /* Context switch code here.*/                                            \
-}
-
-/**
- * @brief   ISR enter hook.
- */
-#define CH_CFG_IRQ_PROLOGUE_HOOK() {                                        \
-  /* IRQ prologue code here.*/                                              \
-}
-
-/**
- * @brief   ISR exit hook.
- */
-#define CH_CFG_IRQ_EPILOGUE_HOOK() {                                        \
-  /* IRQ epilogue code here.*/                                              \
-}
-
+#include "chHooks.h"
 /**
  * @brief   Idle thread enter hook.
  * @note    This hook is invoked within a critical zone, no OS functions
@@ -730,14 +699,6 @@
   /* System tick event code here.*/                                         \
 }
 
-/**
- * @brief   System halt hook.
- * @details This hook is invoked in case to a system halting error before
- *          the system is halted.
- */
-#define CH_CFG_SYSTEM_HALT_HOOK(reason) {                                   \
-  /* System halt code here.*/                                               \
-}
 
 /**
  * @brief   Trace hook.
