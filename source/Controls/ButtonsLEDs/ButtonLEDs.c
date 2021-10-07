@@ -24,8 +24,10 @@ static void joystickCBHandler(void *arg) {
 //#define EASYLINK_BUTTON		LINE_ARD_D9 //pin 13
 #define EASYLINK_BUTTON0	LINE_ARD_D0 //pin 2
 #define EASYLINK_BUTTON1	LINE_ARD_D1 //pin 2
-CPalTypedef 		  			*pGreenLedPAL = NULL, *pCenterKey= NULL, *pUpKey= NULL,
-                                *pDownKey= NULL, *pLeftKey= NULL,*pRightKey= NULL,*pBuzzer= NULL, *pRgb= NULL, *pEasyLinkKey= NULL,*pEasyLinkKey0= NULL,*pEasyLinkKey1= NULL, *pYellow= NULL;
+CPalTypedef 		  			*pGreenLedPAL = NULL, *pCenterKey= NULL,    *pUpKey= NULL,
+                                *pDownKey= NULL,      *pLeftKey  = NULL,    *pRightKey= NULL,
+								*pBuzzer= NULL,       *pRgb= NULL,          *pEasyLinkKey= NULL,
+								*pEasyLinkKey0= NULL, *pEasyLinkKey1= NULL, *pYellow= NULL;
 
 #if S4E_USE_BUZZER != 0
 static CPalTypedef buzzer={     .line=BUZZER_LINE,          .mode=LED_MODE};
@@ -41,34 +43,36 @@ static CPalTypedef redLedPAL={  .line=LINE_LED_RED,       	.mode=LED_MODE};
 #endif
 #if S4E_USE_JOYSTICK != 0
 #ifdef LINE_JOY_CENTER
-static CPalTypedef centerKey={  .line=LINE_JOY_CENTER,      .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)TOGGLE_MUTE_AE_NAME};
+static CPalTypedef centerKey={  .line=LINE_JOY_CENTER,      .mode=BUTTON_MODE2, .risingfallingEdge=BUTTON_EDGE_MODE, .cb=joystickCBHandler, .arg=(void*)TOGGLE_MUTE_AE_NAME};
 #endif
-static CPalTypedef upKey={      .line=LINE_JOY_UP,          .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)NEXT_TRACK_AE_NAME};
-static CPalTypedef downKey={    .line=LINE_JOY_DOWN,        .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)TOGGLE_PAUSE_AE_NAME};
-static CPalTypedef leftKey={    .line=LINE_JOY_LEFT,        .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)VOLUME_DOWN_AE_NAME};
-static CPalTypedef rightKey={   .line=LINE_JOY_RIGHT,       .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)VOLUME_UP_AE_NAME};
+static CPalTypedef upKey={      .line=LINE_JOY_UP,          .mode=BUTTON_MODE2, .risingfallingEdge=BUTTON_EDGE_MODE, .cb=joystickCBHandler, .arg=(void*)NEXT_TRACK_AE_NAME};
+static CPalTypedef downKey={    .line=LINE_JOY_DOWN,        .mode=BUTTON_MODE2, .risingfallingEdge=BUTTON_EDGE_MODE, .cb=joystickCBHandler, .arg=(void*)TOGGLE_PAUSE_AE_NAME};
+static CPalTypedef leftKey={    .line=LINE_JOY_LEFT,        .mode=BUTTON_MODE2, .risingfallingEdge=BUTTON_EDGE_MODE, .cb=joystickCBHandler, .arg=(void*)VOLUME_DOWN_AE_NAME};
+static CPalTypedef rightKey={   .line=LINE_JOY_RIGHT,       .mode=BUTTON_MODE2, .risingfallingEdge=BUTTON_EDGE_MODE, .cb=joystickCBHandler, .arg=(void*)VOLUME_UP_AE_NAME};
 
 //For this to work, plz connect Pin20 to Pin15 in the Zigbee header on the waveshare accessory shield
 #ifdef EASYLINK_BUTTON
-static CPalTypedef easyLinkKey={.line=EASYLINK_BUTTON,  	.mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE,.cb=joystickCBHandler, .arg=(void*)TOGGLE_PAUSE_AE_NAME};
+static CPalTypedef easyLinkKey={.line=EASYLINK_BUTTON,  	.mode=BUTTON_MODE2, .risingfallingEdge=BUTTON_EDGE_MODE,.cb=joystickCBHandler, .arg=(void*)TOGGLE_PAUSE_AE_NAME};
 #endif
 //static CPalTypedef easyLinkKey0={.line=EASYLINK_BUTTON0,  	.mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_FALLING_EDGE,.cb=joystickCBHandler, .arg=(void*)TOGGLE_PAUSE_AE_NAME};//"EasyLink"};Pin3
 //static CPalTypedef easyLinkKey1={.line=EASYLINK_BUTTON1,  	.mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_FALLING_EDGE,.cb=joystickCBHandler, .arg=(void*)VOLUME_DOWN_AE_NAME};//"EasyLink"};Pin2
 #endif
 
 #ifdef USER_BUTTON
-  static CPalTypedef centerKey={.line=USER_BUTTON,      .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=USER_BUTTON_EVENT};
+  static CPalTypedef centerKey={.line=USER_BUTTON,      .risingfallingEdge=BUTTON_EDGE_MODE, .cb=joystickCBHandler, .arg=USER_BUTTON_EVENT};
   #if defined(USER2_BUTTON)
-  static CPalTypedef upKey={    .line=USER2_BUTTON,     .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=NEXT_TRACK_AE_NAME};
+  static CPalTypedef upKey={    .line=USER2_BUTTON,     .risingfallingEdge=BUTTON_EDGE_MODE, .cb=joystickCBHandler, .arg=NEXT_TRACK_AE_NAME};
   #endif
   #if defined(USER3_BUTTON)
-  static CPalTypedef downKey={  .line=USER3_BUTTON,     .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=GO_TO_SLEEP_AE_NAME};
+  static CPalTypedef downKey={  .line=USER3_BUTTON,     .risingfallingEdge=BUTTON_EDGE_MODE, .cb=joystickCBHandler, .arg=GO_TO_SLEEP_AE_NAME};
   #endif
 #endif
 
 void initButtonsLEDs(void) {
 #if S4E_USE_BUZZER != 0
-  pBuzzer      = initCPalInstance(&buzzer);pBuzzer->init(&buzzer);pBuzzer->clear(&buzzer);
+  pBuzzer      = initCPalInstance(&buzzer);
+  pBuzzer->init(&buzzer);
+  pBuzzer->clear(&buzzer);
 #endif
 #if S4E_USE_RGB != 0
   pRgb         = initCPalInstance(&rgb);pRgb->init(&rgb);pRgb->clear(&rgb);

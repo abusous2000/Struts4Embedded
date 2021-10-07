@@ -9,6 +9,7 @@
 #include "EByteLora.h"
 #include "RTCHelper.h"
 #include "ssd1306.h"
+#include "ButtonLEDs.h"
 #if INCLUDE_SEGGER_JLINK != 0
 #include "SEGGER_SYSVIEW_ChibiOS.h"
 #include "SEGGER_RTT_streams.h"
@@ -307,6 +308,14 @@ static int32_t goToSleep(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
    return MSG_OK;
 }
 
+static int32_t toggerBuzzer(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
+	#if S4E_USE_BUZZER != 0
+    pBuzzer->toggle(pBuzzer);
+	#endif
+
+   return MSG_OK;
+}
+
 static ActionEvent_Typedef actionEventToggleMute 	 	= {.name=TOGGLE_MUTE_AE_NAME,  			.eventSource="Center",      	.action=toggleMute,			.view=toggleMuteView,		.dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventNextTrack  	 	= {.name=NEXT_TRACK_AE_NAME,			.eventSource="Up",          	.action=nextTrack,          							.dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventTogglePausePlay	= {.name=TOGGLE_PAUSE_AE_NAME,			.eventSource="Down",        	.action=togglePausePlay};
@@ -321,6 +330,8 @@ static ActionEvent_Typedef actionEventNewHTMLLoaded	 	= {.name=NEW_HTML_LOADED_A
 static ActionEvent_Typedef actionEventPerformanceInfo 	= {.name=PERFORMANCE_INFO_AE_NAME,  	.eventSource="wifi",      	    .action=performanceInfo, 	.view=NULL,				    .dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventSetUnixtime      	= {.name=SET_UNIX_TIME_AE_NAME,			.eventSource="WiFi",   		    .action=setUnixtime, 		.view=NULL,			        .dataType = CHAR_DTYPE};
 static ActionEvent_Typedef actionEventGoToSleep      	= {.name=GO_TO_SLEEP_AE_NAME,			.eventSource="WiFi",   		    .action=goToSleep, 		    .view=NULL,			        .dataType = INT_DTYPE};
+static ActionEvent_Typedef actionEventToggleBuzzer     	= {.name=TOGGLE_BUZZER_AE_NAME,			.eventSource="WiFi",   		    .action=toggerBuzzer, 		.view=NULL,			        .dataType = INT_DTYPE};
+
 ActionEvent_Typedef *gActionEvents[MAX_ACTION_EVENTS] ={&actionEventToggleMute,
 		                                                &actionEventNextTrack,
 														&actionEventTogglePausePlay,
@@ -334,5 +345,6 @@ ActionEvent_Typedef *gActionEvents[MAX_ACTION_EVENTS] ={&actionEventToggleMute,
 														&actionEventNewHTMLLoaded,
 														&actionEventPerformanceInfo,
 														&actionEventSetUnixtime,
-														&actionEventGoToSleep};
+														&actionEventGoToSleep,
+                                                        &actionEventToggleBuzzer};
 

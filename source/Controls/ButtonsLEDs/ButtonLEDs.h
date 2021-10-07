@@ -32,8 +32,9 @@
 #ifdef __cplusplus
  extern "C" {
 #endif
-extern CPalTypedef 		  			*pGreenLedPAL, *pRedLedPAL,*pCenterKey, *pUpKey,
-                                    *pDownKey,     *pLeftKey,*pRightKey,*pBuzzer, *pRgb, *pEasyLinkKey;
+extern CPalTypedef 		  			*pGreenLedPAL, *pRedLedPAL, *pCenterKey, *pUpKey,
+                                    *pDownKey,     *pLeftKey,   *pRightKey,  *pBuzzer,
+									*pRgb,         *pEasyLinkKey;
 void initButtonsLEDs(void);
 #ifdef __cplusplus
 }
