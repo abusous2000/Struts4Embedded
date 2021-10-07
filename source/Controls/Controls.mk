@@ -7,9 +7,11 @@ ALLINC  += $(CONTROLS)/PPMFrameDecoder
 ALLINC  += $(CONTROLS)/PotReader
 ALLINC  += $(CONTROLS)/eByteLora
 ALLINC  += $(CONTROLS)/IRReceiver
+ALLINC  += $(CONTROLS)/W25QXX
 
 ALLCSRC += $(CONTROLS)/LCD/ssd1306_7x10_font.c \
            $(CONTROLS)/LCD/ssd1306.c \
+           $(CONTROLS)/W25QXX/w25qxx.c \
            $(CONTROLS)/PWM/PWM.c \
            $(CONTROLS)/RGB/P9813_RGB_Driver.c \
            $(CONTROLS)/PPMFrameDecoder/PPMFrameDecoder.c \

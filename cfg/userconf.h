@@ -31,7 +31,7 @@
 /**
  * @brief   Enables the RF subsystem.
  */
-#if !defined(USERLIB_USE_RF) || defined(__DOXYGEN__)
+#if defined(USERLIB_USE_RF) && USERLIB_USE_RF != 0
 #define USERLIB_USE_RF              TRUE
 #endif
 

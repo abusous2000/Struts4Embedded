@@ -20,7 +20,7 @@ char *rtcGetTimeAsString(void);
 void rtcSetTimeUnixSec(time_t unix_time);
 void rtcGoToSleep(void);
 void onRTCSystemWakeup(void);
-uint8_t getGoingToSleepCnt(void);
+int16_t getGoingToSleepCnt(void);
 bool getRTCSystemWakeup(void);
 void setRTCSystemWakeup(bool value);
 #ifdef __cplusplus

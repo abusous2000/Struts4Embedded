@@ -26,6 +26,11 @@ TX1	<=>			PB13--Eggplant-1L
 #define EBYTE_LORA_SERVER       0
 #define S4E_USE_IR_RECEIVER		0
 
+#ifndef USE_AE_SHELL
+//set USE_AE_SHELL = "yes" in make file
+#define USE_AE_SHELL 			1
+#endif
+
 #ifndef USE_LCD_TFT
 #define USE_LCD_TFT 			0
 #endif
@@ -42,12 +47,12 @@ TX1	<=>			PB13--Eggplant-1L
 #define S4E_USE_SSD1306_LCD     0
 #endif
 #ifndef S4E_USE_POT
-#define S4E_USE_POT             1
+#define S4E_USE_POT             0
 #define TIM_TGRO_EVENT_EXTSEL 	0x08 //See p. 398 in RM
 #define ADC_POT_TIM             GPTD3 ///See p. 398 in RM
 #define ADC_POT                 ADCD1
 #define ADC_CHANNEL_IN 			ADC_CHANNEL_IN3//See Table 10 in user manual or datasheet
-#define ADC_SMPR2_SMP          ADC_SMPR2_SMP_AN3(ADC_SAMPLE_144)
+#define ADC_SMPR2_SMP           ADC_SMPR2_SMP_AN3(ADC_SAMPLE_144)
 
 //#define LINE_ARD_D2           PAL_LINE(GPIOA, 10U)
 #define POT_GPIO_PIN            PAL_LINE(GPIOA, 3U)
@@ -73,6 +78,7 @@ TX1	<=>			PB13--Eggplant-1L
 #define S4E_USE_FAULT_HANDLER   1
 #endif
 #if S4E_USE_WEB_SERVER == 1 || S4E_USE_MQTT  == 1
+//set USE_MAC = "yes" in make file
 #define S4E_USE_ETHERNET		1
 #else
 #define S4E_USE_ETHERNET		0
@@ -102,61 +108,49 @@ TX1	<=>			PB13--Eggplant-1L
 #define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/STM32F407BlackBoard/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithSTM32F407BlackBoard"
 
-#define SSD1306_I2C_AF       			4
-#define SSD1306_I2C_SCL_PORT 			GPIOB
-#define SSD1306_I2C_SCL_PIN  			GPIOB_ARD_D15
-#define SSD1306_I2C_SDA_PORT 			GPIOB
-#define SSD1306_I2C_SDA_PIN  			GPIOB_ARD_D14
-#define SSD1306_SA0_PORT 				GPIOF
-#define SSD1306_SA0_PIN    				GPIOF_ARD_D8
-#define SSD1306_RESET_PORT				GPIOF
-#define SSD1306_RESET_PIN				GPIOF_ARD_D7
-//brown, black, red, & orange
-#define LINE_LED_GREEN                  PAL_LINE(GPIOE, 13U)
-//#define LINE_LED_RED                    PAL_LINE(GPIOA, 7U)
+
+#define LINE_LED_GREEN                  PAL_LINE(GPIOE, 13U)//PE13
 
 
-#define MPU_SCL_PIN						PAL_LINE(GPIOB, 10U)//LINE_ARD_D15
-#define MPU_SDA_PIN						PAL_LINE(GPIOB, 11U)//LINE_ARD_D14
-#define MPU_I2C_AF						4
-#define MPU_I2CD						I2CD2
 
-#define MPU_INT_PORT					GPIOA
-#define MPU_INT_PIN						10
 #ifndef LINE_JOY_UP
-#define USER_BUTTON                     PAL_LINE(GPIOE, 10U)
-#define USER2_BUTTON                    PAL_LINE(GPIOE, 11U)//K0
-#define USER3_BUTTON                    PAL_LINE(GPIOE, 12U)//K1
+#define USER_BUTTON                     PAL_LINE(GPIOE, 10U)//PE10
+#define USER2_BUTTON                    PAL_LINE(GPIOE, 11U)//PE11
+#define USER3_BUTTON                    PAL_LINE(GPIOE, 12U)//PE12
 #endif
 
 #ifndef S4E_USE_SDCARD
+//set USE_FATFS = "yes" in make file
 #define S4E_USE_SDCARD 			1
 #endif
 #include "board.h"
-#define SDMMCD0_LINE 					LINE_SD_D0		//  PAL_LINE(GPIOG,9)
-#define SDMMCD1_LINE 					LINE_SD_D1		//  PAL_LINE(GPIOG,10)
-#define SDMMCD2_LINE 					LINE_SD_D2		//  PAL_LINE(GPIOB,3)
-#define SDMMCD3_LINE 					LINE_SD_D3		//  PAL_LINE(GPIOB,4)
-#define SDMMCCK_LINE 					LINE_SD_CLK		//  PAL_LINE(GPIOD,6)
-#define SDMMCMD_LINE 					LINE_SD_CMD		//  PAL_LINE(GPIOD,7)
+#define SDMMCD0_LINE 					LINE_SD_D0		//PC8
+#define SDMMCD1_LINE 					LINE_SD_D1		//PC9
+#define SDMMCD2_LINE 					LINE_SD_D2		//PC10
+#define SDMMCD3_LINE 					LINE_SD_D3		//PC11
+#define SDMMCCK_LINE 					LINE_SD_CLK		//PC12
+#define SDMMCMD_LINE 					LINE_SD_CMD		//PD2
 //#define SDMMMC_DETECT   				LINE_SD_DETECT	////PAL_LINE(GPIOI,15)
 
-
+#if S4E_USE_SDCARD 	!= 0
 #define SDMMC_ALREADY_CONFIG            1
+#else
+#define SDMMC_ALREADY_CONFIG            0
+#endif
 
 
-#define USE_W25Q_XXXX  					0
+#define USE_W25Q_XXXX  					1
 
 #define W25QXX_SPI_SCK_LINE   			PAL_LINE(GPIOB, 10)//PB10
-#define W25QXX_SPI_MISO_LINE  			PAL_LINE(GPIOC, 2)//PC2
-#define W25QXX_SPI_MOSI_LINE  			PAL_LINE(GPIOC, 3)//PC3
-#define W25QXX_SPI_CS_LINE    			PAL_LINE(GPIOE, 3)//PE3
+#define W25QXX_SPI_MISO_LINE  			PAL_LINE(GPIOC, 2) //PC2
+#define W25QXX_SPI_MOSI_LINE  			PAL_LINE(GPIOC, 3) //PC3
+#define W25QXX_SPI_CS_LINE    			PAL_LINE(GPIOE, 3) //PE3
 #define W25QXX_SPI_MODE       			PAL_MODE_ALTERNATE(5)    |    PAL_STM32_OSPEED_HIGHEST
 #define W25QXX_SPI_CS_MODE    			PAL_MODE_OUTPUT_PUSHPULL |    PAL_STM32_OSPEED_HIGHEST
 
 #define W25QXX_SPID						SPID2
 
-#define USERLIB_USE_RF                  1
+#define USERLIB_USE_RF                  0
 #define TRANSMITTER                     1
 #define NRF24L01_THD_STACK_SIZE         1024//512
 #define NRF24L01_LINE_CE                PAL_LINE(GPIOE, 7)//PE7

@@ -32,7 +32,7 @@
  */
 
 #include "rf.h"
-#if USERLIB_USE_RF || defined(__DOXYGEN__)
+#if defined(USERLIB_USE_RF) && USERLIB_USE_RF != 0
 
 /*===========================================================================*/
 /* Driver local definitions.                                                 */
@@ -212,7 +212,7 @@ static uint8_t nrf24l01WriteAddress(SPIDriver *spip, uint8_t reg,
   rxbuf[0] = 0xFF;
   for(i = 1; i <= addlen; i++) {
     txbuf[i] = *(pvalue + (i - 1));
-    rxbuf[i] = 0xFF;
+    rxbuf[inRF2401] = 0xFF;
   }
   switch (reg) {
 

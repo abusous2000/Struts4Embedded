@@ -26,11 +26,16 @@
 #define EBYTE_LORA_SERVER       0
 #define S4E_USE_IR_RECEIVER		0
 
+#ifndef USE_AE_SHELL
+//set USE_AE_SHELL = "yes" in make file
+#define USE_AE_SHELL 			1
+#endif
+
 #ifndef USE_LCD_TFT
 #define USE_LCD_TFT 			0
 #endif
 #ifndef S4E_USE_JOYSTICK
-#define S4E_USE_JOYSTICK        0
+#define S4E_USE_JOYSTICK        1
 #define LINE_JOY_UP             PAL_LINE(GPIOF, 9)//PF9-KEY0
 #define LINE_JOY_DOWN           PAL_LINE(GPIOF, 7)//PF7-KEY2
 #define LINE_JOY_LEFT           PAL_LINE(GPIOF, 8)//PF8-KEY1
@@ -39,6 +44,7 @@
 //#define LINE_JOY_CENTER         PAL_LINE(GPIOF, 8)//PF8-KEY5
 
 #endif
+//#define USER_BUTTON             PAL_LINE(GPIOA, 0)//PA0
 #ifndef S4E_USE_BLINKER_THD
 #define S4E_USE_BLINKER_THD     1
 #endif
@@ -65,7 +71,7 @@
 #endif
 //With This board, you cannot used ARD_11 & ETH, there is a conflict
 #ifndef S4E_USE_BUZZER
-#define S4E_USE_BUZZER			0
+#define S4E_USE_BUZZER			1
 #define BUZZER_LINE             PAL_LINE(GPIOG, 7)//PG7
 #endif
 #ifndef S4E_USE_RGB
@@ -110,15 +116,6 @@
 #define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/STM32F407BlackBoard/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithSTM32F407BlackBoard"
 
-#define SSD1306_I2C_AF       			4
-#define SSD1306_I2C_SCL_PORT 			GPIOB
-#define SSD1306_I2C_SCL_PIN  			GPIOB_ARD_D15
-#define SSD1306_I2C_SDA_PORT 			GPIOB
-#define SSD1306_I2C_SDA_PIN  			GPIOB_ARD_D14
-#define SSD1306_SA0_PORT 				GPIOF
-#define SSD1306_SA0_PIN    				GPIOF_ARD_D8
-#define SSD1306_RESET_PORT				GPIOF
-#define SSD1306_RESET_PIN				GPIOF_ARD_D7
 //brown, black, red, & orange
 #define LINE_LED_GREEN                  PAL_LINE(GPIOE, 3U)//PE3
 // #define LINE_LED_RED                    PAL_LINE(GPIOE, 4U)//PE4
@@ -126,15 +123,15 @@
 
 
 #ifndef S4E_USE_SDCARD
-#define S4E_USE_SDCARD 			0
+#define S4E_USE_SDCARD 			1
 #endif
 #include "board.h"
-#define SDMMCD0_LINE 					PAL_LINE(GPIOC, 8U)/PC8
-#define SDMMCD1_LINE 					PAL_LINE(GPIOC, 9U)/PC9
-#define SDMMCD2_LINE 					PAL_LINE(GPIOC, 10U)/PC10
-#define SDMMCD3_LINE 					PAL_LINE(GPIOC, 11U)/PC11
-#define SDMMCCK_LINE 					PAL_LINE(GPIOC, 12U)/PC12
-#define SDMMCMD_LINE 					PAL_LINE(GPIOD, 2U)/PD2
+#define SDMMCD0_LINE 					PAL_LINE(GPIOC, 8U) //PC8
+#define SDMMCD1_LINE 					PAL_LINE(GPIOC, 9U) //PC9
+#define SDMMCD2_LINE 					PAL_LINE(GPIOC, 10U)//PC10
+#define SDMMCD3_LINE 					PAL_LINE(GPIOC, 11U)//PC11
+#define SDMMCCK_LINE 					PAL_LINE(GPIOC, 12U)//PC12
+#define SDMMCMD_LINE 					PAL_LINE(GPIOD, 2U) //PD2
 //#define SDMMMC_DETECT   				LINE_SD_DETECT	////PAL_LINE(GPIOI,15)
 
 
@@ -147,10 +144,10 @@
 #define W25QXX_SPI_MISO_LINE  			PAL_LINE(GPIOB, 4)//PB4
 #define W25QXX_SPI_MOSI_LINE  			PAL_LINE(GPIOB, 5)//PB5
 #define W25QXX_SPI_CS_LINE    			PAL_LINE(GPIOG, 8)//PG8
-#define W25QXX_SPI_MODE       			PAL_MODE_ALTERNATE(6)    |    PAL_STM32_OSPEED_HIGHEST 
+#define W25QXX_SPI_MODE       			PAL_MODE_ALTERNATE(5)    |    PAL_STM32_OSPEED_HIGHEST | PAL_STM32_PUPDR_PULLUP
 #define W25QXX_SPI_CS_MODE    			PAL_MODE_OUTPUT_PUSHPULL |    PAL_STM32_OSPEED_HIGHEST
 
-#define W25QXX_SPID						SPID3
+#define W25QXX_SPID						SPID1
 
 #define USERLIB_USE_RF                  0
 #define TRANSMITTER                     1
@@ -171,9 +168,8 @@
 
 
 #define GO_TO_SLEEP_MACROS      	   SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;\
-	                                   RCC->APB1ENR |=(RCC_APB1ENR_PWREN);\
 									   PWR->CR  |= (PWR_CR_PDDS | PWR_CR_LPDS | PWR_CR_CSBF  | PWR_CR_CWUF);\
-									   PWR->CSR |= (PWR_CSR_EWUP );\
+									   PWR->CSR |= (PWR_CSR_WUF |  PWR_CSR_EWUP );\
 									   RTC->ISR &= ~(RTC_ISR_ALRBF | RTC_ISR_ALRAF | RTC_ISR_WUTF | RTC_ISR_TAMP1F |\
 													RTC_ISR_TSOVF | RTC_ISR_TSF);
 

@@ -4,6 +4,7 @@
  *  Created on: Sep 14, 2020
  *      Author: abusous2000
  */
+//plz watch https://www.youtube.com/watch?v=O82rj9qxkgs
 #include "Strust4EmbeddedConf.h"
 #include "ch.h"
 #include "hal.h"
@@ -11,6 +12,7 @@
 #include "stdlib.h"
 #include "string.h"
 #include "ccportab.h"
+#include "RTCHelper.h"
 #include "Strust4Embedded.h"
 
 #ifndef WAKEUP_HARD_REST_CHECK
@@ -25,8 +27,8 @@
 #error Plz define this macro GO_TO_SLEEP_MACROS
 #endif
 
-
-static uint8_t goingToSleepCnt PLACE_IN_RAM_SECTION(BACKUP_CCM_RAM_SECTION)  = 0;
+//Remember to place vars you wanna save in standby mode into CCM memory bank!
+static int16_t goingToSleepCnt PLACE_IN_RAM_SECTION(BACKUP_CCM_RAM_SECTION)  = 0;
 static time_t unix_time;
 static RTCDateTime timespec;
 
@@ -43,7 +45,7 @@ static const RTCAlarm alarm2 = {
 };
 #endif
 
-uint8_t getGoingToSleepCnt(void){
+int16_t getGoingToSleepCnt(void){
 	return goingToSleepCnt;
 }
 CC_WEAK void onRTCSleep(void){
@@ -55,7 +57,9 @@ void rtcGoToSleep(void) {
   onRTCSleep();
   chSysLock();
   GO_TO_SLEEP_MACROS
-  port_wait_for_interrupt();//Same as  __WFI();
+  __WFI();
+  chThdSleepMilliseconds(200);
+
 }
 
 static time_t rtcGetTimeUnixSec(void) {
@@ -133,6 +137,7 @@ bool getRTCSystemWakeup(void){
 
 
 CC_WEAK void onRTCSystemWakeup(void){
+    dbgprintf("--->onRTCSystemWakeup():%d<----\r\n", WAKEUP_HARD_REST_CHECK);
 
 }
 
@@ -159,7 +164,7 @@ static void alarmcb(RTCDriver *rtcp, rtcevent_t event) {
 
 void RTCInit(void){
 	systemWakeup = WAKEUP_HARD_REST_CHECK;
-	dbgprintf("Hard Rest(0)/Wakeup(2):%d\r\n",  systemWakeup);
+	dbgprintf("------>Reason for booting - Hard Rest(0)/Wake-up(2):%d,\tSleep Count:%d<-------\r\n",  systemWakeup, getGoingToSleepCnt());
 	if ( systemWakeup )
 		onRTCSystemWakeup();
 	else
@@ -167,9 +172,13 @@ void RTCInit(void){
 	CLEAR_WAKEUP_FLAG;
 	#ifdef RTC_ALARM_1_FLAGS
 	rtcSetAlarm(&RTCD1, 0, &alarm1);
+    #else
+	rtcSetAlarm(&RTCD1, 0, NULL);
 	#endif
 	#ifdef RTC_ALARM_1_FLAGS
 	rtcSetAlarm(&RTCD1, 1, &alarm2);
+	#else
+	rtcSetAlarm(&RTCD1, 1, NULL);
 	#endif
 	rtcSetCallback(&RTCD1, alarmcb);
 

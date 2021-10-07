@@ -55,14 +55,14 @@ static CPalTypedef easyLinkKey={.line=EASYLINK_BUTTON,  	.mode=BUTTON_MODE2, .ri
 //static CPalTypedef easyLinkKey0={.line=EASYLINK_BUTTON0,  	.mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_FALLING_EDGE,.cb=joystickCBHandler, .arg=(void*)TOGGLE_PAUSE_AE_NAME};//"EasyLink"};Pin3
 //static CPalTypedef easyLinkKey1={.line=EASYLINK_BUTTON1,  	.mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_FALLING_EDGE,.cb=joystickCBHandler, .arg=(void*)VOLUME_DOWN_AE_NAME};//"EasyLink"};Pin2
 #endif
-#ifdef USER_BUTTON
 
-static CPalTypedef centerKey={  .line=USER_BUTTON,      .mode=BUTTON_MODE1, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)USER_BUTTON_EVENT};
-   #if defined(USER2_BUTTON)
-  static CPalTypedef upKey={      .line=USER2_BUTTON,          .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)NEXT_TRACK_AE_NAME};
+#ifdef USER_BUTTON
+  static CPalTypedef centerKey={.line=USER_BUTTON,      .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=USER_BUTTON_EVENT};
+  #if defined(USER2_BUTTON)
+  static CPalTypedef upKey={    .line=USER2_BUTTON,     .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=NEXT_TRACK_AE_NAME};
   #endif
   #if defined(USER3_BUTTON)
-  static CPalTypedef downKey={    .line=USER3_BUTTON,        .mode=BUTTON_MODE2, .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=(void*)GO_TO_SLEEP_AE_NAME};
+  static CPalTypedef downKey={  .line=USER3_BUTTON,     .risingfallingEdge=PAL_EVENT_MODE_RISING_EDGE, .cb=joystickCBHandler, .arg=GO_TO_SLEEP_AE_NAME};
   #endif
 #endif
 
@@ -73,14 +73,17 @@ void initButtonsLEDs(void) {
 #if S4E_USE_RGB != 0
   pRgb         = initCPalInstance(&rgb);pRgb->init(&rgb);pRgb->clear(&rgb);
 #endif
-  pGreenLedPAL = initCPalInstance(&greenLedPAL);pGreenLedPAL->init(&greenLedPAL);pGreenLedPAL->toggle(&greenLedPAL);
+  pGreenLedPAL = initCPalInstance(&greenLedPAL);
+  pGreenLedPAL->init(&greenLedPAL);
+  pGreenLedPAL->toggle(&greenLedPAL);
 #if defined(LINE_LED_RED)
   pRedLedPAL 	   = initCPalInstance(&redLedPAL);pRedLedPAL->init(&redLedPAL);pRedLedPAL->toggle(&redLedPAL);
 #endif
 
 #if S4E_USE_JOYSTICK != 0
-  #ifdef LINE_JOY_CENTER
-  pCenterKey   = initCPalInstance(&centerKey);pCenterKey->init(&centerKey);
+  #if defined(LINE_JOY_CENTER) || defined(USER_BUTTON)
+  pCenterKey   = initCPalInstance(&centerKey);
+  pCenterKey->init(&centerKey);
   #endif
   #ifndef STM32F446xx
   //These two lines, has interrupt conflict with STM32F446xx
@@ -97,15 +100,18 @@ void initButtonsLEDs(void) {
 //  pEasyLinkKey0= initCPalInstance(&easyLinkKey0);pEasyLinkKey0->init(&easyLinkKey0);
 //  pEasyLinkKey1= initCPalInstance(&easyLinkKey1);pEasyLinkKey1->init(&easyLinkKey1);
 #elif defined(USER_BUTTON)
-   #ifdef LINE_JOY_CENTER
-   pCenterKey   = initCPalInstance(&centerKey);pCenterKey->init(&centerKey);
+   #ifdef USER_BUTTON
+   pCenterKey   = initCPalInstance(&centerKey);
+   pCenterKey->init(&centerKey);
    #endif
    #if defined(USER2_BUTTON)
-   pUpKey       = initCPalInstance(&upKey);pUpKey->init(&upKey);
+   pUpKey       = initCPalInstance(&upKey);
+   pUpKey->init(&upKey);
    #endif
 
    #if defined(USER3_BUTTON)
-   pDownKey     = initCPalInstance(&downKey);pDownKey->init(&downKey);
+   pDownKey     = initCPalInstance(&downKey);
+   pDownKey->init(&downKey);
    #endif
 #endif
 

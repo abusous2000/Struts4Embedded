@@ -7,6 +7,7 @@
 
 #ifndef SOURCE_CPAL_H_
 #define SOURCE_CPAL_H_
+#include "ch.h"
 #include "hal.h"
 
 #if HAL_USE_PAL

@@ -8,12 +8,14 @@
 
 #if HAL_USE_PAL
 static CPalTypedef *initCPal(CPalTypedef *pSelf){
-  palSetLineMode(pSelf->line,pSelf->mode);
-#if (PAL_USE_CALLBACKS == TRUE) || defined(__DOXYGEN__)
-  if (pSelf->risingfallingEdge != 0 )
-     palEnableLineEvent(pSelf->line, pSelf->risingfallingEdge);
-  if ( pSelf->cb != NULL)
-     palSetLineCallback(pSelf->line, pSelf->cb, (void*)pSelf->arg);
+  if (pSelf->risingfallingEdge == 0 )
+     palSetLineMode(pSelf->line,pSelf->mode);
+#if (PAL_USE_CALLBACKS == TRUE)
+  else{
+  	  palEnableLineEvent(pSelf->line, pSelf->risingfallingEdge);
+	  if ( pSelf->cb != NULL)
+		 palSetLineCallback(pSelf->line, pSelf->cb, pSelf->arg);
+  }
 #endif
 
   return pSelf;

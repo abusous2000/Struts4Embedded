@@ -5,6 +5,14 @@
 static mutex_t printfMutex;
 mutex_t *pPrintfMutex = NULL;
 
+bool isNumeric(const char *str){
+    while(*str != '\0'){
+        if(*str < '0' || *str > '9')
+            return false;
+        str++;
+    }
+    return true;
+}
 void removeChar(char *str, char garbage) {
 
     char *src, *dst;
@@ -101,9 +109,7 @@ void initStruts4EmbeddedFramework(void){
 	putSysProperty(&reloadHost);
 	putSysProperty(&fp);
 	putSysProperty(&workerThds);
-#if HAL_USE_RTC != 0
-    RTCInit();
-#endif
+
 	return;
 }
 void putSysProperty(NameValuePairStaticTypeDef *pNVP){

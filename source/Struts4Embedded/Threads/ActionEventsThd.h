@@ -3,7 +3,7 @@
 #include "ActionEventsThd.h"
 
 #ifndef BLINKER_THD_STACK_SIZE
-#define BLINKER_THD_STACK_SIZE	256
+#define BLINKER_THD_STACK_SIZE	           256
 #endif
 #ifndef MAIN_QUEUE_SIZE
 #define MAIN_QUEUE_SIZE						10
@@ -21,7 +21,7 @@
 #define SOURCE_EVENT_WIFI					"WiFi"
 #define SOURCE_EVENT_MQTT					"MQTT"
 #define SOURCE_EVENT_LCD					"LCD"
-#define SOURCE_EVENT_IR					"IR"
+#define SOURCE_EVENT_IR					    "IR"
 #define SOURCE_EVENT_RC						"RC"
 #define SOURCE_EVENT_LORA					"LoRa"
 #define DATA_FIELD_WAS_LT_MAX               100

@@ -6,8 +6,11 @@ ALLINC  += $(STRUTS4EMBEDDED)/Threads
 ALLINC  += $(STRUTS4EMBEDDED)/hal
 ALLINC  += $(STRUTS4EMBEDDED)/SDCard
 
+include $(MQTTCLIENT)/MQTTClient.mk
+include $(CONTROLS)/Controls.mk
 ALLCSRC += $(STRUTS4EMBEDDED)/Threads/WifiCommunicationThd.c \
            $(STRUTS4EMBEDDED)/Threads/BlinkerThd.c \
+           $(STRUTS4EMBEDDED)/Threads/AEShell.c \
            $(STRUTS4EMBEDDED)/Threads/ActionEventsThd.c \
            $(STRUTS4EMBEDDED)/SDCard/SDCard.c \
            $(STRUTS4EMBEDDED)/Utils/JsonParser.c \

@@ -38,7 +38,7 @@
 #include "string.h"
 #include "userconf.h"
 
-#if USERLIB_USE_RF || defined(__DOXYGEN__)
+#if defined(USERLIB_USE_RF) && USERLIB_USE_RF != 0
 
 /*===========================================================================*/
 /* Driver constants.                                                         */
@@ -81,7 +81,7 @@
 
 /******************  Bit definition for Registers Addresses *******************/
 #define  NRF24L01_AD_CONFIG                      ((uint8_t)0x00)             /*!< Configuration Register */
-#define  NRF24L01_AD_EN_AA                       ((uint8_t)0x01)             /*!< Enable ‘Auto Acknowledgment’ */
+#define  NRF24L01_AD_EN_AA                       ((uint8_t)0x01)             /*!< Enable ���Auto Acknowledgment��� */
 #define  NRF24L01_AD_EN_RXADDR                   ((uint8_t)0x02)             /*!< Enabled RX Addresses */
 #define  NRF24L01_AD_SETUP_AW                    ((uint8_t)0x03)             /*!< Setup of Address Widths */
 #define  NRF24L01_AD_SETUP_RETR                  ((uint8_t)0x04)             /*!< Setup of Automatic Retransmission */

@@ -12,7 +12,7 @@
 #include "PPMFrameDecoder.h"
 #include "EByteLora.h"
 #include "RTCHelper.h"
-#include "w25qxx.h"
+#include "AEShell.h"
 
 #if INCLUDE_SEGGER_JLINK != 0
 #include "SEGGER_SYSVIEW_ChibiOS.h"
@@ -76,6 +76,7 @@ void initMain(void){
 #endif
 }
 #endif
+
 int main(void) {
   initMain();
 #if HAL_USE_SERIAL != 0
@@ -128,6 +129,10 @@ int main(void) {
   initEByteLoraThread();
 #endif
 
+#if USE_AE_SHELL != 0
+ initAEShell();
+#endif
+
   while (true) {
 	  chThdSleepMilliseconds(1500);
 	  #if S4E_USE_MQTT != 0
@@ -168,6 +173,9 @@ static void initDrivers(void){
 #endif
 #if USERLIB_USE_RF != 0
   initNRF2401();
+#endif
+#if HAL_USE_RTC != 0
+    RTCInit();
 #endif
 }
 void publishStatusToBroker(void);
