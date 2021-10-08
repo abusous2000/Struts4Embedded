@@ -18,7 +18,7 @@
 #define SET_MOTORS_PARAMS_AE_NAME           "setMotorsParams"
 #define NEW_HTML_LOADED_AE_NAME				"newHTMLLoaded"
 #define PERFORMANCE_INFO_AE_NAME			"performanceInfo"
-#define TOGGLE_BUZZER_AE_NAME               "toggerBuzzer"
+#define TOGGLE_BUZZER_AE_NAME               "toggleBuzzer"
 
 
 #ifdef __cplusplus

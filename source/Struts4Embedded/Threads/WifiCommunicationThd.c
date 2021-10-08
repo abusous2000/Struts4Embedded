@@ -16,6 +16,17 @@ static THD_WORKING_AREA(waWifiCommunicationThd, 1024);
 static BaseSequentialStream *pWiFiChannel = (BaseSequentialStream *)&WIFI_SD;
 thread_t *pWifiThd;
 
+#if !defined(LINE_WIFI_RST) || !defined(LINE_WIFI_RX) || !defined(LINE_WIFI_TX)
+#error Plz define LINE_WIFI_RST, LINE_WIFI_RX, & LINE_WIFI_TX
+#endif
+#if defined(BOARD_BLACKBOARD_INDUSTRIAL2)
+
+#if S4E_USE_ETHERNET == 1
+#error With industrial board #2 you cannot use WIFI & MAC at the same time; there is pin conflict; i.e PA2
+#endif
+palSetLineMode(LINE_WIFI_UART_TX, LINE_WIFI_MODE);
+palSetLineMode(LINE_WIFI_UART_RX, LINE_WIFI_MODE);
+#endif
 
 static THD_FUNCTION(WifiCommunicationThd, arg) {(void)arg;
   chRegSetThreadName("WifiCommunicationThd");

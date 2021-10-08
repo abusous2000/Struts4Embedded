@@ -308,7 +308,7 @@ static int32_t goToSleep(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
    return MSG_OK;
 }
 
-static int32_t toggerBuzzer(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
+static int32_t toggleBuzzer(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
 	#if S4E_USE_BUZZER != 0
     pBuzzer->toggle(pBuzzer);
 	#endif
@@ -330,7 +330,7 @@ static ActionEvent_Typedef actionEventNewHTMLLoaded	 	= {.name=NEW_HTML_LOADED_A
 static ActionEvent_Typedef actionEventPerformanceInfo 	= {.name=PERFORMANCE_INFO_AE_NAME,  	.eventSource="wifi",      	    .action=performanceInfo, 	.view=NULL,				    .dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventSetUnixtime      	= {.name=SET_UNIX_TIME_AE_NAME,			.eventSource="WiFi",   		    .action=setUnixtime, 		.view=NULL,			        .dataType = CHAR_DTYPE};
 static ActionEvent_Typedef actionEventGoToSleep      	= {.name=GO_TO_SLEEP_AE_NAME,			.eventSource="WiFi",   		    .action=goToSleep, 		    .view=NULL,			        .dataType = INT_DTYPE};
-static ActionEvent_Typedef actionEventToggleBuzzer     	= {.name=TOGGLE_BUZZER_AE_NAME,			.eventSource="WiFi",   		    .action=toggerBuzzer, 		.view=NULL,			        .dataType = INT_DTYPE};
+static ActionEvent_Typedef actionEventToggleBuzzer     	= {.name=TOGGLE_BUZZER_AE_NAME,			.eventSource="WiFi",   		    .action=toggleBuzzer, 		.view=NULL,			        .dataType = INT_DTYPE};
 
 ActionEvent_Typedef *gActionEvents[MAX_ACTION_EVENTS] ={&actionEventToggleMute,
 		                                                &actionEventNextTrack,

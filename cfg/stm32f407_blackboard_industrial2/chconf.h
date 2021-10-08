@@ -30,7 +30,13 @@
 
 #define _CHIBIOS_RT_CONF_
 #define _CHIBIOS_RT_CONF_VER_6_1_
-
+//#define bool_t						bool
+////remember to set in the makefile
+////INCLUDE_SEGGER_JLINK := "yes"
+//#define INCLUDE_SEGGER_JLINK 		0
+//#define DEBUG_TRACE_PRINT     		TRUE
+//#define CHPRINTF_USE_FLOAT    		TRUE
+//#define PORT_ENABLE_GUARD_PAGES     TRUE
 
 /*===========================================================================*/
 /**

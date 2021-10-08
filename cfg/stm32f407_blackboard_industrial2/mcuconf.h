@@ -248,7 +248,7 @@
 #define STM32_RTC_TAMPCR_INIT               0
 
 //Added By AbuSous2000
-#define STM32_SDC_USE_SDMMC1                 1
+#define STM32_SDC_USE_SDMMC1                1
 /*
  * SDC driver system settings.
  */
@@ -266,7 +266,7 @@
 #define STM32_SERIAL_USE_USART1             TRUE
 #define STM32_SERIAL_USE_USART2             FALSE
 #define STM32_SERIAL_USE_USART3             FALSE
-#define STM32_SERIAL_USE_UART4              FALSE
+#define STM32_SERIAL_USE_UART4              TRUE
 #define STM32_SERIAL_USE_UART5              FALSE
 #define STM32_SERIAL_USE_USART6             FALSE
 #define STM32_SERIAL_USART1_PRIORITY        12
@@ -279,8 +279,8 @@
 /*
  * SPI driver system settings.
  */
-#define STM32_SPI_USE_SPI1                  TRUE
-#define STM32_SPI_USE_SPI2                  FALSE
+#define STM32_SPI_USE_SPI1                  FALSE
+#define STM32_SPI_USE_SPI2                  TRUE
 #define STM32_SPI_USE_SPI3                  TRUE
 #define STM32_SPI_SPI1_RX_DMA_STREAM        STM32_DMA_STREAM_ID(2, 0)
 #define STM32_SPI_SPI1_TX_DMA_STREAM        STM32_DMA_STREAM_ID(2, 3)

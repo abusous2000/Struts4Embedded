@@ -7,16 +7,31 @@
 //#define USES_SINGLE_BYTE
 
 
+#if defined(BOARD_BLACKBOARD_INDUSTRIAL2)
+//For some reason I was ONLY able to get this boad to work with single byte mode!!! BOARD_BLACKBOARD_INDUSTRIAL was OK
+#define USES_SINGLE_BYTE
+#if 0
+#define W25QXX_SPI_CR1    (uint16_t)((uint32_t)SPI_Direction_2Lines_FullDuplex | SPI_Mode_Master | SPI_DataSize_8b |\
+                                               SPI_CPOL_High                   | SPI_CPHA_2Edge  | SPI_NSS_Soft    | \
+											   SPI_BaudRatePrescaler_2         | SPI_FirstBit_MSB)
+#endif
+#endif
+
+
+#ifndef W25QXX_SPI_CR1
+#define W25QXX_SPI_CR1        0
+#endif
+#ifndef W25QXX_SPI_CR2
+#define W25QXX_SPI_CR2        0
+#endif
+
+
 static SPIConfig hs_spicfg = {  .circular = FALSE,
 		                        .end_cb = NULL,
 							    .ssport =PAL_PORT(W25QXX_SPI_CS_LINE),
 								.sspad = PAL_PAD(W25QXX_SPI_CS_LINE),
-								.cr1=0,
-//								.cr1 = SPI_CR1_BR_2 | SPI_CR1_BR_1 | SPI_CR1_MSTR | SPI_CR1_CPHA | SPI_CR1_CPOL|SPI_CR1_SSM,
-//								.cr1 =                               SPI_CR1_MSTR | SPI_CR1_CPHA | SPI_CR1_CPOL|SPI_CR1_SSM,
-//								.cr1 = SPI_CR1_BR_2 | SPI_CR1_BR_1 | SPI_CR1_BR_0 | SPI_CR1_MSTR | SPI_CR1_CPHA | SPI_CR1_CPOL|SPI_CR1_SSM,
-//								.cr1 =  SPI_CR1_MSTR | SPI_CR1_CPHA | SPI_CR1_CPOL|SPI_CR1_SSM,
-								.cr2 = 0 };
+								.cr1=W25QXX_SPI_CR1,
+								.cr2=W25QXX_SPI_CR2 };
 
 uint8_t SPIX_ReadWriteByte(uint8_t tx) {
 	uint8_t rxBuff[2] = {0};
@@ -50,8 +65,13 @@ void SPIX_Init(void) {
 	palSetLineMode(W25QXX_SPI_MOSI_LINE, W25QXX_SPI_MODE); /* New MOSI.    */
 	palSetLineMode(W25QXX_SPI_CS_LINE, W25QXX_SPI_CS_MODE); /* New CS.      */
 	palSetLine(W25QXX_SPI_CS_LINE);
-
+#if defined(BOARD_BLACKBOARD_INDUSTRIAL2)
+	W25QXX_SPID.spi->CRCPR = 7;
+	W25QXX_SPID.spi->I2SCFGR &= (uint16_t)~((uint16_t)SPI_I2SCFGR_I2SMOD);
+#endif
 	spiStart(&W25QXX_SPID, &hs_spicfg); /* Setup transfer parameters.       */
+	SPIX_ReadWriteByte(0xff);
+
 	W25QXX_WAKEUP();
 }
 
@@ -59,7 +79,7 @@ static uint16_t W25QXX_ID = 0;
 
 void W25QXX_Init(void) {
 	//SPI FLASH
-	SPIX_Init();		   			                              //SPI
+	SPIX_Init();
 	W25QXX_ID = W25QXX_ReadID();
 }
 uint16_t getW25QXX_ID(void){
@@ -121,9 +141,11 @@ int W25QXX_Wait_Busy(void) {
 
 	while ((W25QXX_ReadSR() & 0x01) == 0x01){
 		chThdSleepMicroseconds(10);
+#if !defined(BOARD_BLACKBOARD_INDUSTRIAL2)
 		if ( i++ > 3000 ){
 			break;
 		}
+#endif
 	}
 
 	return i;
@@ -282,7 +304,7 @@ void W25QXX_Read(uint8_t* DataBuffer, uint32_t StartAddress, uint16_t ByteCount)
 	spiAcquireBus(&W25QXX_SPID);
 	spiSelect(&W25QXX_SPID);
 
-#ifdef USES_SINGLE_BYTE2
+#ifdef USES_SINGLE_BYTE
 	SPIX_ReadWrite4Bytes(W25X_CMD_ReadData,StartAddress,NULL);
 //	SPIX_ReadWriteByte(W25X_CMD_ReadData);
 //	SPIX_ReadWriteByte((uint8_t)((StartAddress) >> 16));

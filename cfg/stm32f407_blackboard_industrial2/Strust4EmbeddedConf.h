@@ -50,6 +50,12 @@
 #endif
 #ifndef S4E_USE_WIFI_MODULE_THD
 #define S4E_USE_WIFI_MODULE_THD 0
+#define WIFI_SD                 SD4
+#define LINE_WIFI_AF            8
+#define LINE_WIFI_MODE          PAL_MODE_ALTERNATE(LINE_WIFI_AF)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL
+#define LINE_WIFI_RST           PAL_LINE(GPIOA, 8U)
+#define LINE_WIFI_UART_TX       PAL_LINE(GPIOA, 0U)
+#define LINE_WIFI_UART_RX       PAL_LINE(GPIOA, 1U)
 #endif
 #ifndef S4E_USE_SSD1306_LCD
 #define S4E_USE_SSD1306_LCD     0
@@ -60,7 +66,7 @@
 #define ADC_POT_TIM             GPTD3 ///See p. 398 in RM
 #define ADC_POT                 ADCD1
 #define ADC_CHANNEL_IN 			ADC_CHANNEL_IN3//See Table 10 in user manual or datasheet
-#define ADC_SMPR2_SMP          ADC_SMPR2_SMP_AN3(ADC_SAMPLE_144)
+#define ADC_SMPR2_SMP           ADC_SMPR2_SMP_AN3(ADC_SAMPLE_144)
 
 //#define LINE_ARD_D2           PAL_LINE(GPIOA, 10U)
 #define POT_GPIO_PIN            PAL_LINE(GPIOA, 3U)//PA3
@@ -123,7 +129,7 @@
 
 
 #ifndef S4E_USE_SDCARD
-#define S4E_USE_SDCARD 			1
+#define S4E_USE_SDCARD 			        1
 #endif
 #include "board.h"
 #define SDMMCD0_LINE 					PAL_LINE(GPIOC, 8U) //PC8
@@ -138,16 +144,18 @@
 #define SDMMC_ALREADY_CONFIG            1
 
 
-#define USE_W25Q_XXXX  					0
+#define USE_W25Q_XXXX  					1
+//If you use the recommended SPI1 it will run in conflict with SD Card.
+//That is why I am using SPID3 instead of SPID1. See mcuconf.h for more details
+#define W25QXX_SPID						SPID3
 
 #define W25QXX_SPI_SCK_LINE   			PAL_LINE(GPIOB, 3)//PB3
 #define W25QXX_SPI_MISO_LINE  			PAL_LINE(GPIOB, 4)//PB4
 #define W25QXX_SPI_MOSI_LINE  			PAL_LINE(GPIOB, 5)//PB5
 #define W25QXX_SPI_CS_LINE    			PAL_LINE(GPIOG, 8)//PG8
-#define W25QXX_SPI_MODE       			PAL_MODE_ALTERNATE(5)    |    PAL_STM32_OSPEED_HIGHEST | PAL_STM32_PUPDR_PULLUP
+#define W25QXX_SPI_MODE       			PAL_MODE_ALTERNATE(6)    |    PAL_STM32_OSPEED_HIGHEST
 #define W25QXX_SPI_CS_MODE    			PAL_MODE_OUTPUT_PUSHPULL |    PAL_STM32_OSPEED_HIGHEST
 
-#define W25QXX_SPID						SPID1
 
 #define USERLIB_USE_RF                  0
 #define TRANSMITTER                     1

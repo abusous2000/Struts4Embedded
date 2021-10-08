@@ -12,6 +12,7 @@
 #include "PPMFrameDecoder.h"
 #include "EByteLora.h"
 #include "RTCHelper.h"
+#include "w25qxx.h"
 #include "AEShell.h"
 
 #if INCLUDE_SEGGER_JLINK != 0
@@ -83,7 +84,7 @@ int main(void) {
 	#ifdef USE_USBCFG
 	  initUSBCFG();
 	#else
-      #if defined(BOARD_SEEED_ARCH_MAX) && STM32_SERIAL_USE_USART1 != 0
+      #if (defined(BOARD_SEEED_ARCH_MAX) || defined(BOARD_BLACKBOARD_INDUSTRIAL2)) && STM32_SERIAL_USE_USART1 != 0
 		  palSetLineMode(LINE_UART_SD_TX, PAL_MODE_ALTERNATE(7)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL);
 		  palSetLineMode(LINE_UART_SD_RX, PAL_MODE_ALTERNATE(7)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL);
       #endif
@@ -165,9 +166,11 @@ static void initDrivers(void){
 #if USE_W25Q_XXXX != 0
   uint8_t datatemp[20] = {0};
   W25QXX_Init();
-  W25QXX_Erase_Sector(0);
+//  W25QXX_Erase_Sector(0);
 //  W25QXX_Erase_Chip();
   W25QXX_SectorWrite((uint8_t*)"Hello Salah!2",0,14);
+//  W25QXX_Write_Page((uint8_t*)"Hello Salah!2",0,14);
+
   W25QXX_Read(datatemp,0,12);
   dbgprintf("From Flash:%s\r\n",datatemp);
 #endif
