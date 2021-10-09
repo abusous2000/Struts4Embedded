@@ -24,7 +24,6 @@
 #define S4E_USE_PPM_FRAME_DECODER 		0
 #define S4E_USE_EBYTE_LORA 		0
 #define EBYTE_LORA_SERVER       0
-#define S4E_USE_IR_RECEIVER		0
 
 #ifndef USE_AE_SHELL
 //set USE_AE_SHELL = "yes" in make file
@@ -44,18 +43,17 @@
 //#define LINE_JOY_CENTER         PAL_LINE(GPIOF, 8)//PF8-KEY5
 
 #endif
-//#define USER_BUTTON             PAL_LINE(GPIOA, 0)//PA0
 #ifndef S4E_USE_BLINKER_THD
 #define S4E_USE_BLINKER_THD     1
 #endif
 #ifndef S4E_USE_WIFI_MODULE_THD
 #define S4E_USE_WIFI_MODULE_THD 0
 #define WIFI_SD                 SD4
-#define LINE_WIFI_AF            8
+#define LINE_WIFI_AF            8U
 #define LINE_WIFI_MODE          PAL_MODE_ALTERNATE(LINE_WIFI_AF)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL
-#define LINE_WIFI_RST           PAL_LINE(GPIOA, 8U)
-#define LINE_WIFI_UART_TX       PAL_LINE(GPIOA, 0U)
-#define LINE_WIFI_UART_RX       PAL_LINE(GPIOA, 1U)
+#define LINE_WIFI_RST           PAL_LINE(GPIOF, 14U)//PF14
+#define LINE_WIFI_TX            PAL_LINE(GPIOA, 0U)//PA0
+#define LINE_WIFI_RX            PAL_LINE(GPIOA, 1U)//PA1
 #endif
 #ifndef S4E_USE_SSD1306_LCD
 #define S4E_USE_SSD1306_LCD     0
@@ -65,13 +63,22 @@
 #define TIM_TGRO_EVENT_EXTSEL 	0x08 //See p. 398 in RM
 #define ADC_POT_TIM             GPTD3 ///See p. 398 in RM
 #define ADC_POT                 ADCD1
-#define ADC_CHANNEL_IN 			ADC_CHANNEL_IN3//See Table 10 in user manual or datasheet
-#define ADC_SMPR2_SMP           ADC_SMPR2_SMP_AN3(ADC_SAMPLE_144)
+#define ADC_CHANNEL_IN 			ADC_CHANNEL_IN10//ADC_CHANNEL_IN3//See Table 10 in user manual or datasheet
+#define ADC_SMPR2_SMP           ADC_SMPR1_SMP_AN10(ADC_SAMPLE_144)//ADC_SMPR2_SMP_AN3(ADC_SAMPLE_144)
 
 //#define LINE_ARD_D2           PAL_LINE(GPIOA, 10U)
-#define POT_GPIO_PIN            PAL_LINE(GPIOA, 3U)//PA3
+#define POT_GPIO_PIN            PAL_LINE(GPIOC, 0U)//PC0-PAL_LINE(GPIOA, 3U)//
 
 #endif
+
+#define S4E_USE_IR_RECEIVER		1
+
+#define PORTABLE_ICU_LINE 		PAL_LINE(GPIOC, 6U) //PC6
+#define PORTABLE_ICUD 			ICUD8
+#define PORTABLE_ICU_AF  		3
+#define PORTABLE_ICU_CHANNEL 	ICU_CHANNEL_1
+
+
 #ifndef S4E_USE_PWM
 #define S4E_USE_PWM             0
 #endif
@@ -84,6 +91,7 @@
 #define S4E_USE_RGB             0
 #endif
 #ifndef S4E_USE_MQTT
+//Remember this requires change MAC option hal.h, configuring pins in board.h, & enabling LWIP in makefile
 #define S4E_USE_MQTT            1
 #endif
 #ifndef S4E_USE_WEB_SERVER
@@ -171,8 +179,8 @@
 #define NRF24L01_SPI_CS                 PAL_LINE(GPIOE, 8)//PE8
 #define NRF24L01_SPI_CS_MODE    		PAL_MODE_OUTPUT_PUSHPULL |    PAL_STM32_OSPEED_HIGHEST
 
-#define NRF24L01_SPID				    SPID1
-#define NRF24L01_SPI_MODE       		PAL_MODE_ALTERNATE(5)    |    PAL_STM32_OSPEED_HIGHEST
+#define NRF24L01_SPID				    SPID3
+#define NRF24L01_SPI_MODE       		PAL_MODE_ALTERNATE(6)    |    PAL_STM32_OSPEED_HIGHEST
 
 
 #define GO_TO_SLEEP_MACROS      	   SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;\

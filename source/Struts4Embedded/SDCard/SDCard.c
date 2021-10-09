@@ -54,6 +54,8 @@ SDCardDriverITF_Typedef *getSDCardDriver(void){
 }
 
 FRESULT initMMC(SDCardDriverITF_Typedef *pSDCardDriverITF) {
+	if ( pSDCardDriverITF->currentState != SDCARD_DISCONNECTED )
+		  return FR_OK;
 #if HAL_USE_MMC_SPI
 
   palSetLineMode(SD_CARD_NSS_LINE,  PAL_MODE_OUTPUT_PUSHPULL | PAL_STM32_OSPEED_HIGHEST);
@@ -91,6 +93,8 @@ FRESULT initMMC(SDCardDriverITF_Typedef *pSDCardDriverITF) {
 
 FRESULT mountSDCard(SDCardDriverITF_Typedef *pSDCardDriverITF){
   FRESULT err;
+ if ( pSDCardDriverITF->currentState == SDCARD_MOUNTED ||  pSDCardDriverITF->currentState == SDCARD_PROCESSING)
+	return FR_OK;
 #if HAL_USE_MMC_SPI
   if(mmcConnect(&MMCD1)) {
 	dbgprintf("mountSDCard: Failed to connect to card\r\n");

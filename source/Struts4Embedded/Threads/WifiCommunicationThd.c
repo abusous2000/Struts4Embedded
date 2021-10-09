@@ -19,14 +19,11 @@ thread_t *pWifiThd;
 #if !defined(LINE_WIFI_RST) || !defined(LINE_WIFI_RX) || !defined(LINE_WIFI_TX)
 #error Plz define LINE_WIFI_RST, LINE_WIFI_RX, & LINE_WIFI_TX
 #endif
-#if defined(BOARD_BLACKBOARD_INDUSTRIAL2)
 
-#if S4E_USE_ETHERNET == 1
-#error With industrial board #2 you cannot use WIFI & MAC at the same time; there is pin conflict; i.e PA2
+#if defined(BOARD_BLACKBOARD_INDUSTRIAL2) && S4E_USE_ETHERNET == 1
+#error With industrial board #2 you cannot use WIFI & MAC at the same time; there is pin conflict; i.e PA2. Remove MAC &LWIP from Hal.h & make files
 #endif
-palSetLineMode(LINE_WIFI_UART_TX, LINE_WIFI_MODE);
-palSetLineMode(LINE_WIFI_UART_RX, LINE_WIFI_MODE);
-#endif
+
 
 static THD_FUNCTION(WifiCommunicationThd, arg) {(void)arg;
   chRegSetThreadName("WifiCommunicationThd");
@@ -39,6 +36,10 @@ static THD_FUNCTION(WifiCommunicationThd, arg) {(void)arg;
    */
   //Clearing + Delay (100)+setting +delay(500) the WIFI_RST is critical
   pWifiThd = chThdGetSelfX();
+#if defined(BOARD_BLACKBOARD_INDUSTRIAL2)
+palSetLineMode(LINE_WIFI_TX, LINE_WIFI_MODE);
+palSetLineMode(LINE_WIFI_RX, LINE_WIFI_MODE);
+#endif
   palSetLineMode(LINE_WIFI_RST, PAL_MODE_OUTPUT_PUSHPULL | PAL_STM32_OSPEED_HIGHEST);
   palClearLine(LINE_WIFI_RST);
   chThdSleepMilliseconds(100);

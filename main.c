@@ -13,6 +13,7 @@
 #include "EByteLora.h"
 #include "RTCHelper.h"
 #include "w25qxx.h"
+#include "IRReceiver.h"
 #include "AEShell.h"
 
 #if INCLUDE_SEGGER_JLINK != 0
@@ -129,6 +130,9 @@ int main(void) {
 #if S4E_USE_EBYTE_LORA != 0
   initEByteLoraThread();
 #endif
+#if S4E_USE_IR_RECEIVER != 0
+  initIRReeceiver();
+#endif
 
 #if USE_AE_SHELL != 0
  initAEShell();
@@ -168,7 +172,7 @@ static void initDrivers(void){
   W25QXX_Init();
 //  W25QXX_Erase_Sector(0);
 //  W25QXX_Erase_Chip();
-  W25QXX_SectorWrite((uint8_t*)"Hello Salah!2",0,14);
+  W25QXX_SectorWrite((uint8_t*)"Hello World!",0,14);
 //  W25QXX_Write_Page((uint8_t*)"Hello Salah!2",0,14);
 
   W25QXX_Read(datatemp,0,12);

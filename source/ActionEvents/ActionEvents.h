@@ -19,7 +19,7 @@
 #define NEW_HTML_LOADED_AE_NAME				"newHTMLLoaded"
 #define PERFORMANCE_INFO_AE_NAME			"performanceInfo"
 #define TOGGLE_BUZZER_AE_NAME               "toggleBuzzer"
-
+#define TOGGLE_TEST_SDCARD                  "testSDCard"
 
 #ifdef __cplusplus
  extern "C" {

@@ -10,6 +10,7 @@
 #include "RTCHelper.h"
 #include "ssd1306.h"
 #include "ButtonLEDs.h"
+#include "SDCard.h"
 #if INCLUDE_SEGGER_JLINK != 0
 #include "SEGGER_SYSVIEW_ChibiOS.h"
 #include "SEGGER_RTT_streams.h"
@@ -316,6 +317,20 @@ static int32_t toggleBuzzer(ActionEvent_Typedef 	*pActionEvent){(void)pActionEve
    return MSG_OK;
 }
 
+static int32_t testSDCard(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
+	#if S4E_USE_SDCARD != 0
+	SDCardDriverITF_Typedef *pSDCardDriverITF 			= getSDCardDriver();
+
+	pSDCardDriverITF->init(pSDCardDriverITF);
+	if ( !pSDCardDriverITF->mount(pSDCardDriverITF))
+		pSDCardDriverITF->processFiles(pSDCardDriverITF);
+	else
+		dbgprintf("Failed to mount SD card\r\n");
+	#endif
+
+   return MSG_OK;
+}
+
 static ActionEvent_Typedef actionEventToggleMute 	 	= {.name=TOGGLE_MUTE_AE_NAME,  			.eventSource="Center",      	.action=toggleMute,			.view=toggleMuteView,		.dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventNextTrack  	 	= {.name=NEXT_TRACK_AE_NAME,			.eventSource="Up",          	.action=nextTrack,          							.dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventTogglePausePlay	= {.name=TOGGLE_PAUSE_AE_NAME,			.eventSource="Down",        	.action=togglePausePlay};
@@ -331,6 +346,7 @@ static ActionEvent_Typedef actionEventPerformanceInfo 	= {.name=PERFORMANCE_INFO
 static ActionEvent_Typedef actionEventSetUnixtime      	= {.name=SET_UNIX_TIME_AE_NAME,			.eventSource="WiFi",   		    .action=setUnixtime, 		.view=NULL,			        .dataType = CHAR_DTYPE};
 static ActionEvent_Typedef actionEventGoToSleep      	= {.name=GO_TO_SLEEP_AE_NAME,			.eventSource="WiFi",   		    .action=goToSleep, 		    .view=NULL,			        .dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventToggleBuzzer     	= {.name=TOGGLE_BUZZER_AE_NAME,			.eventSource="WiFi",   		    .action=toggleBuzzer, 		.view=NULL,			        .dataType = INT_DTYPE};
+static ActionEvent_Typedef actionEventTestSDCard     	= {.name=TOGGLE_TEST_SDCARD,			.eventSource="WiFi",   		    .action=testSDCard, 		.view=NULL,			        .dataType = INT_DTYPE};
 
 ActionEvent_Typedef *gActionEvents[MAX_ACTION_EVENTS] ={&actionEventToggleMute,
 		                                                &actionEventNextTrack,
@@ -346,5 +362,6 @@ ActionEvent_Typedef *gActionEvents[MAX_ACTION_EVENTS] ={&actionEventToggleMute,
 														&actionEventPerformanceInfo,
 														&actionEventSetUnixtime,
 														&actionEventGoToSleep,
-                                                        &actionEventToggleBuzzer};
+                                                        &actionEventToggleBuzzer,
+                                                        &actionEventTestSDCard};
 
