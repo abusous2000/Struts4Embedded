@@ -14,6 +14,14 @@ static char *wifiLine=NULL;//[MAX_PAYLOAD_SIZE];
 static char *jsonPayload=NULL;//[MAX_PAYLOAD_SIZE];
 static THD_WORKING_AREA(waWifiCommunicationThd, 1024);
 static BaseSequentialStream *pWiFiChannel = (BaseSequentialStream *)&WIFI_SD;
+
+static const SerialConfig wifiSerialvfg = {
+  WIFI_SERIALBAUD_RATE,
+  0,
+  USART_CR2_STOP1_BITS,
+  0
+};
+
 thread_t *pWifiThd;
 
 #if !defined(LINE_WIFI_RST) || !defined(LINE_WIFI_RX) || !defined(LINE_WIFI_TX)
@@ -36,10 +44,17 @@ static THD_FUNCTION(WifiCommunicationThd, arg) {(void)arg;
    */
   //Clearing + Delay (100)+setting +delay(500) the WIFI_RST is critical
   pWifiThd = chThdGetSelfX();
-#if defined(BOARD_BLACKBOARD_INDUSTRIAL2)
-palSetLineMode(LINE_WIFI_TX, LINE_WIFI_MODE);
-palSetLineMode(LINE_WIFI_RX, LINE_WIFI_MODE);
-#endif
+  #if defined(BOARD_BLACKBOARD_INDUSTRIAL2)
+  //see detailed instructions for this board in /cfg/stm32f407_blackboard_industrial2/Strust4EmbeddedConf.h
+  palSetLineMode(LINE_WIFI_TX, LINE_WIFI_MODE);
+  palSetLineMode(LINE_WIFI_RX, LINE_WIFI_MODE);
+  palSetLineMode(LINE_WIFI_CH_PD, PAL_MODE_INPUT | PAL_STM32_OSPEED_HIGHEST);
+  palSetLineMode(LINE_WIFI_GPIO0, PAL_MODE_OUTPUT_PUSHPULL | PAL_STM32_OSPEED_HIGHEST);
+  palSetLine(LINE_WIFI_GPIO0); // set GPIO0 High
+  palSetLineMode(LINE_WIFI_GPIO2, PAL_MODE_INPUT | PAL_STM32_OSPEED_HIGHEST);
+  chThdSleepMilliseconds(500);
+  #endif
+  sdStart(&WIFI_SD, &wifiSerialvfg);
   palSetLineMode(LINE_WIFI_RST, PAL_MODE_OUTPUT_PUSHPULL | PAL_STM32_OSPEED_HIGHEST);
   palClearLine(LINE_WIFI_RST);
   chThdSleepMilliseconds(100);

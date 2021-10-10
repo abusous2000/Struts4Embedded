@@ -212,7 +212,7 @@ static uint8_t nrf24l01WriteAddress(SPIDriver *spip, uint8_t reg,
   rxbuf[0] = 0xFF;
   for(i = 1; i <= addlen; i++) {
     txbuf[i] = *(pvalue + (i - 1));
-    rxbuf[inRF2401] = 0xFF;
+    rxbuf[i] = 0xFF;
   }
   switch (reg) {
 

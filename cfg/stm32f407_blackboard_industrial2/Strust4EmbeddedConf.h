@@ -12,7 +12,7 @@
  *ETH_MDIO -------------------------> PA2
  *ETH_MDC --------------------------> PC1
  *ETH_RMII_REF_CLK------------------> PA1
- *ETH_RMII_CRS_DV ------------------> PA7
+ *ETH_RMII_CRS_DV/RMII_RX_DV--------> PA7
  *ETH_RMII_RXD0 --------------------> PC4
  *ETH_RMII_RXD1 --------------------> PC5
  *ETH_RMII_TX_EN -------------------> PG11
@@ -24,11 +24,6 @@
 #define S4E_USE_PPM_FRAME_DECODER 		0
 #define S4E_USE_EBYTE_LORA 		0
 #define EBYTE_LORA_SERVER       0
-
-#ifndef USE_AE_SHELL
-//set USE_AE_SHELL = "yes" in make file
-#define USE_AE_SHELL 			1
-#endif
 
 #ifndef USE_LCD_TFT
 #define USE_LCD_TFT 			0
@@ -47,13 +42,24 @@
 #define S4E_USE_BLINKER_THD     1
 #endif
 #ifndef S4E_USE_WIFI_MODULE_THD
+//1-Turn off MAC in halcof.h & makefile if WIFI is on; both have pin conflict (PA2)
+//2-Flash 1st without adding plugging in the WiFi module; else debugger won't work
+//3-WiFi & SDCard use more power than USB can provide; therefore power directly from power supply
+//4-Ground your TTL with MCU else serial output becomes garbage
+//5- GPIO0 ---> configure as output HIGH
+//  -GPIO2 & CH_PD ---> input & keep floating HIZ
+//6-Remove all jumpers from P5 pin group
 #define S4E_USE_WIFI_MODULE_THD 0
 #define WIFI_SD                 SD4
 #define LINE_WIFI_AF            8U
 #define LINE_WIFI_MODE          PAL_MODE_ALTERNATE(LINE_WIFI_AF)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL
-#define LINE_WIFI_RST           PAL_LINE(GPIOF, 14U)//PF14
+#define LINE_WIFI_RST           PAL_LINE(GPIOF, 14U)//PF14--EXT_RST
 #define LINE_WIFI_TX            PAL_LINE(GPIOA, 0U)//PA0
 #define LINE_WIFI_RX            PAL_LINE(GPIOA, 1U)//PA1
+#define LINE_WIFI_CH_PD         PAL_LINE(GPIOC, 1U)//PC1-high-RMII_MDC-EXT-SDA-G6
+#define LINE_WIFI_GPIO0         PAL_LINE(GPIOA, 7U)//PA7-low- RMII RX_DV
+#define LINE_WIFI_GPIO2         PAL_LINE(GPIOA, 2U)//PA2-low-GPIO2 EXT-SCL-G3
+
 #endif
 #ifndef S4E_USE_SSD1306_LCD
 #define S4E_USE_SSD1306_LCD     0
@@ -82,7 +88,6 @@
 #ifndef S4E_USE_PWM
 #define S4E_USE_PWM             0
 #endif
-//With This board, you cannot used ARD_11 & ETH, there is a conflict
 #ifndef S4E_USE_BUZZER
 #define S4E_USE_BUZZER			1
 #define BUZZER_LINE             PAL_LINE(GPIOG, 7)//PG7
@@ -168,20 +173,21 @@
 #define USERLIB_USE_RF                  0
 #define TRANSMITTER                     1
 #define NRF24L01_THD_STACK_SIZE         1024//512
-#define NRF24L01_LINE_CE                PAL_LINE(GPIOE, 7)//PE7
-#define NRF24L01_LINE_IRQ               PAL_LINE(GPIOE, 9)//PE9
+#define NRF24L01_LINE_CE                PAL_LINE(GPIOF, 2)//PF2
+#define NRF24L01_SPI_CNS                PAL_LINE(GPIOF, 3)//PF3
 #define NRF24L01_SPI_IRQ_MODE    		PAL_MODE_INPUT           |    PAL_STM32_OSPEED_HIGHEST
-
-#define NRF24L01_SPI_SCK                PAL_LINE(GPIOB, 10)//PB10-LINE_ARD_D13
-#define NRF24L01_SPI_MISO               PAL_LINE(GPIOC, 2)//PC2-LINE_ARD_D12
-#define NRF24L01_SPI_MOSI               PAL_LINE(GPIOC, 3)//PC3-LINE_ARD_D11
-
-#define NRF24L01_SPI_CS                 PAL_LINE(GPIOE, 8)//PE8
 #define NRF24L01_SPI_CS_MODE    		PAL_MODE_OUTPUT_PUSHPULL |    PAL_STM32_OSPEED_HIGHEST
+
+#define NRF24L01_SPI_SCK                PAL_LINE(GPIOB, 3)//PB3
+#define NRF24L01_SPI_MOSI               PAL_LINE(GPIOB, 5)//PB5-LINE_ARD_D11
+#define NRF24L01_SPI_MISO               PAL_LINE(GPIOB, 4)//PB4-LINE_ARD_D12
+#define NRF24L01_LINE_IRQ               PAL_LINE(GPIOF, 4)//PF4
+
 
 #define NRF24L01_SPID				    SPID3
 #define NRF24L01_SPI_MODE       		PAL_MODE_ALTERNATE(6)    |    PAL_STM32_OSPEED_HIGHEST
-
+#define RF_PAYLEN                       NRF24L01_MAX_PAYLEN
+#define RF_USE_MUTUAL_EXCLUSION     TRUE
 
 #define GO_TO_SLEEP_MACROS      	   SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;\
 									   PWR->CR  |= (PWR_CR_PDDS | PWR_CR_LPDS | PWR_CR_CSBF  | PWR_CR_CWUF);\

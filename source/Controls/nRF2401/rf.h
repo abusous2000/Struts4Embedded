@@ -30,13 +30,13 @@
  * @addtogroup RF
  * @{
  */
-
+#include "Strust4EmbeddedConf.h"
 #ifndef _RF_H_
 #define _RF_H_
 
 #include "hal.h"
 #include "string.h"
-#include "userconf.h"
+//#include "userconf.h"
 
 #if defined(USERLIB_USE_RF) && USERLIB_USE_RF != 0
 

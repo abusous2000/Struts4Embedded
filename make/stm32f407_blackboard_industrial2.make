@@ -97,7 +97,9 @@ INCLUDE_SEGGER_JLINK := "no"
 INCLUDE_SEGGER_JLINK_VALUE :=0
 USE_MAC := "yes"
 USE_AE_SHELL := "yes"
+USE_AE_SHELL_VALUE := 0
 USE_FATFS := "yes"
+
 
 # Licensing files.
 include $(CHIBIOS)/os/license/license.mk
@@ -119,6 +121,7 @@ include $(CHIBIOS)/test/lib/test.mk
 include $(CHIBIOS)/test/rt/rt_test.mk
 include $(CHIBIOS)/test/oslib/oslib_test.mk
 include $(CHIBIOS)/os/various/shell/shell.mk
+USE_AE_SHELL_VALUE := 1
 endif
 include $(CHIBIOS)/os/hal/lib/streams/streams.mk
 include $(CHIBIOS_CONTRIB)/os/common/ports/ARMCMx/compilers/GCC/utils/fault_handlers_v7m.mk
@@ -171,8 +174,11 @@ CPPWARN = -Wall -Wextra -Wundef
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS = -DSHELL_CMD_TEST_ENABLED=0  -DBOARD_PHY_ID=MII_DP83848I_ID -DWICED_LWIP_DEBUG222 -DDEBUG_TRACE_PRINT=1 -DCHPRINTF_USE_FLOAT=1 -DPORT_ENABLE_GUARD_PAGES=1 -DINCLUDE_SEGGER_JLINK=$(INCLUDE_SEGGER_JLINK_VALUE) -Dboot_t=bool
-#UDEFS = -DSHELL_CMD_TEST_ENABLED=0  -DBOARD_PHY_ID=MII_DP83848I_ID
+UDEFS = -DSHELL_CMD_TEST_ENABLED=0  -DBOARD_PHY_ID=MII_DP83848I_ID -DWICED_LWIP_DEBUG222 \
+        -DDEBUG_TRACE_PRINT=1 -DCHPRINTF_USE_FLOAT=1 -DPORT_ENABLE_GUARD_PAGES=1 \
+        -DINCLUDE_SEGGER_JLINK=$(INCLUDE_SEGGER_JLINK_VALUE) -Dboot_t=bool -DSERIAL_BUFFERS_SIZE=512 \
+        -DUSE_AE_SHELL=$(USE_AE_SHELL_VALUE) 
+#UDEFS = -DSHELL_CMD_TEST_ENABLED=0  -DBOARD_PHY_ID=MII_DP83848I_ID  
 
 # Define ASM defines here
 UADEFS =

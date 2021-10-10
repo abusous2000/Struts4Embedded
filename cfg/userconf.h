@@ -31,8 +31,8 @@
 /**
  * @brief   Enables the RF subsystem.
  */
-#if defined(USERLIB_USE_RF) && USERLIB_USE_RF != 0
-#define USERLIB_USE_RF              TRUE
+#if !defined(USERLIB_USE_RF) && USERLIB_USE_RF != 0
+#define USERLIB_USE_RF              0
 #endif
 
 /*===========================================================================*/

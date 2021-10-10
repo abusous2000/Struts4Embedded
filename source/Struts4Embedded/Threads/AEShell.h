@@ -1,3 +1,4 @@
+#if USE_AE_SHELL != 0
 #ifndef SOURCE_STRUTS4EMBEDDED_THREADS_AESHELL_H_
 #define SOURCE_STRUTS4EMBEDDED_THREADS_AESHELL_H_
 #include "shell.h"
@@ -6,3 +7,5 @@ void initAEShell(void);
 
 
 #endif /* SOURCE_STRUTS4EMBEDDED_THREADS_AESHELL_H_ */
+
+#endif

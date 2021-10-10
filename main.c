@@ -37,16 +37,6 @@ static const SerialConfig myserialcfg = {
   0
 };
 #endif
-#if S4E_USE_WIFI_MODULE_THD
-/* WiFi Serial configuration. */
-static const SerialConfig wifiSerialvfg = {
-  WIFI_SERIALBAUD_RATE,
-  0,
-  USART_CR2_STOP1_BITS,
-  0
-};
-#endif
-
 #if DEBUG_TRACE_PRINT != 0
 BaseSequentialStream *GlobalDebugChannel = (BaseSequentialStream *)&PORTAB_SD;
 #endif
@@ -103,7 +93,6 @@ int main(void) {
 #endif
 
 #if S4E_USE_WIFI_MODULE_THD != 0
-  sdStart(&WIFI_SD, &wifiSerialvfg);
   initWifiCommunicationThd();
 #endif
 #if S4E_USE_PWM != 0

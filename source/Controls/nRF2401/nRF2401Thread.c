@@ -18,7 +18,7 @@
 
 
 #include "Strust4EmbeddedConf.h"
-#include "userconf.h"
+//#include "userconf.h"
 #if USERLIB_USE_RF != 0
 #include "ch.h"
 #include "hal.h"
@@ -31,8 +31,8 @@
 
 static SPIConfig std_spi_cfg = { .circular = FALSE,
 		                        .end_cb = NULL,
-							    .ssport =PAL_PORT(NRF24L01_SPI_CS),
-								.sspad = PAL_PAD(NRF24L01_SPI_CS),
+							    .ssport =PAL_PORT(NRF24L01_SPI_CNS),
+								.sspad = PAL_PAD(NRF24L01_SPI_CNS),
 								.cr1=SPI_CR1_BR_1 | SPI_CR1_BR_0,
 								.cr2 = 0 };
 static RFConfig nrf24l01_cfg = {
@@ -66,7 +66,7 @@ static THD_FUNCTION(nRF2401Thread, arg) {(void)arg;
   palSetLineMode(NRF24L01_SPI_SCK,  NRF24L01_SPI_MODE);
   palSetLineMode(NRF24L01_SPI_MISO, NRF24L01_SPI_MODE);
   palSetLineMode(NRF24L01_SPI_MOSI, NRF24L01_SPI_MODE);
-  palSetLineMode(NRF24L01_SPI_CS,   NRF24L01_SPI_CS_MODE);
+  palSetLineMode(NRF24L01_SPI_CNS,  NRF24L01_SPI_CS_MODE);
   /*
    * CE and IRQ pins setup.
    */
@@ -79,7 +79,7 @@ static THD_FUNCTION(nRF2401Thread, arg) {(void)arg;
   /* Starting RF driver. */
   rfStart(&RFD1, &nrf24l01_cfg);
   int msgId = 0;
-  char msg[RF_MAX_STRLEN + 1] = "Hello Salah";
+  char msg[RF_MAX_STRLEN + 1] = "Hello World!";
   uint32_t strl;
   while (TRUE) {
 #if TRANSMITTER == TRUE
@@ -100,7 +100,7 @@ static THD_FUNCTION(nRF2401Thread, arg) {(void)arg;
         dbgprintf("Message not sent (TIMEOUT)\n\r");
       }
     }
-    chThdSleepMilliseconds(550);
+    chThdSleepMilliseconds(2500);
 #else
     msg[0] = '\0';
     rfReceiveString(&RFD1, msg, "RXadd", TIME_MS2I(200));
