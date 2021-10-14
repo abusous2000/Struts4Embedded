@@ -26,17 +26,18 @@ static void pwmc4cb(PWMDriver *pwmp) {
   (void)pwmp;
 }
 static PWMConfig pwmcfg = {
-  TIM_FREQ,                                    /* 10kHz PWM clock frequency.   */
-  TIM_FREQ,                                    /* Initial PWM period 1s.       */
-  pwmcb,
-  {
+  .frequency=TIM_FREQ,                                    /* 10kHz PWM clock frequency.   */
+  .period=TIM_FREQ,                                    /* Initial PWM period 1s.       */
+  .callback=pwmcb,
+  .channels={
    {PWM_OUTPUT_ACTIVE_HIGH, pwmc1cb},
    {PWM_OUTPUT_ACTIVE_HIGH, pwmc2cb},
    {PWM_OUTPUT_DISABLED, pwmc3cb},
    {PWM_OUTPUT_DISABLED, pwmc4cb}
   },
-  0,
-  0
+  .cr2=0,
+  .bdtr=0,
+  .dier=0
 };
 
 void setPWMDutyCycle(uint32_t dc1, uint32_t dc2){
