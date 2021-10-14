@@ -49,6 +49,7 @@
 //5- GPIO0 ---> configure as output HIGH
 //  -GPIO2 & CH_PD ---> input & keep floating HIZ
 //6-Remove all jumpers from P5 pin group
+//7-If you use local mobile hotspot as ur router, plz run it with 2.4GHz ONLY on channel 6
 #define S4E_USE_WIFI_MODULE_THD 0
 #define WIFI_SD                 SD4
 #define LINE_WIFI_AF            8U
