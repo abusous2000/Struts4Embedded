@@ -90,7 +90,7 @@ MCU  = cortex-m4
 
 # Imported source files and paths.
 CHIBIOS  := ../../..
-BOARD_NAME := stm32f407_blackboard2
+BOARD_NAME := stm32f407_blackboard_industrial1
 STRUTS4EMBEDDED :=$(CHIBIOS)/demos/STM32/Struts4Embedded/source/Struts4Embedded
 include $(STRUTS4EMBEDDED)/CommonS4EVars.mk
 
@@ -107,7 +107,7 @@ include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.m
 # HAL-OSAL files (optional).
 include $(CHIBIOS)/os/hal/hal.mk
 include $(CHIBIOS)/os/hal/ports/STM32/STM32F4xx/platform.mk
-include $(CHIBIOS)/os/hal/boards/STM32F407V6-Blackboard/board.mk
+include $(CHIBIOS)/os/hal/boards/$(BOARD_NAME)/board.mk
 include $(CHIBIOS)/os/hal/osal/rt-nil/osal.mk
 # RTOS files (optional).
 include $(CHIBIOS)/os/rt/rt.mk
@@ -173,9 +173,9 @@ CPPWARN = -Wall -Wextra -Wundef
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS = -DSHELL_CMD_TEST_ENABLED=0  -DBOARD_PHY_ID=MII_DP83848I_ID -DSTM32_HSECLK=25000000U -DWICED_LWIP_DEBUG222 \
+UDEFS = -DSHELL_CMD_TEST_ENABLED=0  -DBOARD_PHY_ID=MII_DP83848I_ID -DWICED_LWIP_DEBUG222 -DSTM32_HSECLK=25000000U \
         -DDEBUG_TRACE_PRINT=1 -DCHPRINTF_USE_FLOAT=1 -DPORT_ENABLE_GUARD_PAGES=1 \
-        -DINCLUDE_SEGGER_JLINK=$(INCLUDE_SEGGER_JLINK_VALUE) -Dboot_t=bool -DSERIAL_BUFFERS_SIZE=512 \
+        -DINCLUDE_SEGGER_JLINK=$(INCLUDE_SEGGER_JLINK_VALUE) -DSERIAL_BUFFERS_SIZE=512 \
         -DUSE_AE_SHELL=$(USE_AE_SHELL_VALUE)
 #UDEFS =-DSHELL_CMD_TEST_ENABLED=0 -DBOARD_PHY_ID=MII_DP83848I_ID -DSTM32_HSECLK=25000000U
 

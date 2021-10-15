@@ -13,4 +13,4 @@ It is little not normal... but at least it enables you to debug
  5-Always verify that you are running the latest code
  6-Monitor serial USB for debug output
 
-now every time you change your code, u need to copy the ch.bin file to Seeed manual as in step 2.
+now every time you change your code, u need to copy the ch.bin file to Seeed manually as in step 2.

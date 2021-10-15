@@ -27,11 +27,8 @@
 #define S4E_USE_EBYTE_LORA 		0
 #define EBYTE_LORA_SERVER       0
 #define S4E_USE_IR_RECEIVER		0
-
-
-#ifndef S4E_USE_SDCARD
-#define S4E_USE_SDCARD 			1
-#endif
+#define USE_W25Q_XXXX           0
+#define USERLIB_USE_RF          0
 
 #ifndef USE_LCD_TFT
 #define USE_LCD_TFT 			0
@@ -98,7 +95,7 @@
 #endif
 
 #ifndef S4E_USE_MQTT
-#define S4E_USE_MQTT            1
+#define S4E_USE_MQTT            0
 #endif
 
 #ifndef S4E_USE_WEB_SERVER
@@ -144,15 +141,17 @@
 //For this to work, plz connect Pin20 to Pin13 in the Zigbee header on the waveshare accessory sheild
 #define EASYLINK_BUTTON		            LINE_ARD_D9//PB14
 
+#ifndef S4E_USE_SDCARD
+#define S4E_USE_SDCARD 			        0
 
 #define MMC_SPI_PIN_MODE                PAL_MODE_ALTERNATE(MMC_SPI_AF) 	  |  PAL_STM32_OSPEED_HIGHEST | PAL_STM32_PUPDR_PULLUP
 #define MMC_SPI_PIN_MODE_MISO           MMC_SPI_PIN_MODE
 #define PROTAB_MMCSPI                   SPID2
 #define MMC_SPI_AF						5
-#define SD_CARD_NSS_LINE 					    PAL_LINE(GPIOE, 2U)//PE2
-#define SD_CARD_SCK_LINE 					    PAL_LINE(GPIOB, 10U)//PB10
-#define SD_CARD_MISO_LINE 					    PAL_LINE(GPIOC, 2U)//PC2
-#define SD_CARD_MOSI_LINE 					    PAL_LINE(GPIOC, 3U)//PC3
-
+#define SD_CARD_NSS_LINE 				PAL_LINE(GPIOE, 2U)//PE2
+#define SD_CARD_SCK_LINE 				PAL_LINE(GPIOB, 10U)//PB10
+#define SD_CARD_MISO_LINE 				PAL_LINE(GPIOC, 2U)//PC2
+#define SD_CARD_MOSI_LINE 				PAL_LINE(GPIOC, 3U)//PC3
+#endif
 
 #endif /* CFG_STRUST4EMBEDDED_H_ */
