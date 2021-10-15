@@ -4,7 +4,10 @@ It is little not normal... but at least it enables you to debug
  1-install pyocd vi pip
    pip install -U pyocd
    python2.7 what worked form me. See this for details
- 2-copy ch.bin (not elf file) to Seed's DAPLINK drive; as any mbed app deployment
+ 2-copy ch.bin (not elf file) to Seed's DAPLINK drive; as any mbed app deployment.or use openocd as follows. See flashSeeedArchMax
+     openocd -f arch_max.cfg -c "init; reset halt; program /home/abusous2000/ChibiOS_21.6.0/demos/STM32/Struts4Embedded/build/seeed_arch_max/ch.elf; reset run; exit"   
+     
+     see for details: https://github.com/Seeed-Studio/Arch_Max
    2.2.press & hold the reset button for few seconds
    2.1-sometimes you have to unplug the board from power
    2.3 always before debugging, look at the serial console to make sure that u see the newer code
