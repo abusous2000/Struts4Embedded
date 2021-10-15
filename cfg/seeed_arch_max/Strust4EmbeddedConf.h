@@ -95,7 +95,7 @@
 #endif
 
 #ifndef S4E_USE_MQTT
-#define S4E_USE_MQTT            0
+#define S4E_USE_MQTT            1
 #endif
 
 #ifndef S4E_USE_WEB_SERVER
@@ -131,8 +131,8 @@
 #define MAX_NUM_OF_WORKER_THDS			4
 //Note that for this board, serial output uses PA2 & PA3 (w/ AF 7) which is in conflict with Ethernet with PA2
 #define PORTAB_SD                       SD6
-#define MQTT_CMD_SUBSCRIBE_TOPIC   		"dev/cmd/seeed_arch_max/mp3Player"
-#define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/seeed_arch_max/mp3Player"
+#define MQTT_CMD_SUBSCRIBE_TOPIC   		"dev/cmd/STM32F407BlackBoard/mp3Player"
+#define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/STM32F407BlackBoard/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithSeeedArchMax"
 
 #//brown, black, red, & orange
@@ -142,7 +142,7 @@
 #define EASYLINK_BUTTON		            LINE_ARD_D9//PB14
 
 #ifndef S4E_USE_SDCARD
-#define S4E_USE_SDCARD 			        0
+#define S4E_USE_SDCARD 			        1
 
 #define MMC_SPI_PIN_MODE                PAL_MODE_ALTERNATE(MMC_SPI_AF) 	  |  PAL_STM32_OSPEED_HIGHEST | PAL_STM32_PUPDR_PULLUP
 #define MMC_SPI_PIN_MODE_MISO           MMC_SPI_PIN_MODE

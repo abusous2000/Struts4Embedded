@@ -96,7 +96,7 @@ include $(STRUTS4EMBEDDED)/CommonS4EVars.mk
 
 INCLUDE_SEGGER_JLINK := "no"
 INCLUDE_SEGGER_JLINK_VALUE :=0
-USE_MAC := "no"
+USE_MAC := "yes"
 USE_AE_SHELL := "yes"
 USE_AE_SHELL_VALUE := 0
 USE_FATFS := "yes"
