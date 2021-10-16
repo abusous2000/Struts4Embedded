@@ -124,8 +124,8 @@ TX1	<=>			PB13--Eggplant-1L
 
 
 #define USE_W25Q_XXXX  					1
-#define ___SPI_TO_USE                   SPID2
-#define ___SPI_AF_TO_USE                5
+#define ___SPI_TO_USE                   SPID3
+#define ___SPI_AF_TO_USE                6
 
 #define W25QXX_SPI_SCK_LINE   			PAL_LINE(GPIOB, 3)//PB3
 #define W25QXX_SPI_MISO_LINE  			PAL_LINE(GPIOB, 4)//PB4
