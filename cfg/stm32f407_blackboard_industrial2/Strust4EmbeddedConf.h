@@ -22,7 +22,6 @@
 //#define MAX_ACTION_EVENTS                6
 #define BLINKER_THD_STACK_SIZE             1024//512
 #define S4E_USE_PPM_FRAME_DECODER 		0
-#define S4E_USE_EBYTE_LORA 		0
 #define EBYTE_LORA_SERVER       0
 
 #ifndef USE_LCD_TFT
@@ -157,6 +156,27 @@
 
 #define SDMMC_ALREADY_CONFIG            1
 
+//This is the receiver/client
+#define S4E_USE_EBYTE_LORA              1
+#define EBYTE_LORA_SERVER               0
+#define PORTAB_EBYTE_LORA_SD 			SD3
+
+#define EBYTE_LORA_TX 	    			PAL_LINE(GPIOB, 10U)//PB10
+#define EBYTE_LORA_RX 	    			PAL_LINE(GPIOB, 11U)//PB11
+#define EBYTE_LORA_AF       			7
+
+#define EBYTE_LORA_M0 	    			PAL_LINE(GPIOF, 13U)//PF13
+#define EBYTE_LORA_M1 	    			PAL_LINE(GPIOE, 15U)//PE15
+#define EBYTE_LORA_AUX 	    			PAL_LINE(GPIOE, 11U)//PE11
+
+
+#define DEFAULT_OPTION_FIXED_TRANS		1
+#if DEFAULT_OPTION_FIXED_TRANS != 0
+#define DEFAULT_ADDRESS_HIGH			2
+#define DEFAULT_ADDRESS_LOW				0
+#define DEFAULT_CHANNEL					6
+#endif
+
 
 #define USE_W25Q_XXXX  					1
 //If you use the recommended SPI1 it will run in conflict with SD Card.
@@ -172,23 +192,6 @@
 
 
 #define USERLIB_USE_RF                  0
-#define TRANSMITTER                     1
-#define NRF24L01_THD_STACK_SIZE         1024//512
-#define NRF24L01_LINE_CE                PAL_LINE(GPIOF, 2)//PF2
-#define NRF24L01_SPI_CNS                PAL_LINE(GPIOF, 3)//PF3
-#define NRF24L01_SPI_IRQ_MODE    		PAL_MODE_INPUT           |    PAL_STM32_OSPEED_HIGHEST
-#define NRF24L01_SPI_CS_MODE    		PAL_MODE_OUTPUT_PUSHPULL |    PAL_STM32_OSPEED_HIGHEST
-
-#define NRF24L01_SPI_SCK                PAL_LINE(GPIOB, 3)//PB3
-#define NRF24L01_SPI_MOSI               PAL_LINE(GPIOB, 5)//PB5-LINE_ARD_D11
-#define NRF24L01_SPI_MISO               PAL_LINE(GPIOB, 4)//PB4-LINE_ARD_D12
-#define NRF24L01_LINE_IRQ               PAL_LINE(GPIOF, 4)//PF4
-
-
-#define NRF24L01_SPID				    SPID3
-#define NRF24L01_SPI_MODE       		PAL_MODE_ALTERNATE(6)    |    PAL_STM32_OSPEED_HIGHEST
-#define RF_PAYLEN                       NRF24L01_MAX_PAYLEN
-#define RF_USE_MUTUAL_EXCLUSION     TRUE
 
 #define GO_TO_SLEEP_MACROS      	   SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;\
 									   PWR->CR  |= (PWR_CR_PDDS | PWR_CR_LPDS | PWR_CR_CSBF  | PWR_CR_CWUF);\

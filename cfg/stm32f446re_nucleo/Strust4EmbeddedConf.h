@@ -9,7 +9,8 @@
 #define CFG_STRUST4EMBEDDEDCONF_H_
 
 #define S4E_USE_IR_RECEIVER     0
-
+#define USERLIB_USE_RF 			0
+#define USE_W25Q_XXXX 			0
 #ifndef S4E_USE_SDCARD
 #define S4E_USE_SDCARD 			0
 #endif
