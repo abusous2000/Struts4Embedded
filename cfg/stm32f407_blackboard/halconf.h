@@ -28,7 +28,6 @@
 #ifndef HALCONF_H
 #define HALCONF_H
 #define FAULT_INFO_HOOK 			        _fault_info_hook
-#define SERIAL_BUFFERS_SIZE                 256
 
 #define _CHIBIOS_HAL_CONF_
 #define _CHIBIOS_HAL_CONF_VER_7_1_

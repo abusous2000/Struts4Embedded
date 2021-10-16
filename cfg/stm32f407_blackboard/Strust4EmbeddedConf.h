@@ -39,9 +39,7 @@ TX1	<=>			PB13--Eggplant-1L
 #ifndef S4E_USE_WIFI_MODULE_THD
 #define S4E_USE_WIFI_MODULE_THD 0
 #endif
-#ifndef S4E_USE_SSD1306_LCD
-#define S4E_USE_SSD1306_LCD     0
-#endif
+
 #ifndef S4E_USE_POT
 #define S4E_USE_POT             1
 #define TIM_TGRO_EVENT_EXTSEL 	0x08 //See p. 398 in RM--TIM3_TGRO
@@ -63,7 +61,7 @@ TX1	<=>			PB13--Eggplant-1L
 #define S4E_USE_RGB             0
 #endif
 #ifndef S4E_USE_MQTT
-#define S4E_USE_MQTT            0
+#define S4E_USE_MQTT            1
 #endif
 #ifndef S4E_USE_WEB_SERVER
 #define S4E_USE_WEB_SERVER      0
@@ -93,7 +91,7 @@ TX1	<=>			PB13--Eggplant-1L
 #define DEFAULT_NUM_OF_WORKER_THDS 		1
 #define MAX_THD_NAME_SIZE          		25
 #define MAX_NUM_OF_WORKER_THDS			4
-//Note that for this board, serial output uses PA2 & PA3 (w/ AF 7) which is in conflict with Ethernet with PA2
+
 #define PORTAB_SD                       SD1
 #define LINE_UART_SD_TX                 PAL_LINE(GPIOA, 9)//PA9
 #define LINE_UART_SD_RX                 PAL_LINE(GPIOA, 10)//PA10
@@ -101,28 +99,10 @@ TX1	<=>			PB13--Eggplant-1L
 #define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/STM32F407BlackBoard/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithSTM32F407BlackBoard"
 
-#define SSD1306_I2C_AF       			4
-#define SSD1306_I2C_SCL_PORT 			GPIOB
-#define SSD1306_I2C_SCL_PIN  			GPIOB_ARD_D15
-#define SSD1306_I2C_SDA_PORT 			GPIOB
-#define SSD1306_I2C_SDA_PIN  			GPIOB_ARD_D14
-#define SSD1306_SA0_PORT 				GPIOF
-#define SSD1306_SA0_PIN    				GPIOF_ARD_D8
-#define SSD1306_RESET_PORT				GPIOF
-#define SSD1306_RESET_PIN				GPIOF_ARD_D7
+
 //D2
 #define LINE_LED_GREEN                  PAL_LINE(GPIOA, 6U)//PA6
-//Don't use D3 at PA7, it is in conflict with pin ETH_RMII_CRS_DV
 
-
-
-#define MPU_SCL_PIN						PAL_LINE(GPIOB, 10U)//LINE_ARD_D15
-#define MPU_SDA_PIN						PAL_LINE(GPIOB, 11U)//LINE_ARD_D14
-#define MPU_I2C_AF						4
-#define MPU_I2CD						I2CD2
-
-#define MPU_INT_PORT					GPIOA
-#define MPU_INT_PIN						10
 #ifndef LINE_JOY_UP
 //#define USER_BUTTON                     PAL_LINE(GPIOA, 0U)//PA0
 #define USER_BUTTON                     PAL_LINE(GPIOE, 4U)//PE4-K0
@@ -130,7 +110,7 @@ TX1	<=>			PB13--Eggplant-1L
 #endif
 
 #ifndef S4E_USE_SDCARD
-#define S4E_USE_SDCARD 			0
+#define S4E_USE_SDCARD 			1
 #endif
 #include "board.h"
 #define SDMMCD0_LINE 					LINE_SD_D0		//PC8
@@ -143,8 +123,8 @@ TX1	<=>			PB13--Eggplant-1L
 #define SDMMC_ALREADY_CONFIG            1
 
 
-#define USE_W25Q_XXXX  					0
-#define ___SPI_TO_USE                   SPID1
+#define USE_W25Q_XXXX  					1
+#define ___SPI_TO_USE                   SPID2
 #define ___SPI_AF_TO_USE                5
 
 #define W25QXX_SPI_SCK_LINE   			PAL_LINE(GPIOB, 3)//PB3
@@ -153,25 +133,9 @@ TX1	<=>			PB13--Eggplant-1L
 #define W25QXX_SPI_CS_LINE    			PAL_LINE(GPIOB, 0)//PB0
 #define W25QXX_SPI_MODE       			PAL_MODE_ALTERNATE(___SPI_AF_TO_USE)    |    PAL_STM32_OSPEED_HIGHEST
 #define W25QXX_SPI_CS_MODE    			PAL_MODE_OUTPUT_PUSHPULL |    PAL_STM32_OSPEED_HIGHEST
-
+#define USES_SINGLE_BYTE
 #define W25QXX_SPID						___SPI_TO_USE
-
-#define USERLIB_USE_RF                  0
-#define TRANSMITTER                     0
-#define NRF24L01_THD_STACK_SIZE         1024//512
-#define NRF24L01_LINE_CE                PAL_LINE(GPIOB, 6)//PB6
-#define NRF24L01_LINE_IRQ               PAL_LINE(GPIOB, 8)//PB8-LINE_ARD_D9
-#define NRF24L01_SPI_IRQ_MODE    		PAL_MODE_INPUT           |    PAL_STM32_OSPEED_HIGHEST
-
-#define NRF24L01_SPI_SCK                PAL_LINE(GPIOB, 3)//PB3-LINE_ARD_D13
-#define NRF24L01_SPI_MISO               PAL_LINE(GPIOB, 4)//PB4-LINE_ARD_D12
-#define NRF24L01_SPI_MOSI               PAL_LINE(GPIOB, 5)//PB5-LINE_ARD_D11
-
-#define NRF24L01_SPI_CS                 PAL_LINE(GPIOB, 7)//PB7
-#define NRF24L01_SPI_CS_MODE    		PAL_MODE_OUTPUT_PUSHPULL |    PAL_STM32_OSPEED_HIGHEST
-
-#define NRF24L01_SPID				    ___SPI_TO_USE
-#define NRF24L01_SPI_MODE       		PAL_MODE_ALTERNATE(___SPI_AF_TO_USE)    |    PAL_STM32_OSPEED_HIGHEST
+#define USERLIB_USE_RF  				0
 
 
 #define GO_TO_SLEEP_MACROS      	   SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;\

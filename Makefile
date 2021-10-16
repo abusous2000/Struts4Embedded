@@ -3,11 +3,11 @@
 #
 
 all:
-	@echo === Building for seeed_arch_max ===============================
-	+@make --no-print-directory -f make/seeed_arch_max.make all
+#	@echo === Building for seeed_arch_max ===============================
+#	+@make --no-print-directory -f make/seeed_arch_max.make all
 #	+@make --no-print-directory -f make/seeed_arch_max-C++.make all	
-#	@echo === Building for stm32f407_blackboard ===============================
-#	+@make --no-print-directory -f make/stm32f407_blackboard.make all
+	@echo === Building for stm32f407_blackboard ===============================
+	+@make --no-print-directory -f make/stm32f407_blackboard.make all
 #	+@make --no-print-directory -f make/stm32f407_blackboard-C++.make all	
 #	@echo === Building for stm32f407_blackboard_industrial1 ===============================
 #	+@make --no-print-directory -f make/stm32f407_blackboard_industrial1.make all

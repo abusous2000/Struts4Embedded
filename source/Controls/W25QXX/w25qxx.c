@@ -7,7 +7,7 @@
 //#define USES_SINGLE_BYTE
 
 
-#if defined(BOARD_BLACKBOARD_INDUSTRIAL2)
+#if defined(BOARD_BLACKBOARD_INDUSTRIAL2) && !defined(USES_SINGLE_BYTE)
 //For some reason I was ONLY able to get this boad to work with single byte mode!!! BOARD_BLACKBOARD_INDUSTRIAL was OK
 #define USES_SINGLE_BYTE
 #if 0
