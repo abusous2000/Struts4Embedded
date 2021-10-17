@@ -137,7 +137,8 @@
 
 //brown, black, red, & orange
 #define LINE_LED_GREEN                  PAL_LINE(GPIOE, 3U)//PE3
-// #define LINE_LED_RED                    PAL_LINE(GPIOE, 4U)//PE4
+// #define LINE_LED_RED                 PAL_LINE(GPIOE, 4U)//PE4
+#define LINE_LED_RED                    PAL_LINE(GPIOD, 6U)//PD6
 
 
 
@@ -177,6 +178,13 @@
 #define DEFAULT_CHANNEL					6
 #endif
 
+#define DEFAULT_TO_ADDRESS_HIGH			1
+#define DEFAULT_TO_ADDRESS_LOW			0
+#define DEFAULT_TO_CHANNE				5
+
+#define EBYTE_LORA_HOST_ID              2
+#define EBYTE_LORA_SAVE_PARAMS		    1
+#define EBYTE_LORA_100MW
 
 #define USE_W25Q_XXXX  					1
 //If you use the recommended SPI1 it will run in conflict with SD Card.
