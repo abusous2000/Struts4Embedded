@@ -135,12 +135,10 @@
 #define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/STM32F407BlackBoard/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithSTM32F407BlackBoard"
 
-//brown, black, red, & orange
-#define LINE_LED_GREEN                  PAL_LINE(GPIOE, 3U)//PE3
-// #define LINE_LED_RED                 PAL_LINE(GPIOE, 4U)//PE4
-#define LINE_LED_RED                    PAL_LINE(GPIOD, 6U)//PD6
-
-
+#define LINE_LED_GREEN                  PAL_LINE(GPIOA, 15U)//PD6
+#define LINE_LED_BLUE                   PAL_LINE(GPIOD, 6U)//PD6
+#define LINE_LED_RED                    PAL_LINE(GPIOE, 3U)//PE3
+#define LINE_LED_RED2                   PAL_LINE(GPIOE, 4U)//PE4
 
 #ifndef S4E_USE_SDCARD
 #define S4E_USE_SDCARD 			        1

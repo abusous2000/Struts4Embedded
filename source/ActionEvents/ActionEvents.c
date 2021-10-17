@@ -69,8 +69,8 @@ void eByteProcessReceivedMsg(EByteLoRaFrame_TypeDef	*pEByteLoRaFrame, MyMessage_
    	}
 
   	eByteSendAckMsg(pEByteLoRaFrame);
-#ifdef LINE_LED_RED
-	palToggleLine(LINE_LED_RED);
+#ifdef LINE_LED_BLUE
+  	pBlueLedPAL->toggle(pBlueLedPAL);
 #endif
 
 	return;
