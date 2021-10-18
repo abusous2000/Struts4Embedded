@@ -98,19 +98,16 @@ void initButtonsLEDs(void) {
 #if defined(LINE_LED_RED)
   pRedLedPAL 	   = initCPalInstance(&redLedPAL);
   pRedLedPAL->init(&redLedPAL);
-  pRedLedPAL->toggle(&redLedPAL);
 #endif
 
 #if defined(LINE_LED_RED2)
   pRed2LedPAL 	   = initCPalInstance(&red2LedPAL);
   pRed2LedPAL->init(&red2LedPAL);
-  pRed2LedPAL->toggle(&red2LedPAL);
 #endif
 
 #if defined(LINE_LED_BLUE)
   pBlueLedPAL 	   = initCPalInstance(&blueLedPAL);
   pBlueLedPAL->init(&blueLedPAL);
-  pBlueLedPAL->toggle(&blueLedPAL);
 #endif
 
 #if S4E_USE_JOYSTICK != 0

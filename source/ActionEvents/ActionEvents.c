@@ -246,29 +246,39 @@ static int32_t setPWMParams(ActionEvent_Typedef 	*pActionEvent){(void)pActionEve
 static uint8_t  				lastCh3Value = 0;
 void onChannelPPMValueChange (uint8_t ch, uint8_t currentValue, uint8_t newValue){
 	ButtonStats_Typedef buttonStatus;
-
+    uint8_t    toggleLED = 0;
 	dbgprintf("OnChangeChannelValue: %d\t%d\t%d\r\n", ch, currentValue, newValue);
 	switch(ch){
 		case RC_CH3:{
 			uint32_t  currentValue =  100 *(newValue-RC_MIN_VALUE)/(RC_MAX_VALUE - RC_MIN_VALUE);
 			int8_t   delta         = currentValue- lastCh3Value;
 
-			if ( delta > 2 )
+			if ( delta > 2 ){
 				triggerActionEvent(SET_VOLUME_AE_NAME,NULL,currentValue,"RC");
+				toggleLED = 1;
+			}
 		}
 		break;
 
 		case RC_SWB:
 			buttonStatus = getRCButtonStatus(newValue);
-			if ( buttonStatus != BUTTON_STATE_UNKNOWN)
+			if ( buttonStatus != BUTTON_STATE_UNKNOWN){
+				toggleLED = 1;
 				triggerActionEvent(TOGGLE_PAUSE_AE_NAME,NULL,buttonStatus,"RC");
+			}
 			break;
 		case RC_SWA:
 			buttonStatus = getRCButtonStatus(newValue);
-			if ( buttonStatus != BUTTON_STATE_UNKNOWN)
+			if ( buttonStatus != BUTTON_STATE_UNKNOWN){
+				toggleLED = 1;
 				triggerActionEvent(TOGGLE_MUTE_AE_NAME,NULL,buttonStatus,"RC");
+			}
 			break;
 	}
+#ifdef LINE_LED_RED
+	if ( toggleLED )
+  	    pRedLedPAL->toggle(pRedLedPAL);
+#endif
 
 }
 #endif

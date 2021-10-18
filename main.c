@@ -135,9 +135,6 @@ int main(void) {
 	  #endif
   }
 }
-#ifndef USE_W25Q_XXXX
-#define USE_W25Q_XXXX  0
-#endif
 
 #if S4E_USE_SDCARD != 0
 static NameValuePairStaticTypeDef readFilesFromFolder=  {.key=READ_FILES_FROM_FOLDER,	.value="/music"};
@@ -159,10 +156,10 @@ static void initDrivers(void){
 #if USE_W25Q_XXXX != 0
   uint8_t datatemp[20] = {0};
   W25QXX_Init();
-//  W25QXX_Erase_Sector(0);
+  W25QXX_Erase_Sector(0);
 //  W25QXX_Erase_Chip();
   W25QXX_SectorWrite((uint8_t*)"Hello World!",0,14);
-//  W25QXX_Write_Page((uint8_t*)"Hello Salah!2",0,14);
+//  W25QXX_Write_Page((uint8_t*)"Hello World!2",0,14);
 
   W25QXX_Read(datatemp,0,12);
   dbgprintf("From Flash:%s\r\n",datatemp);
