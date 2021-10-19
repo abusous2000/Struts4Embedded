@@ -111,6 +111,11 @@ TX1	<=>			PB13--Eggplant-1L
 #define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/STM32F407BlackBoard/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithSTM32F407BlackBoard"
 
+// #define LINE_LED_GREEN                  PAL_LINE(GPIOE, 7U)//PE
+// #define LINE_LED_RED                    PAL_LINE(GPIOE, 13U)//PE
+// #define LINE_LED_RED2                   PAL_LINE(GPIOE, 14U)//PE
+// #define LINE_LED_BLUE                   PAL_LINE(GPIOE, 2U)//PE
+
 #define LINE_LED_GREEN                  PAL_LINE(GPIOE, 13U)//PE13
 #define LINE_LED_RED                    PAL_LINE(GPIOE, 14U)//PE14
 #define LINE_LED_BLUE                   PAL_LINE(GPIOE, 15U)//PE15
