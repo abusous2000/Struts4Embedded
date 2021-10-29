@@ -120,8 +120,12 @@
 #define MQTT_CMD_SUBSCRIBE_TOPIC   		"dev/cmd/STM32F407BlackBoard/mp3Player"
 #define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/STM32F407BlackBoard/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithSTM32F407BlackBoard"
-
-#define LINE_LED_GREEN                  PAL_LINE(GPIOA, 15U)//PD6-18b20-at P8-Right two pin. Left most is ground
+#define BLACKBOARD_INDUSTRIAL_V5_1
+#ifndef BLACKBOARD_INDUSTRIAL_V5_1
+#define LINE_LED_GREEN                  PAL_LINE(GPIOA, 15U)//PA15-18b20-at P8-Right two pin. Left most is ground
+#else
+#define LINE_LED_GREEN                  PAL_LINE(GPIOD, 3U)//PD3-18b20-at P8-Right two pin. Left most is ground
+#endif
 #define LINE_LED_BLUE                   PAL_LINE(GPIOD, 6U)//PD6-P18-2nd pin - From top let hand corner, left most is ground
 #define LINE_LED_RED                    PAL_LINE(GPIOE, 3U)//PE3
 #define LINE_LED_RED2                   PAL_LINE(GPIOE, 4U)//PE4

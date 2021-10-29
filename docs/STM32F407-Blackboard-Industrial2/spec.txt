@@ -1,0 +1,43 @@
+1, CPU:stm32f407zgt6 LQFP144, FLASH:1024K, SRAM:192K, 5 independent serial ports
+ADC, DAC...
+2, IO mouth all elicited
+3. External expansion of 1M SRAM IS62WV51216
+4, FSMC driver LCD interface
+5, W25Q128 of FLASH 16M
+6, EEPROM AT24C02
+7, TF card slot (self projectile micro SD slot)
+8, USB FS (USB OTG...)
+9. RTC clock crystal oscillator adopts the official recommended crystal parameters and matching capacitance 6P.
+No longer afraid of RTC vibration, such as the use of cylindrical 32.768K crystal oscillator,
+There may be no vibration.
+10, serial port 1-RS232 interface
+11, serial port 2-RS485 interface
+12, serial port 3-TTL
+13, 4 independent keys
+14, 3 LED
+15, infrared receiver tube interface (not with HS0038)
+16. Temperature sensor interface (not with 18B20)
+17, buzzer
+18, CAN (TJA1050)
+19, Bluetooth 4 module interface (Bluetooth module is purchased separately)
+20, ESP8266 serial port WiFi module interface (WiFi module purchased separately)
+STM32F407ZGT6 chip introduction:
+1, kernel: Cortex (TM) -M4 CPU of ARM 32 bit
+2, working frequency: 168MHz working frequency (online test of up to more than 200 MHz), when the memory's 0 waiting period is accessed, it can reach 1.25DMips/MHz (Dhrystone2.1).
+3, working voltage and package: 1.8 to 3.6 volts power supply and I/O pin.
+4. Storage resources: up to 1024K byte Flash memory, 192 +4 KB SRAM, which includes 64 byte CCM (core coupled memory) RAM, and flexible static memory controllers support flash memory, SRAM, PSRAM, NOR, and NAND memory.
+5, low power design: sleep, downtime and standby mode, VBAT provides RTC, 20 x 32 bit backup register + optional 4 KB backup SRAM
+6, interface resources: 3 12 bit A/D analog to digital converter, 1 mu s conversion time (up to 24 input channels), 2 channel 12 bit D/A converter, 12 channel DMA controller, as many as 140 I/O ports have interrupt function, 136 fast I / O up to 84 MHz, 138 5 V tolerance I/O, 17 timer Door dog (independent, window type), 15 communication interfaces, 3 I2C interfaces (supporting SMBus/PMBus), 3 SPI interfaces (37.5M bit / sec), 5 USART interfaces supporting ISO 7816, LIN, IrDA interface and modulation and demodulation control, 2 reusable I2S interface, 2 USB2.0 full speed interface, 2 CAN communication interface, 8-14 bit parallel camera interface 54 Mbytes / s, 10/100 Ethernet MAC dedicated DMA, and SDIO, FSMC interface
+7, debugging Download: serial single line debugging (SWD) and JTAG interface, Cortex-M4 embedded tracking module (ETM).
+8, real random number generator
+9, CRC computing unit
+10 and 96 bits of ID
+ 
+11, RTC: one second accuracy, hardware calendar (see the official website data manual).
+
+
+
+
+
+
+https://item.taobao.com/item.htm?spm=a1z10.1-c.w4004-15404422184.2.5d1969bfe0uJEK&id=525275390637

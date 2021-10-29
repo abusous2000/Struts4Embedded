@@ -188,7 +188,7 @@
         "type": "mqtt out",
         "z": "31cc55da.55e6da",
         "name": "",
-        "topic": "dev/cmd/STM32F746G/mp3Player",
+        "topic": "dev/cmd/STM32F746g/mp3Player",
         "qos": "0",
         "retain": "",
         "broker": "bc23579c.d8182",
@@ -1197,7 +1197,9 @@
         "y": 1080,
         "wires": [
             [
-                "849edac7.64eaf8"
+                "849edac7.64eaf8",
+                "c010b06b.b3bd",
+                "d8f6c3bd.719ee8"
             ]
         ]
     },
@@ -1260,11 +1262,13 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 660,
+        "x": 680,
         "y": 1520,
         "wires": [
             [
-                "849edac7.64eaf8"
+                "849edac7.64eaf8",
+                "c010b06b.b3bd",
+                "d8f6c3bd.719ee8"
             ],
             []
         ]
