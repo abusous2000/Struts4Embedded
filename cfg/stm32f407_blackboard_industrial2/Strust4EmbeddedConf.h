@@ -258,4 +258,6 @@
 #define BACKUP_CCM_RAM_SECTION 			ram5
 
 
+//CanBuss
+
 #endif /* CFG_STRUST4EMBEDDED_H_ */
