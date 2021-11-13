@@ -52,6 +52,7 @@
 //6-Remove all jumpers from P5 pin group
 //7-If you use local mobile hotspot as ur router, plz run it with 2.4GHz ONLY on channel 6
 
+#define S4E_USE_WIFI_MODULE_THD 0
 #define WIFI_SD                 SD4
 #define LINE_WIFI_AF            8U
 #define LINE_WIFI_MODE          PAL_MODE_ALTERNATE(LINE_WIFI_AF)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL
