@@ -120,7 +120,8 @@
 #define MQTT_CMD_SUBSCRIBE_TOPIC   		"dev/cmd/STM32F407BlackBoard/mp3Player"
 #define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/STM32F407BlackBoard/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithSTM32F407BlackBoard"
-#define BLACKBOARD_INDUSTRIAL_V5_1
+//#define BLACKBOARD_INDUSTRIAL_V4_1
+//By default, assume it is the new board, see schematic; there are minor changes for pings
 #ifndef BLACKBOARD_INDUSTRIAL_V5_1
 #define LINE_LED_GREEN                  PAL_LINE(GPIOA, 15U)//PA15-18b20-at P8-Right two pin. Left most is ground
 #else
