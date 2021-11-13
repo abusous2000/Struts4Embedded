@@ -11,44 +11,44 @@
 
 </language>
 <language name="GNU C">
-<includepath workspace_path="true">/Strusts4Embedded/cfg/stm32f407_blackboard</includepath>
-<includepath workspace_path="true">/Strusts4Embedded/cfg</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/STM32F4xx</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/common/ext/ST/STM32F4xx</includepath>
-<includepath workspace_path="true">/Struts4Embedded/os/common/ext/ST/STM32F4xx</includepath>
-<includepath workspace_path="true">/Strusts4Embedded/board</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/community/os/various/</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/common/startup/ARMCMx/devices/STM32F7xx</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/common/ports/ARMCMx</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/rt/src</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/rt/include</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/src</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/include</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/common/portability/GCC</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/CANv1</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/CRYPv1</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/DACv1</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/EXTIv1</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/I2Cv2</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/OTGv1</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/RNGv1</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/RTCv2</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/SDMMCv1</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/SPIv2</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/TIMv1</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/USARTv2</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/USBv1</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/xWDGv1</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/common/ARMCMx</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/lib/streams</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/ex/ST</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/ADCv2</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/DMAv2</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/os/hal/ports/STM32/LLD/GPIOv2</includepath>
+<includepath workspace_path="true">/Strusts4EmbeddedV2/cfg/stm32f407_blackboard</includepath>
+<includepath workspace_path="true">/Strusts4EmbeddedV2/cfg</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/STM32F4xx</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/common/ext/ST/STM32F4xx</includepath>
+<includepath workspace_path="true">/Struts4EmbeddedV2/os/common/ext/ST/STM32F4xx</includepath>
+<includepath workspace_path="true">/Strusts4EmbeddedV2/board</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/community/os/various/</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/common/startup/ARMCMx/devices/STM32F7xx</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/common/ports/ARMCMx</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/rt/src</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/rt/include</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/src</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/include</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/common/portability/GCC</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/CANv1</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/CRYPv1</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/DACv1</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/EXTIv1</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/I2Cv2</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/OTGv1</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/RNGv1</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/RTCv2</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/SDMMCv1</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/SPIv2</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/TIMv1</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/USARTv2</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/USBv1</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/xWDGv1</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/common/ARMCMx</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/lib/streams</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/ex/ST</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/ADCv2</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/DMAv2</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/os/hal/ports/STM32/LLD/GPIOv2</includepath>
 <includepath>/home/abusous2000/ChibiStudio/tools/GNU Tools ARM Embedded/7.2 2017q4/lib/gcc/arm-none-eabi/7.2.1/include</includepath>
 <includepath>/home/abusous2000/ChibiStudio/tools/GNU Tools ARM Embedded/7.2 2017q4/arm-none-eabi/include/</includepath>
-<includepath>/home/abusous2000/ChibiOS_20.3.0/ext/fatfs/src</includepath>
-<includepath workspace_path="true">/Strusts4Embedded/lwip</includepath>
+<includepath>/home/abusous2000/ChibiOS_21.6.0/ext/fatfs/src</includepath>
+<includepath workspace_path="true">/Strusts4EmbeddedV2/lwip</includepath>
 <includepath>/home/abusous2000/Downloads/Temp/ChibiOS-Contrib/os/common/ports/ARMCMx/compilers/GCC/utils</includepath>
 <includepath>/home/abusous2000/Downloads/Temp/ChibiOS-Contrib/os/various/fault_handlers</includepath>
 

@@ -104,14 +104,14 @@
  * @brief   Enables the ICU subsystem.
  */
 #if !defined(HAL_USE_ICU) || defined(__DOXYGEN__)
-#define HAL_USE_ICU                         FALSE
+#define HAL_USE_ICU                         TRUE
 #endif
 
 /**
  * @brief   Enables the MAC subsystem.
  */
 #if !defined(HAL_USE_MAC) || defined(__DOXYGEN__)
-#define HAL_USE_MAC                         TRUE
+#define HAL_USE_MAC                         FALSE
 #endif
 
 /**
@@ -139,7 +139,7 @@
  * @brief   Enables the SDC subsystem.
  */
 #if !defined(HAL_USE_SDC) || defined(__DOXYGEN__)
-#define HAL_USE_SDC                         TRUE
+#define HAL_USE_SDC                         FALSE
 #endif
 
 /**
@@ -167,7 +167,7 @@
  * @brief   Enables the SPI subsystem.
  */
 #if !defined(HAL_USE_SPI) || defined(__DOXYGEN__)
-#define HAL_USE_SPI                         TRUE
+#define HAL_USE_SPI                         FALSE
 #endif
 
 /**
@@ -416,11 +416,7 @@
  *          buffers.
  */
 #if !defined(SERIAL_BUFFERS_SIZE) || defined(__DOXYGEN__)
-	#if INCLUDE_SEGGER_JLINK != 0
-	#define SERIAL_BUFFERS_SIZE                 512
-	#else
-	#define SERIAL_BUFFERS_SIZE                 82
-	#endif
+#define SERIAL_BUFFERS_SIZE                 82
 #endif
 
 /*===========================================================================*/

@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2018 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2020 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -29,11 +29,27 @@
 #define CHCONF_H
 
 #define _CHIBIOS_RT_CONF_
-#define _CHIBIOS_RT_CONF_VER_6_1_
-#define bool_t						bool
-#define DEBUG_TRACE_PRINT     		TRUE
-#define CHPRINTF_USE_FLOAT    		TRUE
-#define PORT_ENABLE_GUARD_PAGES     TRUE
+#define _CHIBIOS_RT_CONF_VER_7_0_
+
+/*===========================================================================*/
+/**
+ * @name System settings
+ * @{
+ */
+/*===========================================================================*/
+
+/**
+ * @brief   Handling of instances.
+ * @note    If enabled then threads assigned to various instances can
+ *          interact each other using the same synchronization objects.
+ *          If disabled then each OS instance is a separate world, no
+ *          direct interactions are handled by the OS.
+ */
+#if !defined(CH_CFG_SMP_MODE)
+#define CH_CFG_SMP_MODE                     FALSE
+#endif
+
+/** @} */
 
 /*===========================================================================*/
 /**
@@ -44,7 +60,7 @@
 
 /**
  * @brief   System time counter resolution.
- * @note    Allowed values are 16 or 32 bits.
+ * @note    Allowed values are 16, 32 or 64 bits.
  */
 #if !defined(CH_CFG_ST_RESOLUTION)
 #define CH_CFG_ST_RESOLUTION                32
@@ -162,6 +178,17 @@
  */
 #if !defined(CH_CFG_USE_TM)
 #define CH_CFG_USE_TM                       TRUE
+#endif
+
+/**
+ * @brief   Time Stamps APIs.
+ * @details If enabled then the time time stamps APIs are included in
+ *          the kernel.
+ *
+ * @note    The default is @p TRUE.
+ */
+#if !defined(CH_CFG_USE_TIMESTAMP)
+#define CH_CFG_USE_TIMESTAMP                TRUE
 #endif
 
 /**
@@ -570,7 +597,7 @@
  * @note    The default is @p CH_DBG_TRACE_MASK_DISABLED.
  */
 #if !defined(CH_DBG_TRACE_MASK)
-#define CH_DBG_TRACE_MASK                   CH_DBG_TRACE_MASK_SLOW//CH_DBG_TRACE_MASK_DISABLED
+#define CH_DBG_TRACE_MASK                   CH_DBG_TRACE_MASK_ALL//CH_DBG_TRACE_MASK_SLOW//CH_DBG_TRACE_MASK_DISABLED
 #endif
 
 /**
@@ -579,7 +606,7 @@
  *          different from @p CH_DBG_TRACE_MASK_DISABLED.
  */
 #if !defined(CH_DBG_TRACE_BUFFER_SIZE)
-#define CH_DBG_TRACE_BUFFER_SIZE            128
+#define CH_DBG_TRACE_BUFFER_SIZE            (128 * 4)
 #endif
 
 /**
@@ -635,7 +662,7 @@
  * @details User fields added to the end of the @p ch_system_t structure.
  */
 #define CH_CFG_SYSTEM_EXTRA_FIELDS                                          \
-  /* Add threads custom fields here.*/
+  /* Add system custom fields here.*/
 
 /**
  * @brief   System initialization hook.
@@ -643,7 +670,7 @@
  *          just before interrupts are enabled globally.
  */
 #define CH_CFG_SYSTEM_INIT_HOOK() {                                         \
-  /* Add threads initialization code here.*/                                \
+  /* Add system initialization code here.*/                                 \
 }
 
 /**
@@ -660,40 +687,7 @@
  * @note    It is invoked from within @p _thread_init() and implicitly from all
  *          the threads creation APIs.
  */
-#define CH_CFG_THREAD_INIT_HOOK(tp) {                                       \
-  /* Add threads initialization code here.*/                                \
-}
-
-/**
- * @brief   Threads finalization hook.
- * @details User finalization code added to the @p chThdExit() API.
- */
-#define CH_CFG_THREAD_EXIT_HOOK(tp) {                                       \
-  /* Add threads finalization code here.*/                                  \
-}
-
-/**
- * @brief   Context switch hook.
- * @details This hook is invoked just before switching between threads.
- */
-#define CH_CFG_CONTEXT_SWITCH_HOOK(ntp, otp) {                              \
-  /* Context switch code here.*/                                            \
-}
-
-/**
- * @brief   ISR enter hook.
- */
-#define CH_CFG_IRQ_PROLOGUE_HOOK() {                                        \
-  /* IRQ prologue code here.*/                                              \
-}
-
-/**
- * @brief   ISR exit hook.
- */
-#define CH_CFG_IRQ_EPILOGUE_HOOK() {                                        \
-  /* IRQ epilogue code here.*/                                              \
-}
-
+#include "chHooks.h"
 /**
  * @brief   Idle thread enter hook.
  * @note    This hook is invoked within a critical zone, no OS functions
@@ -730,16 +724,6 @@
 #define CH_CFG_SYSTEM_TICK_HOOK() {                                         \
   /* System tick event code here.*/                                         \
 }
-
-/**
- * @brief   System halt hook.
- * @details This hook is invoked in case to a system halting error before
- *          the system is halted.
- */
-#define CH_CFG_SYSTEM_HALT_HOOK(reason) {                                   \
-  /* System halt code here.*/                                               \
-}
-
 /**
  * @brief   Trace hook.
  * @details This hook is invoked each time a new record is written in the
@@ -754,6 +738,7 @@
 /*===========================================================================*/
 /* Port-specific settings (override port settings defaulted in chcore.h).    */
 /*===========================================================================*/
+
 
 #endif  /* CHCONF_H */
 

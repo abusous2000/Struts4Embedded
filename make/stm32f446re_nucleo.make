@@ -43,7 +43,7 @@ endif
 ifeq ($(USE_SMART_BUILD),)
   USE_SMART_BUILD = yes
 endif
-INCLUDE_SEGGER_JLINK := "no"
+
 #
 # Build global options
 ##############################################################################
@@ -55,7 +55,7 @@ INCLUDE_SEGGER_JLINK := "no"
 # Stack size to be allocated to the Cortex-M process stack. This stack is
 # the stack used by the main() thread.
 ifeq ($(USE_PROCESS_STACKSIZE),)
-  USE_PROCESS_STACKSIZE = 0x400
+  USE_PROCESS_STACKSIZE = 0x1000
 endif
 
 # Stack size to the allocated to the Cortex-M main/exceptions stack. This
@@ -93,6 +93,12 @@ CHIBIOS  := ../../..
 BOARD_NAME := stm32f446re_nucleo
 STRUTS4EMBEDDED :=$(CHIBIOS)/demos/STM32/Struts4Embedded/source/Struts4Embedded
 include $(STRUTS4EMBEDDED)/CommonS4EVars.mk
+INCLUDE_SEGGER_JLINK := "no"
+INCLUDE_SEGGER_JLINK_VALUE :=0
+USE_MAC := "no"
+USE_AE_SHELL := "yes"
+USE_AE_SHELL_VALUE := 0
+USE_FATFS := "no"
 
 # Licensing files.
 include $(CHIBIOS)/os/license/license.mk
@@ -105,27 +111,37 @@ include $(CHIBIOS)/os/hal/boards/ST_NUCLEO64_F446RE/board.mk
 include $(CHIBIOS)/os/hal/osal/rt-nil/osal.mk
 # RTOS files (optional).
 include $(CHIBIOS)/os/rt/rt.mk
-include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
+include $(CHIBIOS)/os/common/ports/ARMv7-M/compilers/GCC/mk/port.mk
 # Auto-build files in ./source recursively.
 include $(CHIBIOS)/tools/mk/autobuild.mk
 # Other files (optional).
-#include $(CHIBIOS)/test/lib/test.mk
-#include $(CHIBIOS)/test/rt/rt_test.mk
-#include $(CHIBIOS)/test/oslib/oslib_test.mk
+ifeq ($(USE_AE_SHELL),"yes")
+include $(CHIBIOS)/test/lib/test.mk
+include $(CHIBIOS)/test/rt/rt_test.mk
+include $(CHIBIOS)/test/oslib/oslib_test.mk
+include $(CHIBIOS)/os/various/shell/shell.mk
+USE_AE_SHELL_VALUE := 1
+endif
 include $(CHIBIOS)/os/hal/lib/streams/streams.mk
 include $(CHIBIOS_CONTRIB)/os/common/ports/ARMCMx/compilers/GCC/utils/fault_handlers_v7m.mk
-#include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
+ifeq ($(USE_FATFS),"yes")
+include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
+endif
 #STARTUPLD = /os/common/startup/ARMCMx/compilers/GCC/ld
-#include $(CHIBIOS)/os/various/lwip_bindings/lwip.mk
+ifeq ($(USE_MAC),"yes")
+include $(CHIBIOS)/os/various/lwip_bindings/lwip.mk
+endif
 ifeq ($(INCLUDE_SEGGER_JLINK),"yes")
 include $(CHIBIOS_CONTRIB)/os/various/segger_bindings/segger_rtt.mk
 include $(CHIBIOS_CONTRIB)/os/various/segger_bindings/segger_systemview.mk
+INCLUDE_SEGGER_JLINK_VALUE := 1
 endif
 LDSCRIPT= $(STARTUPLD)/STM32F446xE.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
 CSRC = $(ALLCSRC) \
+       $(CHIBIOS)/os/various/syscalls.c \
        $(CHIBIOS)/os/various/evtimer.c \
        main.c
 
@@ -157,7 +173,10 @@ CPPWARN = -Wall -Wextra -Wundef
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS =
+UDEFS = -DSHELL_CMD_TEST_ENABLED=0   \
+        -DDEBUG_TRACE_PRINT=1 -DCHPRINTF_USE_FLOAT=1 -DPORT_ENABLE_GUARD_PAGES=1 \
+        -DINCLUDE_SEGGER_JLINK=$(INCLUDE_SEGGER_JLINK_VALUE) -DSERIAL_BUFFERS_SIZE=512 \
+        -DUSE_AE_SHELL=$(USE_AE_SHELL_VALUE) 
 
 # Define ASM defines here
 UADEFS =

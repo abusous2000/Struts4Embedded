@@ -27,7 +27,8 @@ static void joystickCBHandler(void *arg) {
 CPalTypedef 		  			*pGreenLedPAL = NULL, *pCenterKey= NULL,    *pUpKey= NULL,
                                 *pDownKey= NULL,      *pLeftKey  = NULL,    *pRightKey= NULL,
 								*pBuzzer= NULL,       *pRgb= NULL,          *pEasyLinkKey= NULL,
-								*pEasyLinkKey0= NULL, *pEasyLinkKey1= NULL, *pYellow= NULL;
+								*pEasyLinkKey0= NULL, *pEasyLinkKey1= NULL, *pYellow= NULL,
+								*pRed2LedPAL= NULL,   *pBlueLedPAL= NULL;
 
 #if S4E_USE_BUZZER != 0
 static CPalTypedef buzzer={     .line=BUZZER_LINE,          .mode=LED_MODE};
@@ -40,6 +41,14 @@ static CPalTypedef greenLedPAL={.line=LINE_LED_GREEN,     	.mode=LED_MODE};
 #if defined(LINE_LED_RED)
 CPalTypedef 		  			*pRedLedPAL;
 static CPalTypedef redLedPAL={  .line=LINE_LED_RED,       	.mode=LED_MODE};
+#endif
+#if defined(LINE_LED_RED2)
+CPalTypedef 		  			*pRedLedPAL;
+static CPalTypedef red2LedPAL={  .line=LINE_LED_RED2,       	.mode=LED_MODE};
+#endif
+#if defined(LINE_LED_BLUE)
+CPalTypedef 		  			*pRedLedPAL;
+static CPalTypedef blueLedPAL={  .line=LINE_LED_BLUE,       	.mode=LED_MODE};
 #endif
 #if S4E_USE_JOYSTICK != 0
 #ifdef LINE_JOY_CENTER
@@ -69,19 +78,36 @@ static CPalTypedef easyLinkKey={.line=EASYLINK_BUTTON,  	.mode=BUTTON_MODE2, .ri
 #endif
 
 void initButtonsLEDs(void) {
+
 #if S4E_USE_BUZZER != 0
   pBuzzer      = initCPalInstance(&buzzer);
   pBuzzer->init(&buzzer);
   pBuzzer->clear(&buzzer);
 #endif
 #if S4E_USE_RGB != 0
-  pRgb         = initCPalInstance(&rgb);pRgb->init(&rgb);pRgb->clear(&rgb);
+  pRgb         = initCPalInstance(&rgb);
+  pRgb->init(&rgb);
+  pRgb->clear(&rgb);
 #endif
+#if defined(LINE_LED_GREEN)
   pGreenLedPAL = initCPalInstance(&greenLedPAL);
   pGreenLedPAL->init(&greenLedPAL);
   pGreenLedPAL->toggle(&greenLedPAL);
+#endif
+
 #if defined(LINE_LED_RED)
-  pRedLedPAL 	   = initCPalInstance(&redLedPAL);pRedLedPAL->init(&redLedPAL);pRedLedPAL->toggle(&redLedPAL);
+  pRedLedPAL 	   = initCPalInstance(&redLedPAL);
+  pRedLedPAL->init(&redLedPAL);
+#endif
+
+#if defined(LINE_LED_RED2)
+  pRed2LedPAL 	   = initCPalInstance(&red2LedPAL);
+  pRed2LedPAL->init(&red2LedPAL);
+#endif
+
+#if defined(LINE_LED_BLUE)
+  pBlueLedPAL 	   = initCPalInstance(&blueLedPAL);
+  pBlueLedPAL->init(&blueLedPAL);
 #endif
 
 #if S4E_USE_JOYSTICK != 0

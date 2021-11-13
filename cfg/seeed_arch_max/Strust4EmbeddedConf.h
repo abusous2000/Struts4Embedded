@@ -27,11 +27,8 @@
 #define S4E_USE_EBYTE_LORA 		0
 #define EBYTE_LORA_SERVER       0
 #define S4E_USE_IR_RECEIVER		0
-
-
-#ifndef S4E_USE_SDCARD
-#define S4E_USE_SDCARD 			1
-#endif
+#define USE_W25Q_XXXX           0
+#define USERLIB_USE_RF          0
 
 #ifndef USE_LCD_TFT
 #define USE_LCD_TFT 			0
@@ -52,15 +49,21 @@
 
 #ifndef S4E_USE_WIFI_MODULE_THD
 #define S4E_USE_WIFI_MODULE_THD 0
+#define WIFI_SD                 SD1
+#define LINE_WIFI_AF            7U
+#define LINE_WIFI_MODE          PAL_MODE_ALTERNATE(LINE_WIFI_AF)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL
+#define LINE_WIFI_TX            PAL_LINE(GPIOA, 9U)//PA9
+#define LINE_WIFI_RX            PAL_LINE(GPIOA, 10U)//PA10
+
 #endif
 
 #ifndef S4E_USE_SSD1306_LCD
 #define S4E_USE_SSD1306_LCD     1
 
-#define SSD1306_I2C_SCL_LINE    PAL_LINE(GPIOB, GPIOB_ARD_D15)
-#define SSD1306_I2C_SDA_LINE   	PAL_LINE(GPIOB, GPIOB_ARD_D14)
-#define SSD1306_SA0_LINE        PAL_LINE(GPIOB, GPIOB_ARD_D8)
-#define SSD1306_RESET_LINE      PAL_LINE(GPIOB, GPIOB_ARD_D7)
+#define SSD1306_I2C_SCL_LINE    PAL_LINE(GPIOB, GPIOB_ARD_D15)//PB8
+#define SSD1306_I2C_SDA_LINE   	PAL_LINE(GPIOB, GPIOB_ARD_D14)//PB9
+#define SSD1306_SA0_LINE        PAL_LINE(GPIOB, GPIOB_ARD_D8) //PB15
+#define SSD1306_RESET_LINE      PAL_LINE(GPIOB, GPIOB_ARD_D7) //PB7
 #define SSD1306_I2C_AF       	4
 #define SSD1306_I2C_LINE_MODE	PAL_MODE_ALTERNATE(SSD1306_I2C_AF)  | PAL_STM32_OSPEED_HIGHEST|  PAL_STM32_OTYPE_OPENDRAIN
 #define SSD1306_LINE_MODE   	PAL_STM32_MODE_OUTPUT  | PAL_STM32_PUPDR_PULLUP
@@ -88,7 +91,7 @@
 #endif
 //With This board, you cannot used ARD_11 & ETH, there is a conflict
 #ifndef S4E_USE_BUZZER
-#define S4E_USE_BUZZER			0
+#define S4E_USE_BUZZER			1
 #endif
 
 #ifndef S4E_USE_RGB
@@ -132,27 +135,58 @@
 #define DEFAULT_NUM_OF_WORKER_THDS 		1
 #define MAX_THD_NAME_SIZE          		25
 #define MAX_NUM_OF_WORKER_THDS			4
-//Note that for this board, serial output uses PA2 & PA3 (w/ AF 7) which is in conflict with Ethernet with PA2
-#define PORTAB_SD                       SD6
-#define MQTT_CMD_SUBSCRIBE_TOPIC   		"dev/cmd/seeed_arch_max/mp3Player"
-#define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/seeed_arch_max/mp3Player"
+#define PORTAB_SD                       SD6//Uses PC6 & PC7
+#define MQTT_CMD_SUBSCRIBE_TOPIC   		"dev/cmd/STM32F407BlackBoard/mp3Player"
+#define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/STM32F407BlackBoard/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithSeeedArchMax"
 
 #//brown, black, red, & orange
-#define LINE_LED_GREEN                  LINE_LED//PAL_LINE(GPIOA, 6U)-PA6
+#define LINE_LED_GREEN                  LINE_ARD_D13//PB3
 //#define LINE_LED_RED                    PAL_LINE(GPIOA, 7U)
 //For this to work, plz connect Pin20 to Pin13 in the Zigbee header on the waveshare accessory sheild
 #define EASYLINK_BUTTON		            LINE_ARD_D9//PB14
 
+#ifndef S4E_USE_SDCARD
+#define S4E_USE_SDCARD 			        1
 
 #define MMC_SPI_PIN_MODE                PAL_MODE_ALTERNATE(MMC_SPI_AF) 	  |  PAL_STM32_OSPEED_HIGHEST | PAL_STM32_PUPDR_PULLUP
 #define MMC_SPI_PIN_MODE_MISO           MMC_SPI_PIN_MODE
 #define PROTAB_MMCSPI                   SPID2
 #define MMC_SPI_AF						5
-#define SD_CARD_NSS_LINE 					    PAL_LINE(GPIOE, 2U)//PE2
-#define SD_CARD_SCK_LINE 					    PAL_LINE(GPIOB, 10U)//PB10
-#define SD_CARD_MISO_LINE 					    PAL_LINE(GPIOC, 2U)//PC2
-#define SD_CARD_MOSI_LINE 					    PAL_LINE(GPIOC, 3U)//PC3
+#define SD_CARD_NSS_LINE 				PAL_LINE(GPIOE, 2U)//PE2
+#define SD_CARD_SCK_LINE 				PAL_LINE(GPIOB, 10U)//PB10
+#define SD_CARD_MISO_LINE 				PAL_LINE(GPIOC, 2U)//PC2
+#define SD_CARD_MOSI_LINE 				PAL_LINE(GPIOC, 3U)//PC3
+#endif
 
 
+#ifndef S4E_USE_WIFI_MODULE_THD
+#define S4E_USE_WIFI_MODULE_THD 0
+#define WIFI_SD                 SD1
+#endif
+
+
+#define GO_TO_SLEEP_MACROS      	   SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;\
+									   PWR->CR  |= (PWR_CR_PDDS | PWR_CR_LPDS | PWR_CR_CSBF  | PWR_CR_CWUF);\
+									   PWR->CSR |= (PWR_CSR_WUF |  PWR_CSR_EWUP );\
+									   RTC->ISR &= ~(RTC_ISR_ALRBF | RTC_ISR_ALRAF | RTC_ISR_WUTF | RTC_ISR_TAMP1F |\
+													RTC_ISR_TSOVF | RTC_ISR_TSF);
+
+#define RTC_ALARM_1_FLAGS2   			RTC_ALRM_MSK4  |\
+										RTC_ALRM_MSK3  |\
+										RTC_ALRM_MSK2  |\
+										RTC_ALRM_ST(0) |\
+										RTC_ALRM_SU(0)
+
+#define RTC_ALARM_2_FLAGS2  			RTC_ALRM_MSK4  |\
+										RTC_ALRM_MSK3  |\
+										RTC_ALRM_MSK2  |\
+										RTC_ALRM_ST(5) |\
+										RTC_ALRM_SU(1)
+#define WAKEUP_HARD_REST_CHECK          (uint32_t)(PWR->CSR & PWR_CSR_SBF)
+#define CLEAR_WAKEUP_FLAG			    PWR->CR  	|= (PWR_CR_CSBF)
+
+
+
+#define BACKUP_CCM_RAM_SECTION 			ram5
 #endif /* CFG_STRUST4EMBEDDED_H_ */

@@ -7,6 +7,8 @@
 
 #ifndef CFG_STRUST4EMBEDDEDCONF_H_
 #define CFG_STRUST4EMBEDDEDCONF_H_
+#define USE_W25Q_XXXX           0
+#define USERLIB_USE_RF          0
 
 #define S4E_USE_PPM_FRAME_DECODER 		0
 #define S4E_USE_EBYTE_LORA 		0
@@ -114,7 +116,7 @@
 
 #define TIM_TGRO_EVENT_EXTSEL 		    12 //See table 98 in RM on pages 451 & 471 for details
 #define ADC_CHANNEL_IN 					ADC_CHANNEL_IN0
-#define ADC_SMPR2_SMP          		ADC_SMPR2_SMP_AN0(ADC_SAMPLE_144)
+#define ADC_SMPR2_SMP          		    ADC_SMPR2_SMP_AN0(ADC_SAMPLE_144)
 
 #define ADC_POT                     	ADCD3
 

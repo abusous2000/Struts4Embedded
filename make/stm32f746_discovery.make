@@ -95,7 +95,12 @@ STMHAL = STM32F7xx_HAL_Driver
 BOARD_NAME := stm32f746_discovery
 STRUTS4EMBEDDED :=$(CHIBIOS)/demos/STM32/Struts4Embedded/source/Struts4Embedded
 include $(STRUTS4EMBEDDED)/CommonS4EVars.mk
-
+INCLUDE_SEGGER_JLINK := "no"
+INCLUDE_SEGGER_JLINK_VALUE :=0
+USE_MAC := "yes"
+USE_AE_SHELL := "yes"
+USE_AE_SHELL_VALUE := 0
+USE_FATFS := "yes
 # Licensing files.
 include $(CHIBIOS)/os/license/license.mk
 # Startup files.
@@ -107,18 +112,34 @@ include $(CHIBIOS)/os/hal/boards/ST_STM32F746G_DISCOVERY/board.mk
 include $(CHIBIOS)/os/hal/osal/rt-nil/osal.mk
 # RTOS files (optional).
 include $(CHIBIOS)/os/rt/rt.mk
-include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
+include $(CHIBIOS)/os/common/ports/ARMv7-M/compilers/GCC/mk/port.mk
 # Auto-build files in ./source recursively.
 include $(CHIBIOS)/tools/mk/autobuild.mk
 # Other files (optional).
-#include $(CHIBIOS)/test/lib/test.mk
-#include $(CHIBIOS)/test/rt/rt_test.mk
-#include $(CHIBIOS)/test/oslib/oslib_test.mk
+ifeq ($(USE_AE_SHELL),"yes")
+include $(CHIBIOS)/test/lib/test.mk
+include $(CHIBIOS)/test/rt/rt_test.mk
+include $(CHIBIOS)/test/oslib/oslib_test.mk
+include $(CHIBIOS)/os/various/shell/shell.mk
+USE_AE_SHELL_VALUE := 1
+endif
 include $(CHIBIOS)/os/hal/lib/streams/streams.mk
 include $(CHIBIOS_CONTRIB)/os/common/ports/ARMCMx/compilers/GCC/utils/fault_handlers_v7m.mk
+
+#include $(STRUTS4EMBEDDED)/Struts4Embedded.mk
+ifeq ($(USE_FATFS),"yes")
 include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
+endif
 #STARTUPLD = /os/common/startup/ARMCMx/compilers/GCC/ld
+ifeq ($(USE_MAC),"yes")
 include $(CHIBIOS)/os/various/lwip_bindings/lwip.mk
+endif
+ifeq ($(INCLUDE_SEGGER_JLINK),"yes")
+include $(CHIBIOS_CONTRIB)/os/various/segger_bindings/segger_rtt.mk
+include $(CHIBIOS_CONTRIB)/os/various/segger_bindings/segger_systemview.mk
+INCLUDE_SEGGER_JLINK_VALUE := 1
+endif
+
 # Define linker script file here
 LDSCRIPT= $(STARTUPLD)/STM32F746xG.ld
 #LDSCRIPT= $(STARTUPLD)/STM32F746xG_MAX.ld
@@ -157,8 +178,11 @@ CPPWARN = -Wall -Wextra -Wundef
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS =
-
+#UDEFS = -DWOLFSSL_USER_SETTINGS -DLWIP_DEBUG 
+UDEFS = -DSHELL_CMD_TEST_ENABLED=0  -DWOLFSSL_USER_SETTINGS  -DLWIP_DEBUG \
+        -DDEBUG_TRACE_PRINT=1 -DCHPRINTF_USE_FLOAT=1 -DPORT_ENABLE_GUARD_PAGES=1 \
+        -DINCLUDE_SEGGER_JLINK=$(INCLUDE_SEGGER_JLINK_VALUE) -Dboot_t=bool -DSERIAL_BUFFERS_SIZE=512 \
+        -DUSE_AE_SHELL=$(USE_AE_SHELL_VALUE) -DSIZEOF_INT=4
 # Define ASM defines here
 UADEFS =
 

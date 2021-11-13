@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2018 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2020 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -98,6 +98,7 @@
 #define STM32_CK48MSEL                      STM32_CK48MSEL_PLL
 #define STM32_SDMMC1SEL                     STM32_SDMMC1SEL_PLL48CLK
 #define STM32_SDMMC2SEL                     STM32_SDMMC2SEL_PLL48CLK
+#define STM32_SDC_SDMMC_50MHZ				TRUE
 #define STM32_SRAM2_NOCACHE                 FALSE
 
 /*
@@ -318,6 +319,18 @@
 #define STM32_SERIAL_USE_UART8              FALSE
 
 /*
+ * SIO driver system settings.
+ */
+#define STM32_SIO_USE_USART1                FALSE
+#define STM32_SIO_USE_USART2                FALSE
+#define STM32_SIO_USE_USART3                FALSE
+#define STM32_SIO_USE_UART4                 FALSE
+#define STM32_SIO_USE_UART5                 FALSE
+#define STM32_SIO_USE_USART6                FALSE
+#define STM32_SIO_USE_UART7                 FALSE
+#define STM32_SIO_USE_UART8                 FALSE
+
+/*
  * SPI driver system settings.
  */
 #define STM32_SPI_USE_SPI1                  FALSE
@@ -420,5 +433,6 @@
  */
 #define STM32_WSPI_USE_QUADSPI1             FALSE
 #define STM32_WSPI_QUADSPI1_DMA_STREAM      STM32_DMA_STREAM_ID(2, 7)
+#define STM32_WSPI_QUADSPI1_PRESCALER_VALUE 1
 
 #endif /* MCUCONF_H */

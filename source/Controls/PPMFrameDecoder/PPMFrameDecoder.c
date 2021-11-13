@@ -68,12 +68,10 @@ static bool 				currentPPMDecoderState 			   = true;
 
 thread_reference_t 	ppmDecoderThdRef 	= NULL;
 static void icuwidthcb(ICUDriver *icup) {
-  palSetLine(LINE_LED_GREEN);
   last_width = icuGetWidthX(icup);
 }
 
 static void icuperiodcb(ICUDriver *icup) {
-  palClearLine(LINE_LED_GREEN);
   last_period = icuGetPeriodX(icup);
   if ( last_period >= MIN_GAP ){
 	  bool invalidFrame = currentChannel < (MAX_CHANNELS -2);
@@ -108,7 +106,6 @@ static void icuperiodcb(ICUDriver *icup) {
 	  pCurrentPPM_Frame->period[currentChannel] 		= last_period;
 	  currentChannel++;
  }
-
 }
 static void icuovfcb(ICUDriver *icup) {
   (void)icup;
@@ -120,7 +117,7 @@ static ICUConfig icucfg = {
   .width_cb=icuwidthcb,
   .period_cb=icuperiodcb,
   .overflow_cb=icuovfcb,
-  .channel=PORTABLE_ICU_CHANNEL,
+  .channel=RC_ICU_CHANNEL,
   .dier=0,
   .arr=0xFFFFFFFFU
 };
@@ -132,30 +129,31 @@ CC_WEAK void onChannelPPMValueChange(uint8_t ch, uint8_t currentValue, uint8_t n
 
 void enablePPMDecoder(bool enable){
 	if ( enable)
-		icuEnableNotifications(&PORTABLE_ICUD);
+		icuEnableNotifications(&RC_ICUD);
 	else
-		icuDisableNotifications(&PORTABLE_ICUD);
+		icuDisableNotifications(&RC_ICUD);
 
 	currentPPMDecoderState = enable;
 	dbgprintf("PPMDecoder State: %d\r\n", enable);
 }
 static THD_WORKING_AREA(wappmDecoderThread, PPM_THD_STACK_SIZE);
 static THD_FUNCTION(ppmDecoderThread, arg) {(void)arg;
+    chRegSetThreadName("ppmDecoderThread");
 
 	#ifdef PORTABLE_PWM_LINE
 	pwmStart(&PORTABLE_PWMD, &pwmcfg);
 	pwmEnablePeriodicNotification(&PORTABLE_PWMD);
 	palSetLineMode(PORTABLE_PWM_LINE, PAL_MODE_ALTERNATE(PORTABLE_PWM_AF));
 	#endif
-	icuStart(&PORTABLE_ICUD, &icucfg);
-	palSetLineMode(PORTABLE_ICU_LINE, PAL_MODE_ALTERNATE(PORTABLE_ICU_AF));
+	icuStart(&RC_ICUD, &icucfg);
+	palSetLineMode(RC_ICU_LINE, PAL_MODE_ALTERNATE(RC_ICU_AF));
 
 	#ifdef PORTABLE_PWM_LINE
 	pwmEnableChannel(&PORTABLE_PWMD, PORTABLE_PWM_CHANNEL, PWM_PERCENTAGE_TO_WIDTH(&PORTABLE_PWMD, FREQUENCY_USED * .75));
 	pwmEnableChannelNotification(&PORTABLE_PWMD, PORTABLE_PWM_CHANNEL);
     #endif
-	icuStartCapture(&PORTABLE_ICUD);
-	icuEnableNotifications(&PORTABLE_ICUD);
+	icuStartCapture(&RC_ICUD);
+	icuEnableNotifications(&RC_ICUD);
 	uint8_t lastValue = MAX_FRAMES_TO_COLLECT > 1?MAX_FRAMES_TO_COLLECT-1:0;
 	while (true) {
 		if ( currentPPMDecoderState ){

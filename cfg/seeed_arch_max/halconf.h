@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2018 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2020 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@
 
 #define _CHIBIOS_HAL_CONF_
 #define _CHIBIOS_HAL_CONF_VER_7_1_
+#define FAULT_INFO_HOOK 			        _fault_info_hook
 
 #include "mcuconf.h"
 #if !defined(CHPRINTF_USE_FLOAT) || defined(__DOXYGEN__)
@@ -130,7 +131,7 @@
  * @brief   Enables the RTC subsystem.
  */
 #if !defined(HAL_USE_RTC) || defined(__DOXYGEN__)
-#define HAL_USE_RTC                         FALSE
+#define HAL_USE_RTC                         TRUE
 #endif
 
 /**
@@ -414,7 +415,11 @@
  *          buffers.
  */
 #if !defined(SERIAL_BUFFERS_SIZE) || defined(__DOXYGEN__)
-#define SERIAL_BUFFERS_SIZE                 82
+	#if INCLUDE_SEGGER_JLINK != 0
+	#define SERIAL_BUFFERS_SIZE                 512
+	#else
+	#define SERIAL_BUFFERS_SIZE                 82
+	#endif
 #endif
 
 /*===========================================================================*/
