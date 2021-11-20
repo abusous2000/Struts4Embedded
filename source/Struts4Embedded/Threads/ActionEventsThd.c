@@ -56,13 +56,18 @@ ActionEvent_Typedef *triggerActionEventNoLock(char *aeName, char *pData, uint32_
   if ( !isActonEventThdInitialized() ){
 	 chSysHalt("ActonEventThd hasn't been initialized. Plz call initActonEventThd() in your startup code");
   }
+  /*
+   * Note that after this method is executed; the thread is not released yet.
+   * It will be once chSchRescheduleS(); & chSysUnlock(); are done
+   */
   ActionEvent_Typedef *pAE = sendActionEvent(aeName);
 
   if ( pAE == NULL )
 	  return NULL;
-  pAE->dataType = IS_CHAR_STR_NULL(pData)?INT_DTYPE:CHAR_DTYPE;
-  //Use memory pool only when needed. If that was the case, then
-  //Always deep copy when char data else memory corruption will happen
+  //Use memory pool only when needed & defined as such. If that was the case, then
+  if ( pAE->dataType == CHAR_DTYPE)
+     pAE->dataType = IS_CHAR_STR_NULL(pData)?INT_DTYPE:CHAR_DTYPE;
+  //Always deep copy when char data as the type, else memory corruption will happen
   if ( pAE->dataType == CHAR_DTYPE){
 	  pAE->u.pData = (char*)chGuardedPoolAllocI(&guardedDataBufferMemoryPool);
 	  if ( pAE->u.pData == NULL){

@@ -10,6 +10,7 @@
 #include "RTCHelper.h"
 #include "ssd1306.h"
 #include "ButtonLEDs.h"
+#include "CanBus.h"
 #include "SDCard.h"
 #if INCLUDE_SEGGER_JLINK != 0
 #include "SEGGER_SYSVIEW_ChibiOS.h"
@@ -341,6 +342,34 @@ static int32_t testSDCard(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent
    return MSG_OK;
 }
 
+static int32_t canBusControlAE(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
+   uint32_t val =  pActionEvent->dataType==CHAR_DTYPE? atoi(pActionEvent->u.pData): (int8_t)pActionEvent->u.data;
+   canBusControl(val);
+
+   return MSG_OK;
+}
+
+
+///MSGFormat:XXX#<LEN><Data>
+static int32_t sendCanBusMsg(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
+	if ( pActionEvent->u.pData != NULL){
+		char temp[DATA_FIELD_WAS_LT_MAX];
+
+		strlcpy(temp,pActionEvent->u.pData,DATA_FIELD_WAS_LT_MAX);
+		char     *strMsgId 	= strtok(temp,"#");
+		char     *pData 	= strtok(NULL,"#");
+		uint8_t  len        = (uint8_t)(*pData);
+		uint8_t  *pData8    = (uint8_t*)(pData+1);
+
+		sendCanMsg((uint32_t)strtol(strMsgId, NULL, 16),len,pData8);
+	}
+	else{
+		   dbgprintf("No data to send CanBus Msg\r\n");
+		   return MSG_RESET;
+	}
+   return MSG_OK;
+}
+
 static ActionEvent_Typedef actionEventToggleMute 	 	= {.name=TOGGLE_MUTE_AE_NAME,  			.eventSource="Center",      	.action=toggleMute,			.view=toggleMuteView,		.dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventNextTrack  	 	= {.name=NEXT_TRACK_AE_NAME,			.eventSource="Up",          	.action=nextTrack,          							.dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventTogglePausePlay	= {.name=TOGGLE_PAUSE_AE_NAME,			.eventSource="Down",        	.action=togglePausePlay};
@@ -356,7 +385,9 @@ static ActionEvent_Typedef actionEventPerformanceInfo 	= {.name=PERFORMANCE_INFO
 static ActionEvent_Typedef actionEventSetUnixtime      	= {.name=SET_UNIX_TIME_AE_NAME,			.eventSource="WiFi",   		    .action=setUnixtime, 		.view=NULL,			        .dataType = CHAR_DTYPE};
 static ActionEvent_Typedef actionEventGoToSleep      	= {.name=GO_TO_SLEEP_AE_NAME,			.eventSource="WiFi",   		    .action=goToSleep, 		    .view=NULL,			        .dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventToggleBuzzer     	= {.name=TOGGLE_BUZZER_AE_NAME,			.eventSource="WiFi",   		    .action=toggleBuzzer, 		.view=NULL,			        .dataType = INT_DTYPE};
-static ActionEvent_Typedef actionEventTestSDCard     	= {.name=TOGGLE_TEST_SDCARD,			.eventSource="WiFi",   		    .action=testSDCard, 		.view=NULL,			        .dataType = INT_DTYPE};
+static ActionEvent_Typedef actionEventTestSDCard     	= {.name=TEST_SDCARD,			        .eventSource="WiFi",   		    .action=testSDCard, 		.view=NULL,			        .dataType = INT_DTYPE};
+static ActionEvent_Typedef actionEventCanBusControl    	= {.name=CAN_BUS_CONTROL_AE_NAME,		.eventSource="WiFi",   		    .action=canBusControlAE, 	.view=NULL,			        .dataType = CHAR_DTYPE};
+static ActionEvent_Typedef actionEventCanBusSendMsg    	= {.name=CAN_BUS_SEND_MSG_AE_NAME,		.eventSource="WiFi",   		    .action=sendCanBusMsg, 		.view=NULL,			        .dataType = CHAR_DTYPE};
 
 ActionEvent_Typedef *gActionEvents[MAX_ACTION_EVENTS] ={&actionEventToggleMute,
 		                                                &actionEventNextTrack,
@@ -373,5 +404,7 @@ ActionEvent_Typedef *gActionEvents[MAX_ACTION_EVENTS] ={&actionEventToggleMute,
 														&actionEventSetUnixtime,
 														&actionEventGoToSleep,
                                                         &actionEventToggleBuzzer,
-                                                        &actionEventTestSDCard};
+                                                        &actionEventTestSDCard,
+														&actionEventCanBusControl,
+														&actionEventCanBusSendMsg};
 

@@ -14,6 +14,7 @@
 #include "RTCHelper.h"
 #include "w25qxx.h"
 #include "IRReceiver.h"
+#include "CanBus.h"
 #include "AEShell.h"
 
 #if INCLUDE_SEGGER_JLINK != 0
@@ -121,6 +122,10 @@ int main(void) {
 #endif
 #if S4E_USE_IR_RECEIVER != 0
   initIRReeceiver();
+#endif
+
+#if S4E_USE_CAN_BUS != 0
+  initCanBusThreads();
 #endif
 
 #if USE_AE_SHELL != 0

@@ -19,7 +19,10 @@
 #define NEW_HTML_LOADED_AE_NAME				"newHTMLLoaded"
 #define PERFORMANCE_INFO_AE_NAME			"performanceInfo"
 #define TOGGLE_BUZZER_AE_NAME               "toggleBuzzer"
-#define TOGGLE_TEST_SDCARD                  "testSDCard"
+#define TEST_SDCARD                         "testSDCard"
+#define CAN_BUS_CONTROL_AE_NAME             "canBusControl"
+#define CAN_BUS_SEND_MSG_AE_NAME            "canBusSendMsg"
+#define CAN_BUS_ADD_FILTER_AE_NAME          "canBusAddFilter"
 
 #ifdef __cplusplus
  extern "C" {

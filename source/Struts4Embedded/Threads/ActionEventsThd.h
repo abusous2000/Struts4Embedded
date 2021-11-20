@@ -24,6 +24,8 @@
 #define SOURCE_EVENT_IR					    "IR"
 #define SOURCE_EVENT_RC						"RC"
 #define SOURCE_EVENT_LORA					"LoRa"
+#define SOURCE_EVENT_CAN_BUS				"CanBus"
+
 #define DATA_FIELD_WAS_LT_MAX               100
 struct ActionEvent_Typedef;
 typedef int32_t (*onActionEventCallback_t)(struct ActionEvent_Typedef *data);
@@ -51,7 +53,10 @@ typedef struct ActionEvent_Typedef {
 #define ACTION_EVENT_NAME_SIZE              25
 #endif
 #define MAX_DATA_POOL_BUFFERS 				MAIN_QUEUE_SIZE
+
+#ifndef MAX_POOL_BUFFER_SIZE
 #define MAX_POOL_BUFFER_SIZE   				ACTION_EVENT_DATA_MAX_SIZE
+#endif
 typedef struct ActionEventPayload {
     char                        actionEvent[ACTION_EVENT_NAME_SIZE];
     char                        data[ACTION_EVENT_DATA_MAX_SIZE];
