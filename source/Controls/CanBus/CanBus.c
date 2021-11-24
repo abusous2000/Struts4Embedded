@@ -71,15 +71,16 @@ uint8_t packCanFrameForUartTransmission(uint8_t *buf, CANRxFrame *pCanFrame){
 	return bytes;
 }
 static uint8_t logText = CAN_BUS_LOG_TEXT;
-static uint8_t streamDataToSerial = 1;
-static uint8_t playDummyCanBusData = 1;
+static uint8_t streamDataToSerial  = 1;
+static uint8_t playDummyCanBusData = 0;
 static uint32_t cnt = 0;
 static uint8_t checkCanQueue = 1;
 static CanBusMonitorChange_Typedef  headLightMonitor={.msgId=0x622,.actionEventToExecute=TOGGLE_BUZZER_AE_NAME};
 static CanBusMonitorChange_Typedef  *arCanMsgsToMonitor[MAX_CAN_MSGS_TO_MONITOR]={&headLightMonitor};
 
-CC_WEAK void handleCanMsg(CANRxFrame  *pRXFrame) {
-	for(uint8_t i; i < MAX_CAN_MSGS_TO_MONITOR; ++i){
+CC_WEAK uint8_t handleCanMsg(CANRxFrame  *pRXFrame) {
+	uint8_t rc = 0;
+	for(uint8_t i = 0; i < MAX_CAN_MSGS_TO_MONITOR; ++i){
 		if ( arCanMsgsToMonitor[i]->msgId > 0 && arCanMsgsToMonitor[i]->msgId == pRXFrame->SID ){
 			if ( arCanMsgsToMonitor[i]->lastRXFrame.data64[0] != 0 ){
 				if ( memcmp(arCanMsgsToMonitor[i]->lastRXFrame.data8,pRXFrame->data8,8) != 0 ){
@@ -87,9 +88,12 @@ CC_WEAK void handleCanMsg(CANRxFrame  *pRXFrame) {
 					triggerActionEvent(arCanMsgsToMonitor[i]->actionEventToExecute,(char*)arCanMsgsToMonitor[i]->lastRXFrame.data8,0,SOURCE_EVENT_CAN_BUS);
 				}
 			}
+			arCanMsgsToMonitor[i]->lastRXFrame = *pRXFrame;
+			rc = 1;
+			break;
 		}
 	}
-	return;
+	return rc;
 }
 
 void monitorClearCanMsg(uint8_t val) {
@@ -184,9 +188,11 @@ static THD_FUNCTION(dummyDataSenderThd, p) {(void)p;
 
 }
 static void printCanMsg(uint32_t msgId, uint8_t len, uint8_t *data) {
-	dbgprintf("%d#", msgId);
-	for (uint8_t i = 0; i < len; ++i)
-		dbgprintf("%x", data+i);
+	dbgprintf("%x#", msgId);
+	for (uint8_t i = 0; i < len; ++i){
+		char c = *(data+i);
+		dbgprintf("%c", c);
+	}
 	dbgprintf("\r");
 }
 
@@ -198,7 +204,7 @@ static THD_FUNCTION(can_rx, p) {  (void)p;
 
 
 #if CAN_BUS_START_CAN1_THD != 0
-  if (cip->canp == (&can1) )
+  if (cip->canp == (&CAND1) )
      chRegSetThreadName("receiver_can1");
   else
 #endif
@@ -209,13 +215,17 @@ static THD_FUNCTION(can_rx, p) {  (void)p;
       continue;
     while ( checkCanQueue && canReceive(cip->canp, CAN_ANY_MAILBOX,
                       &rxmsg, TIME_IMMEDIATE) == MSG_OK) {
-    	handleCanMsg(&rxmsg);
+    	if ( handleCanMsg(&rxmsg) ){
+            palToggleLine(cip->led);
+            if ( logText )
+    		  dbgprintf("Handled frame\r\n");
+    	}
         uint8_t num_bytes = packCanFrameForUartTransmission(buf,&rxmsg);
         if ( streamDataToSerial )
             sdWriteTimeout(&CAN_BUS_SD, buf, num_bytes, TIME_MS2I(3000));
         if ( logText )
 			printCanMsg(rxmsg.SID,rxmsg.DLC,rxmsg.data8);
-    	palToggleLine(cip->led);
+
     }
   }
   chEvtUnregister(&cip->canp->rxfull_event, &el);
@@ -240,10 +250,10 @@ CC_WEAK void changeFilter(uint32_t idMask1, uint32_t idMask2) {
   canStart(&CAND2, &cancfg);
 
 }
-static   CANDriver     *sendCanDriver = &CAND2;
+static   CANDriver     *sendCanDriver = &CAND1;
 CC_WEAK void sendCanMsg(uint32_t msgId, uint8_t len, uint8_t *pData8) {
   CANTxFrame txmsg;
-  txmsg.IDE = CAN_IDE_EXT;
+  txmsg.IDE = CAN_IDE_STD;
   txmsg.SID = msgId;
   txmsg.RTR = CAN_RTR_DATA;
   txmsg.DLC = len;

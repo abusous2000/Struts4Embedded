@@ -121,16 +121,19 @@
 #define MQTT_CMD_SUBSCRIBE_TOPIC   		"dev/cmd/STM32F407BlackBoard/mp3Player"
 #define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/STM32F407BlackBoard/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithSTM32F407BlackBoard"
-//#define BLACKBOARD_INDUSTRIAL_V4_1
+#define BLACKBOARD_INDUSTRIAL_V4_1
+
+#define LINE_LED_RED3                   PAL_LINE(GPIOG, 9U)//PG9
 //By default, assume it is the new board, see schematic; there are minor changes for pings
-#ifndef BLACKBOARD_INDUSTRIAL_V5_1
-#define LINE_LED_GREEN                  PAL_LINE(GPIOA, 15U)//PA15-18b20-at P8-Right two pin. Left most is ground
+#ifdef BLACKBOARD_INDUSTRIAL_V5_1
+#define LINE_LED_GREEN                  LINE_LED_RED3//PAL_LINE(GPIOA, 15U)//PA15-18b20-at P8-Right two pin. Left most is ground
 #else
-#define LINE_LED_GREEN                  PAL_LINE(GPIOD, 3U)//PD3-18b20-at P8-Right two pin. Left most is ground
+#define LINE_LED_GREEN                  LINE_LED_RED3//PAL_LINE(GPIOD, 3U)//PD3-18b20-at P8-Right two pin. Left most is ground
 #endif
 #define LINE_LED_BLUE                   PAL_LINE(GPIOD, 6U)//PD6-P18-2nd pin - From top let hand corner, left most is ground
 #define LINE_LED_RED                    PAL_LINE(GPIOE, 3U)//PE3
 #define LINE_LED_RED2                   PAL_LINE(GPIOE, 4U)//PE4
+
 
 #ifndef S4E_USE_SDCARD
 #define S4E_USE_SDCARD 			        1
@@ -231,6 +234,27 @@
 #define RC_ICU_AF  				        3
 #define RC_ICU_CHANNEL 			        ICU_CHANNEL_2
 #endif //End-S4E_USE_PPM_FRAME_DECODER
+#ifndef S4E_USE_CAN_BUS
+
+
+
+#define S4E_USE_CAN_BUS		            1
+
+#define CAN_BUS_SD                      PORTAB_SD
+#define CAN_BUS_LED                     LINE_LED_RED2
+#define CAN_BUS_START_CAN1_THD          1
+
+#define CAN1_RX_LINE       				PAL_LINE(GPIOD, 0) //PD0
+#define CAN1_TX_LINE       				PAL_LINE(GPIOD, 1) //PD1
+#define CAN2_RX_LINE                    PAL_LINE(GPIOB, 5) //PB5
+#define CAN2_TX_LINE                    PAL_LINE(GPIOB, 6) //PB6
+
+
+#define CAN_BUS_AF                      9U
+#define CAN_PORT_MODE       	        PAL_MODE_ALTERNATE(CAN_BUS_AF)    |    PAL_STM32_OSPEED_HIGHEST | PAL_MODE_INPUT_PULLUP
+
+#endif//S4E_USE_CAN_BUS
+
 
 #define USERLIB_USE_RF                  0
 #define GO_TO_SLEEP_MACROS      	    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;\

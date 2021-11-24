@@ -358,7 +358,7 @@ static int32_t sendCanBusMsg(ActionEvent_Typedef 	*pActionEvent){(void)pActionEv
 		strlcpy(temp,pActionEvent->u.pData,DATA_FIELD_WAS_LT_MAX);
 		char     *strMsgId 	= strtok(temp,"#");
 		char     *pData 	= strtok(NULL,"#");
-		uint8_t  len        = (uint8_t)(*pData);
+		uint8_t  len        = (uint8_t)(*pData)-'0';
 		uint8_t  *pData8    = (uint8_t*)(pData+1);
 
 		sendCanMsg((uint32_t)strtol(strMsgId, NULL, 16),len,pData8);

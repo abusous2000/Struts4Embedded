@@ -13,25 +13,26 @@
 
 #if S4E_USE_CAN_BUS != 0
 
-#ifdef STM32F4_INDUSTRIAL1_NEW
-#define CAN1_RX_LINE       PAL_LINE(GPIOA, 11)
-#define CAN1_TX_LINE       PAL_LINE(GPIOA, 12)
-#define CAN2_RX_LINE       PAL_LINE(GPIOB, 12)
-#define CAN2_TX_LINE       PAL_LINE(GPIOB, 13)
-#elif defined(STM32F4_INDUSTRIAL1_OLD)
-#define CAN1_RX_LINE       PAL_LINE(GPIOD, 0)
-#define CAN1_TX_LINE       PAL_LINE(GPIOD, 1)
-#define CAN2_RX_LINE       PAL_LINE(GPIOB, 5)
-#define CAN2_TX_LINE       PAL_LINE(GPIOB, 6)
-#elif defined(BOARD_BLACKBOARD_INDUSTRIAL2)
-#define CAN1_RX_LINE       PAL_LINE(GPIOA, 11)
-#define CAN1_TX_LINE       PAL_LINE(GPIOA, 12)
-#define CAN2_RX_LINE       PAL_LINE(GPIOB, 12)
-#define CAN2_TX_LINE       PAL_LINE(GPIOB, 13)
-#else
-#error Can Bus: plz define which board you are using
+#ifndef CAN2_RX_LINE
+	#ifdef STM32F4_INDUSTRIAL1_NEW
+	#define CAN1_RX_LINE       PAL_LINE(GPIOA, 11)
+	#define CAN1_TX_LINE       PAL_LINE(GPIOA, 12)
+	#define CAN2_RX_LINE       PAL_LINE(GPIOB, 12)
+	#define CAN2_TX_LINE       PAL_LINE(GPIOB, 13)
+	#elif defined(STM32F4_INDUSTRIAL1_OLD)
+	#define CAN1_RX_LINE       PAL_LINE(GPIOD, 0)
+	#define CAN1_TX_LINE       PAL_LINE(GPIOD, 1)
+	#define CAN2_RX_LINE       PAL_LINE(GPIOB, 5)
+	#define CAN2_TX_LINE       PAL_LINE(GPIOB, 6)
+	#elif defined(BOARD_BLACKBOARD_INDUSTRIAL2)
+	#define CAN1_RX_LINE       PAL_LINE(GPIOA, 11)
+	#define CAN1_TX_LINE       PAL_LINE(GPIOA, 12)
+	#define CAN2_RX_LINE       PAL_LINE(GPIOB, 12)
+	#define CAN2_TX_LINE       PAL_LINE(GPIOB, 13)
+	#else
+	#error Can Bus: plz define which board you are using
+	#endif
 #endif
-
 #ifndef CAN_BUD_DUMMY_THRD_SLEEP
 #define CAN_BUD_DUMMY_THRD_SLEEP     500
 #endif
@@ -94,6 +95,7 @@ enum CanBusTogglerEnum {
 #ifdef __cplusplus
  extern "C" {
 #endif
+uint8_t handleCanMsg(CANRxFrame  *pRXFrame);
 void canBusControl(uint32_t   canBusToggler);
 void changeFilter(uint32_t idMask1, uint32_t idMask2);
 void initCanBusThreads(void);
