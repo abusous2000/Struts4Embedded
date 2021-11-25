@@ -12,6 +12,7 @@
 #include "ch.h"
 #include "hal.h"
 #include "string.h"
+#include "stdlib.h"
 #include "dbgtrace.h"
 #include "ActionEvents.h"
 #include "CanBus.h"
@@ -75,24 +76,27 @@ static uint8_t streamDataToSerial  = 1;
 static uint8_t playDummyCanBusData = 0;
 static uint32_t cnt = 0;
 static uint8_t checkCanQueue = 1;
-static CanBusMonitorChange_Typedef  headLightMonitor={.msgId=0x622,.actionEventToExecute=TOGGLE_BUZZER_AE_NAME};
+static CanBusMonitorChange_Typedef  headLightMonitor={.msgId=0x622,.monitorByte={0,0,0,1,0,0,0,0},.actionEventToExecute=TOGGLE_BUZZER_AE_NAME};
 static CanBusMonitorChange_Typedef  *arCanMsgsToMonitor[MAX_CAN_MSGS_TO_MONITOR]={&headLightMonitor};
 
 CC_WEAK uint8_t handleCanMsg(CANRxFrame  *pRXFrame) {
 	uint8_t rc = 0;
-	for(uint8_t i = 0; i < MAX_CAN_MSGS_TO_MONITOR; ++i){
-		if ( arCanMsgsToMonitor[i]->msgId > 0 && arCanMsgsToMonitor[i]->msgId == pRXFrame->SID ){
-			if ( arCanMsgsToMonitor[i]->lastRXFrame.data64[0] != 0 ){
-				if ( memcmp(arCanMsgsToMonitor[i]->lastRXFrame.data8,pRXFrame->data8,8) != 0 ){
-					arCanMsgsToMonitor[i]->lastRXFrame = *pRXFrame;
-					triggerActionEvent(arCanMsgsToMonitor[i]->actionEventToExecute,(char*)arCanMsgsToMonitor[i]->lastRXFrame.data8,0,SOURCE_EVENT_CAN_BUS);
+	for(uint8_t i = 0; i < MAX_CAN_MSGS_TO_MONITOR && !rc ; ++i){
+		CanBusMonitorChange_Typedef  *pMonitor = arCanMsgsToMonitor[i];
+
+		if ( pMonitor->msgId > 0 && pMonitor->msgId == pRXFrame->SID){
+			if ( pMonitor->lastRXFrame.data64[0] != 0 ){
+				for(uint8_t j = 0; j < pRXFrame->DLC && !rc; ++j){
+					if ( pMonitor->monitorByte[j] != 0 && pMonitor->lastRXFrame.data8[j] != pRXFrame->data8[j] ){
+						triggerActionEvent(pMonitor->actionEventToExecute,(char*)pRXFrame->data8,0,SOURCE_EVENT_CAN_BUS);
+						rc = 1;
+					}
 				}
 			}
-			arCanMsgsToMonitor[i]->lastRXFrame = *pRXFrame;
-			rc = 1;
-			break;
+			pMonitor->lastRXFrame = *pRXFrame;
 		}
 	}
+
 	return rc;
 }
 
@@ -121,7 +125,7 @@ void monitorClearCanMsg(uint8_t val) {
 	}
 }
 
-CC_WEAK void canBusControl(uint32_t   val) {
+CC_WEAK void canBusControl(uint32_t   val, char *pData) {
 	switch(val){
 	case TOGGLE_CAN_BUS:
 		checkCanQueue = !checkCanQueue;
@@ -131,6 +135,23 @@ CC_WEAK void canBusControl(uint32_t   val) {
 		break;
 	case TOGGLE_CAN_BUS_STREAM_DATA:
 		streamDataToSerial = !streamDataToSerial;
+		break;
+	case CAN_BUS_SET_FILTER:
+		{
+			char *a = pData;
+			char *b = strstr(pData, ";");
+			int position = b - a;
+			if ( pData != NULL && position > 0 && position < 30 ){
+				char temp[ACTION_EVENT_DATA_MAX_SIZE];
+				char *context    = NULL;
+
+				strlcpy(temp,pData,DATA_FIELD_WAS_LT_MAX);
+				char     *mask1Str 	= strtok_r(temp,";",&context);
+				char     *mask2Str 	= strtok_r(NULL,";",&context);
+
+				changeFilter((uint32_t)strtol(mask1Str, NULL, 16),(uint32_t)strtol(mask2Str, NULL, 16));
+			}
+		}
 		break;
 	default:
 		 if (val >= 0x100 ){
@@ -213,8 +234,7 @@ static THD_FUNCTION(can_rx, p) {  (void)p;
   while (true) {
     if (chEvtWaitAnyTimeout(ALL_EVENTS, TIME_MS2I(100)) == 0)
       continue;
-    while ( checkCanQueue && canReceive(cip->canp, CAN_ANY_MAILBOX,
-                      &rxmsg, TIME_IMMEDIATE) == MSG_OK) {
+    while ( checkCanQueue && canReceive(cip->canp, CAN_ANY_MAILBOX,&rxmsg, TIME_IMMEDIATE) == MSG_OK) {
     	if ( handleCanMsg(&rxmsg) ){
             palToggleLine(cip->led);
             if ( logText )
@@ -236,14 +256,15 @@ static CANFilter can_filter[1] = {\
 
 //when idMask1 = idMask2 = 0; the filter is cleared
 CC_WEAK void changeFilter(uint32_t idMask1, uint32_t idMask2) {
-  dbgprintf("Changing filter\r\n");
+  dbgprintf("Changing filter: %x-%x\r\n",idMask1, idMask2);
   can_filter[2].register1 = idMask1<<21;
   can_filter[2].register2 = idMask2<<21;
   checkCanQueue = 0;
-  chThdSleepMilliseconds(500);
+  chThdSleepMilliseconds(250);
   checkCanQueue = 1;
   canStop(&CAND2);
   canStop(&CAND1);
+  chThdSleepMilliseconds(250);
   uint8_t n =  (idMask1 == 0 && idMask2 == 0) ? 0 : 1 ;
   canSTM32SetFilters(&CAND1, 14, n, &can_filter[0]);
   canStart(&CAND1, &cancfg);

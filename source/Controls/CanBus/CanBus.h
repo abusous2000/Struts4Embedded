@@ -81,6 +81,7 @@
 
 typedef struct CanBusMonitorChange_Typedef {
 	uint32_t    msgId;
+	uint8_t     monitorByte[8];
 	char        *actionEventToExecute;
 	CANRxFrame  lastRXFrame;
 }CanBusMonitorChange_Typedef;
@@ -88,7 +89,8 @@ typedef struct CanBusMonitorChange_Typedef {
 enum CanBusTogglerEnum {
   TOGGLE_CAN_BUS               = 1,
   TOGGLE_CAN_BUS_DUMMY_DATA    = 2,
-  TOGGLE_CAN_BUS_STREAM_DATA   = 3
+  TOGGLE_CAN_BUS_STREAM_DATA   = 3,
+  CAN_BUS_SET_FILTER           = 4
 };
 
 #endif//S4E_USE_CAN_BUS
@@ -96,7 +98,7 @@ enum CanBusTogglerEnum {
  extern "C" {
 #endif
 uint8_t handleCanMsg(CANRxFrame  *pRXFrame);
-void canBusControl(uint32_t   canBusToggler);
+void canBusControl(uint32_t   canBusToggler, char *pData);
 void changeFilter(uint32_t idMask1, uint32_t idMask2);
 void initCanBusThreads(void);
 void sendCanMsg(uint32_t msgId, uint8_t len, uint8_t *pData8);

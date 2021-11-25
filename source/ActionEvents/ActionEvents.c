@@ -192,11 +192,14 @@ static int32_t nextTrack(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
 int32_t setRGBLED(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
 #if S4E_USE_RGB == 1
    if ( pActionEvent->u.pData != NULL){
-	   char temp[DATA_FIELD_WAS_LT_MAX];
-	   strlcpy(temp,pActionEvent->u.pData,DATA_FIELD_WAS_LT_MAX);
-       char *strRed 	= strtok(temp,"|");
-       char *strGreen 	= strtok(NULL,"|");
-       char *strBlue 	= strtok(NULL,"|");
+	   char     temp[ACTION_EVENT_DATA_MAX_SIZE];
+	   char     *context    = NULL;
+
+	   strlcpy(temp,pActionEvent->u.pData,ACTION_EVENT_DATA_MAX_SIZE);
+
+       char *strRed 	= strtok_r(temp,"|",&context);
+       char *strGreen 	= strtok_r(NULL,"|",&context);
+       char *strBlue 	= strtok_r(NULL,"|",&context);
 
 	   uint8_t  red 	= strRed!=NULL?  atoi(strRed):  0;
 	   uint8_t  green	= strGreen!=NULL?atoi(strGreen):0;
@@ -216,12 +219,14 @@ int32_t setRGBLED(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
 static int32_t setPWMParams(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
 #if S4E_USE_PWM == 1
 	if ( pActionEvent->u.pData != NULL){
-	   char temp[DATA_FIELD_WAS_LT_MAX];
+	   char     temp[ACTION_EVENT_DATA_MAX_SIZE];
+	   char     *context    = NULL;
+
 	   strlcpy(temp,pActionEvent->u.pData,DATA_FIELD_WAS_LT_MAX);
-	   char *frequency			 	= strtok((char *)temp,"|");
-	   char *period 				= strtok(NULL,"|");
-	   char *firstChannelDutyCycle 	= strtok(NULL,"|");
-	   char *secondChannelDutyCycle = strtok(NULL,"|");
+	   char *frequency			 	= strtok_r((char *)temp,"|",&context);
+	   char *period 				= strtok_r(NULL,"|",&context);
+	   char *firstChannelDutyCycle 	= strtok_r(NULL,"|",&context);
+	   char *secondChannelDutyCycle = strtok_r(NULL,"|",&context);
 
 	   uint32_t iFrequency 	= atoi(frequency);
 	   uint32_t iPeriod     = atoi(period);
@@ -343,8 +348,15 @@ static int32_t testSDCard(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent
 }
 
 static int32_t canBusControlAE(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
-   uint32_t val =  pActionEvent->dataType==CHAR_DTYPE? atoi(pActionEvent->u.pData): (int8_t)pActionEvent->u.data;
-   canBusControl(val);
+   char     *context    = NULL;
+   char     temp[ACTION_EVENT_DATA_MAX_SIZE];
+
+   strlcpy(temp,pActionEvent->u.pData,ACTION_EVENT_DATA_MAX_SIZE);
+
+   char     *actionId 	= strtok_r(temp,"#",&context);
+   char     *pData 	    = strtok_r(NULL,"#",&context);
+
+   canBusControl(atoi(actionId),pData);
 
    return MSG_OK;
 }
@@ -353,11 +365,12 @@ static int32_t canBusControlAE(ActionEvent_Typedef 	*pActionEvent){(void)pAction
 ///MSGFormat:XXX#<LEN><Data>
 static int32_t sendCanBusMsg(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
 	if ( pActionEvent->u.pData != NULL){
-		char temp[DATA_FIELD_WAS_LT_MAX];
+		char temp[ACTION_EVENT_DATA_MAX_SIZE];
+		char *context    = NULL;
 
-		strlcpy(temp,pActionEvent->u.pData,DATA_FIELD_WAS_LT_MAX);
-		char     *strMsgId 	= strtok(temp,"#");
-		char     *pData 	= strtok(NULL,"#");
+		strlcpy(temp,pActionEvent->u.pData,ACTION_EVENT_DATA_MAX_SIZE);
+		char     *strMsgId 	= strtok_r(temp,"#",&context);
+		char     *pData 	= strtok_r(NULL,"#",&context);
 		uint8_t  len        = (uint8_t)(*pData)-'0';
 		uint8_t  *pData8    = (uint8_t*)(pData+1);
 
