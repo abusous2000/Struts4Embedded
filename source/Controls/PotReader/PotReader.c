@@ -58,6 +58,7 @@ static void adcerrorcallback(ADCDriver *adcp, adcerror_t err) {
   (void)err;
 }
 /*
+ * https://www.playembedded.org/blog/stm32-adc-chibios/
  * ADC conversion group.
  * Mode:   Continuous, 1 channel, HW triggered by GPT4-TRGO.
  * NOTES for ADC config... plz see Ref. Manual for diagram on page 439, note on the lower right hand corner-->TIM4_TGRO

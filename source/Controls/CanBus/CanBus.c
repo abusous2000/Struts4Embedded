@@ -4,7 +4,9 @@
  *  Created on: Nov 14, 2021
  *      Author: abusous2000
  */
-
+/*
+ * Use project the modified version of USBtinViewer to view the Can Msgs on Desktop streamed via serial
+ */
 
 #include "Strust4EmbeddedConf.h"
 #if S4E_USE_CAN_BUS != 0

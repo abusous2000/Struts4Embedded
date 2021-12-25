@@ -16,7 +16,7 @@ ActionEvent_Typedef *sendActionEvent(char *aeName){
 	  ActionEvent_Typedef     *pActionEvent = (ActionEvent_Typedef*)chFifoTakeObjectI(pMainQueue);//Get a free object from pool
 
 	  pActionEvent->processed = 0;
-	  //Do memory copy ONLY after you receive a NULL pointer.
+	  //Do memory copy ONLY after you receive a none NULL pointer.
 	 *pActionEvent =    *tmp;
 	 chFifoSendObjectI(pMainQueue,pActionEvent);
 
