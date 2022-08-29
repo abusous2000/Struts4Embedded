@@ -94,8 +94,8 @@ CHIBIOS  := ../../..
 BOARD_NAME := stm32f407_blackboard_industrial2
 STRUTS4EMBEDDED :=$(CHIBIOS)/demos/STM32/Struts4Embedded/source/Struts4Embedded
 include $(STRUTS4EMBEDDED)/CommonS4EVars.mk
-INCLUDE_SEGGER_JLINK := "no"
-INCLUDE_SEGGER_JLINK_VALUE :=0
+INCLUDE_SEGGER_JLINK := "yes"
+INCLUDE_SEGGER_JLINK_VALUE :=1
 USE_MAC := "yes"
 USE_AE_SHELL := "yes"
 USE_AE_SHELL_VALUE := 0

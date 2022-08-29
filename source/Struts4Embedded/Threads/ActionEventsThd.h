@@ -71,7 +71,7 @@ ActionEvent_Typedef *getActionEvent(char *aeName);
 void ActonEventThd(void *arg);
 int8_t getActionEventNdx(char *aeName);
 ActionEventPayload_Typedef *parseActionEventPayload(char *payload, ActionEventPayload_Typedef *pAEPayload);
-ActionEvent_Typedef *sendActionEvent(char *aeName);
+ActionEvent_Typedef *sendActionEventI(char *aeName);
 ActionEvent_Typedef *triggerActionEventFromISR(char *aeName, char *pData,  uint32_t data,char *eventSource);
 ActionEvent_Typedef *triggerActionEvent(char *aeName, char *pData,  uint32_t data, char *eventSource);
 void initActonEventThd(void);

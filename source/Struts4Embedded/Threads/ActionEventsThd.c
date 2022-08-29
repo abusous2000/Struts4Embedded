@@ -9,7 +9,7 @@ static guarded_memory_pool_t guardedDataBufferMemoryPool  = {0};
 static dyn_objects_fifo_t 	 *dynObjMainQueueFIFO		  = NULL;
 static map_t                 *actionEventsMap             = NULL;
 
-ActionEvent_Typedef *sendActionEvent(char *aeName){
+ActionEvent_Typedef *sendActionEventI(char *aeName){
   ActionEvent_Typedef     *tmp = getActionEvent(aeName);//This is more like memcpy the AE definition, & later override the pData field, see triggerActionEventNoLock()
 
   if ( tmp != NULL){
@@ -52,7 +52,7 @@ static void initActionEvents(void){
    initStruts4EmbeddedFramework();
    return;
 }
-ActionEvent_Typedef *triggerActionEventNoLock(char *aeName, char *pData, uint32_t data, char *eventSource){
+ActionEvent_Typedef *triggerActionEventNoLockI(char *aeName, char *pData, uint32_t data, char *eventSource){
   if ( !isActonEventThdInitialized() ){
 	 chSysHalt("ActonEventThd hasn't been initialized. Plz call initActonEventThd() in your startup code");
   }
@@ -60,7 +60,7 @@ ActionEvent_Typedef *triggerActionEventNoLock(char *aeName, char *pData, uint32_
    * Note that after this method is executed; the thread is not released yet.
    * It will be once chSchRescheduleS(); & chSysUnlock(); are done
    */
-  ActionEvent_Typedef *pAE = sendActionEvent(aeName);
+  ActionEvent_Typedef *pAE = sendActionEventI(aeName);
 
   if ( pAE == NULL )
 	  return NULL;
@@ -87,7 +87,7 @@ ActionEvent_Typedef *triggerActionEventNoLock(char *aeName, char *pData, uint32_
 
 ActionEvent_Typedef *triggerActionEvent(char *aeName, char *pData, uint32_t data, char *eventSource){
   chSysLock();
-  ActionEvent_Typedef *pAE = triggerActionEventNoLock(aeName,pData,data,eventSource);
+  ActionEvent_Typedef *pAE = triggerActionEventNoLockI(aeName,pData,data,eventSource);
   /*##############IMPORTANT###################
    * YOU MUST CALL chSchRescheduleS() method else you might crash; see comment @chSysUnlock(void) in chsys.h for details
    * The following condition can be triggered by the use of i-class functions
@@ -105,7 +105,7 @@ ActionEvent_Typedef *triggerActionEvent(char *aeName, char *pData, uint32_t data
 }
 ActionEvent_Typedef *triggerActionEventFromISR(char *aeName, char *pData, uint32_t data, char *eventSource){
   chSysLockFromISR();
-  ActionEvent_Typedef *pAE = triggerActionEventNoLock(aeName,pData,data,eventSource);
+  ActionEvent_Typedef *pAE = triggerActionEventNoLockI(aeName,pData,data,eventSource);
   chSysUnlockFromISR();
 
   return pAE;

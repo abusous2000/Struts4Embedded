@@ -174,7 +174,7 @@ static THD_WORKING_AREA(can_rx2_wa, 1024);
 static THD_WORKING_AREA(dummyDataSenderThd_wa, 1024);
 #endif
 
-static THD_FUNCTION(dummyDataSenderThd, p) {(void)p;
+THD_FUNCTION(dummyDataSenderThd, p) {(void)p;
   CANRxFrame    testMsg     =  {0};
   SerialDriver *sCandp      =  &CAN_BUS_SD;
   SerialDriver *sGeneralp   =  &PORTAB_SD;
@@ -219,7 +219,7 @@ static void printCanMsg(uint32_t msgId, uint8_t len, uint8_t *data) {
 	dbgprintf("\r");
 }
 
-static THD_FUNCTION(can_rx, p) {  (void)p;
+THD_FUNCTION(can_rx, p) {  (void)p;
   struct can_instance *cip = p;
   event_listener_t el;
   CANRxFrame rxmsg;

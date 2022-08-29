@@ -111,13 +111,33 @@ void reconnectDefaultMQTTBroker(void){
 	if ( isDefaultMQTTBrokerConnected() == false )
 		mqttBrokerConnect(&defaultBroker);
 }
-
+#if 1
 void sendToTopicMQTTQueue(MqttPublishInfo_Typedef *pPublishInfo, char *payload){
 	MqttConnection_Typedef *pMqttConnection=&defaultBroker;
 
 	if ( isMQTTBrokerConnected(pMqttConnection) ){
 		 err_t err = mqttBrokerPublishMessage(pMqttConnection,pPublishInfo,payload);
 		 if ( err != ERR_OK){
+			 //After three failed attempts; disconnect from broker. Once that is detected be the driver
+			 //it will automatically call onBrokerDisconnection() and re-connect will be attempted
+			 if ( ++pMqttConnection->error >= MAX_RETRY_AFTER_BROKER_DISCONNECTS)
+				mqttBrokerDisconnect(pMqttConnection);
+			 return;
+		 }
+		 else
+	        pMqttConnection->error = 0;
+	}
+    else
+	    dbgprintf("+++Thd:%s-->Broker Disconnected\r\n", chThdGetSelfX()->name);
+}
+#else
+void sendToTopicMQTTQueue(MqttPublishInfo_Typedef *pPublishInfo, char *payload){
+	MqttConnection_Typedef *pMqttConnection=&defaultBroker;
+
+	if ( isMQTTBrokerConnected(pMqttConnection) ){
+		 err_t err = mqttBrokerPublishMessage(pMqttConnection,pPublishInfo,payload);
+		 if ( err != ERR_OK){
+
 			 if ( ++pMqttConnection->error >= MAX_RETRY_AFTER_BROKER_DISCONNECTS)
 				mqttBrokerDisconnect(pMqttConnection);
 		 }
@@ -128,6 +148,7 @@ void sendToTopicMQTTQueue(MqttPublishInfo_Typedef *pPublishInfo, char *payload){
 	if ( isMQTTBrokerConnected(pMqttConnection) )
 		mqttBrokerPublishMessage(pMqttConnection,pPublishInfo,payload);
 }
+#endif
 void sendToDefaultMQTTQueue(char *payload){
 	sendToTopicMQTTQueue(&defaultMQTTTopicInfo,payload);
 }

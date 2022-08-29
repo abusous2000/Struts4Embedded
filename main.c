@@ -132,7 +132,7 @@ int main(void) {
  initAEShell();
 #endif
 
-  while (true) {
+ while (true) {
 	  chThdSleepMilliseconds(1500);
 	  #if S4E_USE_MQTT != 0
 	  if ( !isDefaultMQTTBrokerConnected() )
@@ -212,5 +212,44 @@ static void initUSBCFG(void){
 	usbConnectBus(serusbcfg.usbp);
 
 	sdStart(&PORTAB_SD_VCP, &myserialcfg);
+}
+#endif
+
+#if INCLUDE_SEGGER_JLINK != 0
+extern void tname(void *arg);
+extern void irReceiverThd(void *arg);
+extern void BlinkerThd(void *arg);
+extern void eByteLoraThread(void *arg);
+extern void can_rx(void *arg);
+extern void dummyDataSenderThd(void *arg);
+extern void BlinkerThd(void *arg);
+extern void lwip_thread(void *arg);
+
+char *_getThreadName(tfunc_t pf){
+	if ( pf == ActonEventThd)
+		return "ActonEventThd";
+	else
+	if ( pf == irReceiverThd)
+		return "irReceiverThd";
+	else
+	if ( pf == dummyDataSenderThd)
+		return "dummyDataSenderThd";
+	else
+	if ( pf == can_rx)
+		return "can_rx";
+	else
+	if ( pf == lwip_thread)
+		return "lwip_thread";
+	else
+	if ( pf == BlinkerThd)
+		return "BlinkerThd";
+	else
+	if ( pf == eByteLoraThread)
+		return "eByteLoraThread";
+	else
+	if ( pf == shellThread)
+		return "shellThread";
+	else
+	   return "noname";
 }
 #endif
