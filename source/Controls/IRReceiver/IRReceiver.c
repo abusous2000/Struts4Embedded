@@ -32,12 +32,14 @@ static int32_t index = -1;
 static bool START_OCCURED = FALSE, REPEAT_FLAG = FALSE;
 static IR_CMD_t tmp, command;
 icucnt_t cntW = 0;
+#ifdef RAW_IR
 static void icuwidthcbRAW(ICUDriver *icup) {
 	  cntW = icuGetWidthX(icup);
 	  chSysLockFromISR();
 	  chEvtBroadcastFlagsI(&IR_receiver, 0);
 	  chSysUnlockFromISR();
 }
+#else
 static void icuwidthcb(ICUDriver *icup) {
 
   icucnt_t cnt = icuGetWidthX(icup);
@@ -75,6 +77,7 @@ static void icuwidthcb(ICUDriver *icup) {
     /* Long dead pulse nothing to do */
   }
 }
+#endif
 
 static ICUConfig icucfg = {
   ICU_INPUT_ACTIVE_HIGH,
@@ -86,7 +89,7 @@ static ICUConfig icucfg = {
 #endif
   NULL,
   NULL,
-  ICU_CHANNEL_1,
+  PORTABLE_ICU_CHANNEL,
   0,
   0xFFFFFFFFU
 };

@@ -111,6 +111,12 @@ void eByteLoraSendFrame(int8_t buttonPressed){
 
 }
 #endif
+static int32_t togglePPM(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
+
+  toggleEnableDisablePPMDecoder();
+
+  return MSG_OK;
+}
 
 
 static int32_t toggleMute(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
@@ -401,6 +407,8 @@ static ActionEvent_Typedef actionEventToggleBuzzer     	= {.name=TOGGLE_BUZZER_A
 static ActionEvent_Typedef actionEventTestSDCard     	= {.name=TEST_SDCARD,			        .eventSource="WiFi",   		    .action=testSDCard, 		.view=NULL,			        .dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventCanBusControl    	= {.name=CAN_BUS_CONTROL_AE_NAME,		.eventSource="WiFi",   		    .action=canBusControlAE, 	.view=NULL,			        .dataType = CHAR_DTYPE};
 static ActionEvent_Typedef actionEventCanBusSendMsg    	= {.name=CAN_BUS_SEND_MSG_AE_NAME,		.eventSource="WiFi",   		    .action=sendCanBusMsg, 		.view=NULL,			        .dataType = CHAR_DTYPE};
+static ActionEvent_Typedef actionEventTogglePPM      	= {.name=TOGGLE_PPM_AE_NAME,		    .eventSource="WiFi",   		    .action=togglePPM, 		    .view=NULL,			        .dataType = INT_DTYPE};
+
 
 ActionEvent_Typedef *gActionEvents[MAX_ACTION_EVENTS] ={&actionEventToggleMute,
 		                                                &actionEventNextTrack,
@@ -419,5 +427,6 @@ ActionEvent_Typedef *gActionEvents[MAX_ACTION_EVENTS] ={&actionEventToggleMute,
                                                         &actionEventToggleBuzzer,
                                                         &actionEventTestSDCard,
 														&actionEventCanBusControl,
-														&actionEventCanBusSendMsg};
+														&actionEventCanBusSendMsg,
+														&actionEventTogglePPM};
 

@@ -6,6 +6,7 @@
  */
 /*
  * Use project the modified version of USBtinViewer to view the Can Msgs on Desktop streamed via serial
+ * See readme.txt file too
  */
 
 #include "Strust4EmbeddedConf.h"
@@ -46,8 +47,8 @@ static uint32_t getRandomData32(void){
 }
 
 static const CANConfig cancfg = {
-  .mcr=CAN_MCR_ABOM | CAN_MCR_AWUM | CAN_MCR_TXFP,
-  .btr=CAN_BTR_SJW(CAN_BUS_BTR_SJW) | CAN_BTR_TS2(CAN_BUS_BTR_TS2) | CAN_BTR_TS1(CAN_BUS_BTR_TS1) | CAN_BTR_BRP(CAN_BUS_BTR_BRP)
+  .mcr=CAN_BUS_MCR,
+  .btr=CAN_BUT_BTR_FLAGS
 };
 
 uint8_t halfbyte_to_hexascii(uint8_t _halfbyte){
@@ -255,12 +256,12 @@ THD_FUNCTION(can_rx, p) {  (void)p;
 static CANFilter can_filter[1] = {\
                             {.filter=14,  .mode=1, .scale=1, .assignment=0, .register1=0xC5<<21, .register2=0xC7<<21}
                           };
-
+//watch from 4:00 & 6:32 in https://www.youtube.com/watch?v=NS3eeZPUDns&list=PLERTijJOmYrApVZqiI6gtA8hr1_6QS-cs&index=20
 //when idMask1 = idMask2 = 0; the filter is cleared
 CC_WEAK void changeFilter(uint32_t idMask1, uint32_t idMask2) {
   dbgprintf("Changing filter: %x-%x\r\n",idMask1, idMask2);
-  can_filter[2].register1 = idMask1<<21;
-  can_filter[2].register2 = idMask2<<21;
+  can_filter[0].register1 = idMask1<<21;
+  can_filter[0].register2 = idMask2<<21;
   checkCanQueue = 0;
   chThdSleepMilliseconds(250);
   checkCanQueue = 1;

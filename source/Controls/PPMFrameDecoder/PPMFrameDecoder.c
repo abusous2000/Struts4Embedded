@@ -127,6 +127,10 @@ CC_WEAK void onChannelPPMValueChange(uint8_t ch, uint8_t currentValue, uint8_t n
   dbgprintf("OnChangeChannelValue: %d\t%d\t%d\r\n", ch, currentValue, newValue);
 }
 
+void toggleEnableDisablePPMDecoder(void){
+	enablePPMDecoder(currentPPMDecoderState?false:true);
+}
+
 void enablePPMDecoder(bool enable){
 	if ( enable)
 		icuEnableNotifications(&RC_ICUD);

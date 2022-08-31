@@ -23,6 +23,7 @@
 #define CAN_BUS_CONTROL_AE_NAME             "canBusControl"
 #define CAN_BUS_SEND_MSG_AE_NAME            "canBusSendMsg"
 #define CAN_BUS_ADD_FILTER_AE_NAME          "canBusAddFilter"
+#define TOGGLE_PPM_AE_NAME                  "togglePPM"
 
 #ifdef __cplusplus
  extern "C" {

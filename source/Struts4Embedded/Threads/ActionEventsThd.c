@@ -44,7 +44,7 @@ int8_t getActionEventNdx(char *aeName){
 
    return pAE!=NULL?pAE->ndx:-1;
 }
-
+//See http://www.chibios.org/dokuwiki/doku.php?id=chibios:documentation:books:rt:oslib_objects_fifo for details
 static void initActionEvents(void){
    dynObjMainQueueFIFO = chFactoryCreateObjectsFIFO(MAIN_ACTION_EVENTS_QUEUE,sizeof(ActionEvent_Typedef),MAIN_QUEUE_SIZE,PORT_NATURAL_ALIGN);
    pMainQueue = &(dynObjMainQueueFIFO->fifo);
