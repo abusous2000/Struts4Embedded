@@ -164,9 +164,9 @@
 //This is the receiver/client
 #ifndef S4E_USE_EBYTE_LORA
 #define S4E_USE_EBYTE_LORA              1
+#define EBYTE_LORA_SERVER               0
 #endif
 #if S4E_USE_EBYTE_LORA != 0
-#define EBYTE_LORA_SERVER               0
 #define PORTAB_EBYTE_LORA_SD 			SD3
 
 #define EBYTE_LORA_TX 	    			PAL_LINE(GPIOB, 10U)//PB10

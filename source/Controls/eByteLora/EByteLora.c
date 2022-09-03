@@ -25,6 +25,7 @@ static const SerialConfig eBytecfg = {
   0
 };
 
+static bool 				enableEbyte 			   = true;
 
 static EByteParams_TypeDef  eByteDefaultParams = {._AddressHigh	=DEFAULT_ADDRESS_HIGH,
 										   ._AddressLow		=DEFAULT_ADDRESS_LOW,
@@ -349,11 +350,24 @@ CC_WEAK void eByteProcessReceivedMsg(EByteLoRaFrame_TypeDef	*pEByteLoRaFrame, My
 	return;
 }
 
+void toggleEnableDisableEByteLora(void){
+	enableEbyteThd(enableEbyte?false:true);
+}
+void enableEbyteThd(bool enable){
+	enableEbyte = enable;
+	dbgprintf("Setting enableEbyte: %d\r\n", enable);
+}
 static THD_WORKING_AREA(waEByteLoraThread, EBYTE_LORA_THD_STACK_SIZE);
 THD_FUNCTION(eByteLoraThread, arg) {(void)arg;
 	chRegSetThreadName("eByteLoraThd");
     eByteInit();
 	while (true) {
+
+		if ( enableEbyte == false ){
+			dbgprintf("eByte Lora Thd disabled\r\n");
+			chThdSleepSeconds(120);
+			continue;
+		}
 		#if EBYTE_LORA_SERVER != 0
 			#if EBYTE_LORA_SEND_PERIODIC_MSG != 0
 			eByteSendPeriodicMsg();

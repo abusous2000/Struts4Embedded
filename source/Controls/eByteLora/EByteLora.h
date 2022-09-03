@@ -270,6 +270,8 @@ void eByteProcessReplyMsgs(void);
 void eByteProcessReceivedMsg( EByteLoRaFrame_TypeDef	*pEByteLoRaFrame, MyMessage_TypeDef *pMyPayload);
 void initEByteLoraThread(void);
 void eByteSendAckMsg(EByteLoRaFrame_TypeDef	*pEByteLoRaFrame);
+void enableEbyteThd(bool enable);
+void toggleEnableDisableEByteLora(void);
 #ifdef __cplusplus
  }
 #endif

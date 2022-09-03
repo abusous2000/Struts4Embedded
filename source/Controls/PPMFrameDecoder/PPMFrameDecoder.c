@@ -130,7 +130,10 @@ CC_WEAK void onChannelPPMValueChange(uint8_t ch, uint8_t currentValue, uint8_t n
 void toggleEnableDisablePPMDecoder(void){
 	enablePPMDecoder(currentPPMDecoderState?false:true);
 }
-
+static bool ppmDebug = false;
+void toggleDebugPPMDecoder(void){
+	ppmDebug = !ppmDebug;
+}
 void enablePPMDecoder(bool enable){
 	if ( enable)
 		icuEnableNotifications(&RC_ICUD);
@@ -166,8 +169,7 @@ static THD_FUNCTION(ppmDecoderThread, arg) {(void)arg;
 			 chSysUnlock();
 			 uint8_t filledBatch = !currentBatch;
 			 uint8_t base = filledBatch * MAX_FRAMES_TO_COLLECT;
-			 #if PPM_DECODING_DEBUG != 0
-			 for(int i = 0; i < MAX_FRAMES_TO_COLLECT; ++i){
+			 for(int i = 0;ppmDebug && i < MAX_FRAMES_TO_COLLECT; ++i){
 				 PPM_FRAME_TYPDEF   *pCurrentPWM = &PPM_Frame[base+i];
 				 dbgprintf("Frame:%d\tDuration: %d\tNDX:%d\t",pCurrentPWM->frameID,pCurrentPWM->frameDurationMicroSec,i);
 				 for(int j = 0;j < MAX_CHANNELS; ++j){
@@ -182,7 +184,7 @@ static THD_FUNCTION(ppmDecoderThread, arg) {(void)arg;
 				 }
 				 dbgprintf("\r\n");
 			 }
-			 #endif
+
 			 PPM_FRAME_TYPDEF   *pLastPPMFrame = &PPM_Frame[base+lastValue];
 			 for(int j = 0;j < MAX_CHANNELS; ++j){
 				 if ( pLastPPMFrame->valueInCycles[j] > 0 && pLastPPMFrame->valueInCycles[j] != mostRecentFrame.valueInCycles[j] )

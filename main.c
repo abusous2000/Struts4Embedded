@@ -243,9 +243,11 @@ char *_getThreadName(tfunc_t pf){
 	else
 	if ( pf == BlinkerThd)
 		return "BlinkerThd";
+#if S4E_USE_EBYTE_LORA != 0
 	else
 	if ( pf == eByteLoraThread)
 		return "eByteLoraThread";
+#endif
 	else
 	if ( pf == shellThread)
 		return "shellThread";

@@ -100,6 +100,7 @@ typedef struct {
 void onChannelPPMValueChange(uint8_t ch, uint8_t currentValue, uint8_t newValue);
 void enablePPMDecoder(bool enable);
 void initPPMFrameDecoder(void);
+void toggleDebugPPMDecoder(void);
 void toggleEnableDisablePPMDecoder(void);
 ButtonStats_Typedef getRCButtonStatus(uint8_t value);
 

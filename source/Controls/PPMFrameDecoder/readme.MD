@@ -1,5 +1,5 @@
 If you decide to use *[FlySky-i6s](https://github.com/abusous2000/Struts4Embedded/tree/master/source/Controls/PPMFrameDecoder)* to send control signals via RC, please note the following:
    - configure RC output to be PPM & i-Bus in the system config menu & make sure it is already bounded to the receiver. 
-   - All you need is to wire 3 pins: ground, 5V, and PPM. 
+   - All you need is to wire 3 pins: ground, 5V, and PPM. Remember, to power the receiver from external source; i.e. TTL cable.
    - Note that current configuration by default ignores every other 9 frames, which could be [adjusted by changing MAX_FRAMES_TO_COLLECT](https://github.com/abusous2000/Struts4Embedded/blob/master/source/Controls/PPMFrameDecoder/PPMFrameDecoder.h#L67). This is needed because PPM frames are coming fast; & this is needed to reach steady state quickly else flickering states will be reported (especially for buttons).
-   - Also note that if you use SD-Card; you may have to power the receiver externally and not directly powered from the board's pins (unless the board is powered externally and not from USB).
+   - Also note that if you use SD-Card; you may have to power the receiver externally and not directly powered from the board's pins (unless the board is powered externally and not via USB cable).
