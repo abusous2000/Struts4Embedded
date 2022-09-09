@@ -235,7 +235,6 @@
 #define S4E_USE_IBUS                    1
 
 #define IBUS_UART_RX                    PAL_LINE(GPIOC, 7U)//PC7 w/ uart6
-
 #define IBUS_SD                         SD6
 #define IBUS_PIN_MODE                   PAL_MODE_ALTERNATE(8)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL
 
