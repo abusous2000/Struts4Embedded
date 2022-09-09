@@ -277,10 +277,13 @@ static int32_t setPWMParams(ActionEvent_Typedef 	*pActionEvent){(void)pActionEve
 }
 #if S4E_USE_PPM_FRAME_DECODER != 0
 static uint8_t  				lastCh3Value = 0;
+static ButtonStats_Typedef  	rcSWA = BUTTON_STATE_UNKNOWN;
+static ButtonStats_Typedef  	rcSWB = BUTTON_STATE_UNKNOWN;
+
 void onChannelPPMValueChange (uint8_t ch, uint8_t currentValue, uint8_t newValue){
 	ButtonStats_Typedef buttonStatus;
     uint8_t    toggleLED = 0;
-	dbgprintf("OnChangeChannelValue: %d\t%d\t%d\r\n", ch, currentValue, newValue);
+    uint8_t    printDebugInfo = 0;
 	switch(ch){
 		case RC_CH3:{
 			uint32_t  currentValue =  100 *(newValue-RC_MIN_VALUE)/(RC_MAX_VALUE - RC_MIN_VALUE);
@@ -290,24 +293,31 @@ void onChannelPPMValueChange (uint8_t ch, uint8_t currentValue, uint8_t newValue
 				triggerActionEvent(SET_VOLUME_AE_NAME,NULL,currentValue,"RC");
 				toggleLED = 1;
 			}
+			printDebugInfo =1;
 		}
 		break;
-
-		case RC_SWB:
-			buttonStatus = getRCButtonStatus(newValue);
-			if ( buttonStatus != BUTTON_STATE_UNKNOWN){
-				toggleLED = 1;
-				triggerActionEvent(TOGGLE_PAUSE_AE_NAME,NULL,buttonStatus,"RC");
-			}
-			break;
 		case RC_SWA:
 			buttonStatus = getRCButtonStatus(newValue);
-			if ( buttonStatus != BUTTON_STATE_UNKNOWN){
+			if ( buttonStatus != BUTTON_STATE_UNKNOWN && rcSWA != buttonStatus ){
 				toggleLED = 1;
 				triggerActionEvent(TOGGLE_MUTE_AE_NAME,NULL,buttonStatus,"RC");
+				rcSWA = buttonStatus;
 			}
+			printDebugInfo =1;
+			break;
+		case RC_SWB:
+			buttonStatus = getRCButtonStatus(newValue);
+			if ( buttonStatus != BUTTON_STATE_UNKNOWN && rcSWB != buttonStatus){
+				toggleLED = 1;
+				triggerActionEvent(TOGGLE_PAUSE_AE_NAME,NULL,buttonStatus,"RC");
+				rcSWB = buttonStatus;
+			}
+			printDebugInfo =1;
 			break;
 	}
+	if ( printDebugInfo )
+	    dbgprintf("OnChangeChannelValue: %d\t%d\t%d\r\n", ch, currentValue, newValue);
+
 #ifdef LINE_LED_RED
 	if ( toggleLED )
   	    pRedLedPAL->toggle(pRedLedPAL);

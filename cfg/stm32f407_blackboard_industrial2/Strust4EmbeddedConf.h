@@ -136,7 +136,7 @@
 
 
 #ifndef S4E_USE_SDCARD
-#define S4E_USE_SDCARD 			        1
+#define S4E_USE_SDCARD 			        0
 #endif
 #if S4E_USE_SDCARD != 0
 #include "board.h"
@@ -154,6 +154,8 @@
 #ifndef S4E_USE_IR_RECEIVER
 #define S4E_USE_IR_RECEIVER		        1
 #endif
+
+
 #if S4E_USE_IR_RECEIVER != 0
 #define PORTABLE_ICU_LINE 				PAL_LINE(GPIOC, 6U) //PC6
 #define PORTABLE_ICUD 					ICUD8
@@ -211,9 +213,10 @@
 #ifndef S4E_USE_PPM_FRAME_DECODER
 #define S4E_USE_PPM_FRAME_DECODER		1
 #endif
+
 #if S4E_USE_PPM_FRAME_DECODER != 0
 #define PPM_DECODING_DEBUG				0
-#define FREQUENCY_USED          		50000
+#define PPM_FREQUENCY_USED         		50000
 #define RC_MIN_VALUE                    30
 #define RC_MID_VALUE                    55
 #define RC_MAX_VALUE                    80
@@ -229,14 +232,29 @@
 #define CH4_CB 							{PWM_OUTPUT_DISABLED, NULL}
 #endif
 
+#define S4E_USE_IBUS                    1
+
+#define IBUS_UART_RX                    PAL_LINE(GPIOD, 2U)//PD2-in conflict with SDIO
+#define IBUS_UART_TX                    PAL_LINE(GPIOC, 12U)//PC12-in conflict with SDIO
+#define IBUS_SD                         SD5
+
+#if 1
 #define RC_ICU_LINE 				    PAL_LINE(GPIOE, 6)//PE6-FSMC_D7--2nd lower hand corner P18
 #define RC_ICUD 					    ICUD9
 #define RC_ICU_AF  				        3
 #define RC_ICU_CHANNEL 			        ICU_CHANNEL_2
+
+#else
+#define RC_ICU_LINE 				    PAL_LINE(GPIOC, 6U)
+#define RC_ICUD 					    ICUD8
+#define RC_ICU_AF  				        3
+#define RC_ICU_CHANNEL 			        ICU_CHANNEL_1
+#endif
+
 #endif //End-S4E_USE_PPM_FRAME_DECODER
+
+
 #ifndef S4E_USE_CAN_BUS
-
-
 
 #define S4E_USE_CAN_BUS		            1
 

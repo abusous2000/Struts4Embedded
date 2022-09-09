@@ -11,8 +11,8 @@
 #ifndef PPM_THD_STACK_SIZE
 #define PPM_THD_STACK_SIZE             	512
 #endif
-#ifndef FREQUENCY_USED
-#define FREQUENCY_USED          		60000
+#ifndef PPM_FREQUENCY_USED
+#define PPM_FREQUENCY_USED          		60000
 #endif
 #ifndef PERIOD_USED
 #define PERIOD_USED          		    60000
@@ -59,20 +59,27 @@
 #define RC_SWF 							9
 #endif
 
-#define TimeFromCycles2US(x)        	((x * 1000000)/FREQUENCY_USED)
+#define TimeFromCycles2US(x)        	((x * 1000000)/PPM_FREQUENCY_USED)
 #ifndef MAX_CHANNELS
-#define MAX_CHANNELS   					10
+#define MAX_CHANNELS   					8
 #endif
 #ifndef MAX_FRAMES_TO_COLLECT
-#define MAX_FRAMES_TO_COLLECT     		2
+#define MAX_FRAMES_TO_COLLECT     		10
 #endif
-#ifndef MIN_GAP
-#define MIN_GAP        					200
+#ifndef PPM_MIN_GAP_BTWN_FRAMES
+#define PPM_MIN_GAP_BTWN_FRAMES     	450
 #endif
-#define BUTTON_IN_MARGIN(x,y)          ( x >= (y-RC_ERR_MARGIN) &&  x <= (y+RC_ERR_MARGIN))
 
+#ifndef PPM_CHANNEL_WIDTH
+#define PPM_CHANNEL_WIDTH        		100
+#endif
+#define PPM_WITHIN_MARGIN(x,y)          (x >= (y-RC_ERR_MARGIN) &&  x <= (y+RC_ERR_MARGIN))
 
-
+#define IBUS_LENGTH                     0x20
+#define IBUS_COMMAND40                  0x40
+#define IBUS_MAX_CHANNLES               14
+#define IBUS_PIN_MODE                   PAL_MODE_ALTERNATE(8)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL
+#define IBUS_SLEEP_BTWN_MSGS            150
 enum ButtonStats {
   BUTTON_STATE_LOW     = 0,
   BUTTON_STATE_MID     = 1,

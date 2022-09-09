@@ -11,18 +11,19 @@
 #include "ch.h"
 #include "hal.h"
 #include <string.h>
+#include <stdlib.h>
 #include "dbgtrace.h"
 #include "PPMFrameDecoder.h"
 #include "ccportab.h"
 
 ButtonStats_Typedef getRCButtonStatus(uint8_t value){
-	if ( BUTTON_IN_MARGIN(value,RC_MIN_VALUE) )
+	if ( PPM_WITHIN_MARGIN(value,RC_MIN_VALUE) )
 		return BUTTON_STATE_LOW;
 	else
-	if ( BUTTON_IN_MARGIN(value,RC_MID_VALUE) )
+	if ( PPM_WITHIN_MARGIN(value,RC_MID_VALUE) )
 		return BUTTON_STATE_MID;
 	else
-	if ( BUTTON_IN_MARGIN(value,RC_MAX_VALUE) )
+	if ( PPM_WITHIN_MARGIN(value,RC_MAX_VALUE) )
 		return BUTTON_STATE_HIGH;
 	else
 		return BUTTON_STATE_UNKNOWN;
@@ -69,11 +70,9 @@ static bool 				currentPPMDecoderState 			   = true;
 thread_reference_t 	ppmDecoderThdRef 	= NULL;
 static void icuwidthcb(ICUDriver *icup) {
   last_width = icuGetWidthX(icup);
-}
+  icucnt_t lastWidth=last_width;
 
-static void icuperiodcb(ICUDriver *icup) {
-  last_period = icuGetPeriodX(icup);
-  if ( last_period >= MIN_GAP ){
+  if ( last_width >= PPM_MIN_GAP_BTWN_FRAMES ){
 	  bool invalidFrame = currentChannel < (MAX_CHANNELS -2);
 	  pCurrentPPM_Frame->end = chVTGetSystemTimeX();
 	  if ( pCurrentPPM_Frame->start > 0 ){
@@ -100,23 +99,22 @@ static void icuperiodcb(ICUDriver *icup) {
 	  pCurrentPPM_Frame->start   = chVTGetSystemTimeX();
 	  pCurrentPPM_Frame->frameID = invalidFrame?frame:++frame;
  }
-  else{
+ else
+ if ( PPM_WITHIN_MARGIN(last_width,PPM_CHANNEL_WIDTH) ){
 	  currentChannel = currentChannel >= (MAX_CHANNELS -1)?0:currentChannel;
 	  pCurrentPPM_Frame->valueInCycles[currentChannel]  = last_width;
 	  pCurrentPPM_Frame->period[currentChannel] 		= last_period;
 	  currentChannel++;
  }
 }
-static void icuovfcb(ICUDriver *icup) {
-  (void)icup;
-}
+
 
 static ICUConfig icucfg = {
   .mode=ICU_INPUT_ACTIVE_HIGH,
-  .frequency=FREQUENCY_USED,                                    /* 10kHz ICU clock frequency.   */
+  .frequency=PPM_FREQUENCY_USED,  //50kHz ICU clock frequency
   .width_cb=icuwidthcb,
-  .period_cb=icuperiodcb,
-  .overflow_cb=icuovfcb,
+  .period_cb=NULL,//icuperiodcb,
+  .overflow_cb=NULL,
   .channel=RC_ICU_CHANNEL,
   .dier=0,
   .arr=0xFFFFFFFFU
@@ -143,27 +141,83 @@ void enablePPMDecoder(bool enable){
 	currentPPMDecoderState = enable;
 	dbgprintf("PPMDecoder State: %d\r\n", enable);
 }
+
+
+
+#if S4E_USE_IBUS != 0
+uint16_t channel[MAX_CHANNELS] = {0};
+
+static const SerialConfig iBusSerialcfg = {
+  115200,
+  0,
+  USART_CR2_STOP1_BITS,
+  0
+};
+#endif
+
 static THD_WORKING_AREA(wappmDecoderThread, PPM_THD_STACK_SIZE);
 static THD_FUNCTION(ppmDecoderThread, arg) {(void)arg;
     chRegSetThreadName("ppmDecoderThread");
 
-	#ifdef PORTABLE_PWM_LINE
-	pwmStart(&PORTABLE_PWMD, &pwmcfg);
-	pwmEnablePeriodicNotification(&PORTABLE_PWMD);
-	palSetLineMode(PORTABLE_PWM_LINE, PAL_MODE_ALTERNATE(PORTABLE_PWM_AF));
-	#endif
+#if S4E_USE_IBUS != 0
+	palSetLineMode(IBUS_UART_RX, IBUS_PIN_MODE);
+	palSetLineMode(IBUS_UART_TX, IBUS_PIN_MODE);
+	sdStart(&IBUS_SD, &iBusSerialcfg);
+#else
 	icuStart(&RC_ICUD, &icucfg);
 	palSetLineMode(RC_ICU_LINE, PAL_MODE_ALTERNATE(RC_ICU_AF));
 
-	#ifdef PORTABLE_PWM_LINE
-	pwmEnableChannel(&PORTABLE_PWMD, PORTABLE_PWM_CHANNEL, PWM_PERCENTAGE_TO_WIDTH(&PORTABLE_PWMD, FREQUENCY_USED * .75));
-	pwmEnableChannelNotification(&PORTABLE_PWMD, PORTABLE_PWM_CHANNEL);
-    #endif
 	icuStartCapture(&RC_ICUD);
 	icuEnableNotifications(&RC_ICUD);
 	uint8_t lastValue = MAX_FRAMES_TO_COLLECT > 1?MAX_FRAMES_TO_COLLECT-1:0;
+#endif
+
 	while (true) {
 		if ( currentPPMDecoderState ){
+#if S4E_USE_IBUS != 0
+			uint16_t checksum_cal, checksum_ibus;
+			uint8_t rx_buffer[32] = {0};
+			uint16_t channel_buffer[IBUS_MAX_CHANNLES] = {0};
+
+			size_t byteRead = sdReadTimeout(&IBUS_SD,rx_buffer, 32, TIME_MS2I(100));
+			if ( byteRead == 0 ) continue;
+			else
+			if(rx_buffer[0] == IBUS_LENGTH && rx_buffer[1] == IBUS_COMMAND40){
+				checksum_cal = 0xffff - rx_buffer[0] - rx_buffer[1];
+				for(int i = 0; i < IBUS_MAX_CHANNLES; i++){
+					channel_buffer[i] = (uint16_t)(rx_buffer[i * 2 + 3] << 8 | rx_buffer[i * 2 + 2]);
+					checksum_cal = checksum_cal - rx_buffer[i * 2 + 3] - rx_buffer[i * 2 + 2];
+
+				}
+				checksum_ibus = rx_buffer[31] << 8 | rx_buffer[30];
+				PPM_FRAME_TYPDEF   *pLastPPMFrame = &PPM_Frame[0];
+				if(checksum_cal == checksum_ibus){
+					for(int j = 0; j < MAX_CHANNELS; j++){
+						pLastPPMFrame->valueInCycles[j] = (uint8_t)(PPM_FREQUENCY_USED/channel_buffer[j]);
+						 int delta = pLastPPMFrame->valueInCycles[j] - mostRecentFrame.valueInCycles[j];
+						 if ( pLastPPMFrame->valueInCycles[j] > 0 && delta != 0 && abs(delta) > RC_ERR_MARGIN  )
+							 onChannelPPMValueChange(j,mostRecentFrame.valueInCycles[j],pLastPPMFrame->valueInCycles[j]);
+					}
+					 mostRecentFrame = *pLastPPMFrame;
+				}
+
+				if ( ppmDebug ){
+				    dbgprintf("RC Channel Values:");
+					for(int i = 0; i < IBUS_MAX_CHANNLES; i++){
+					    dbgprintf("%d\t", channel_buffer[i]);
+					}
+				    dbgprintf("\r\n");
+				}
+
+				if ( IBUS_SLEEP_BTWN_MSGS > 0 )
+				   chThdSleepMilliseconds(IBUS_SLEEP_BTWN_MSGS);
+			}
+			else{
+				//process other messages
+				;
+			}
+
+#else
 			 chSysLock();
 			 msg_t reInit = chThdSuspendS((thread_reference_t *)&ppmDecoderThdRef);
 			 chSysUnlock();
@@ -187,10 +241,13 @@ static THD_FUNCTION(ppmDecoderThread, arg) {(void)arg;
 
 			 PPM_FRAME_TYPDEF   *pLastPPMFrame = &PPM_Frame[base+lastValue];
 			 for(int j = 0;j < MAX_CHANNELS; ++j){
-				 if ( pLastPPMFrame->valueInCycles[j] > 0 && pLastPPMFrame->valueInCycles[j] != mostRecentFrame.valueInCycles[j] )
+				 int delta = pLastPPMFrame->valueInCycles[j] - mostRecentFrame.valueInCycles[j];
+				 if ( pLastPPMFrame->valueInCycles[j] > 0 && delta != 0 && abs(delta) > RC_ERR_MARGIN  )
 					 onChannelPPMValueChange(j,mostRecentFrame.valueInCycles[j],pLastPPMFrame->valueInCycles[j]);
 			 }
+
 			 mostRecentFrame = *pLastPPMFrame;
+#endif
 		}
 		else
 			chThdSleepMilliseconds(1000);

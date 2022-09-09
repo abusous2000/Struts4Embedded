@@ -228,30 +228,33 @@ extern void lwip_thread(void *arg);
 char *_getThreadName(tfunc_t pf){
 	if ( pf == ActonEventThd)
 		return "ActonEventThd";
-	else
+#if S4E_USE_IR_RECEIVER != 0
 	if ( pf == irReceiverThd)
 		return "irReceiverThd";
-	else
+#endif
+#if S4E_USE_CAN_BUS != 0
 	if ( pf == dummyDataSenderThd)
 		return "dummyDataSenderThd";
-	else
+
 	if ( pf == can_rx)
 		return "can_rx";
-	else
+#endif
+#if S4E_USE_ETHERNET != 0
 	if ( pf == lwip_thread)
 		return "lwip_thread";
-	else
+#endif
+#if S4E_USE_BLINKER_THD != 0
 	if ( pf == BlinkerThd)
 		return "BlinkerThd";
+#endif
 #if S4E_USE_EBYTE_LORA != 0
-	else
 	if ( pf == eByteLoraThread)
 		return "eByteLoraThread";
 #endif
-	else
+#if USE_AE_SHELL != 0
 	if ( pf == shellThread)
 		return "shellThread";
-	else
+#endif
 	   return "noname";
 }
 #endif
