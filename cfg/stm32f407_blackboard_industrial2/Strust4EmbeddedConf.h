@@ -136,7 +136,7 @@
 
 
 #ifndef S4E_USE_SDCARD
-#define S4E_USE_SDCARD 			        0
+#define S4E_USE_SDCARD 			        1
 #endif
 #if S4E_USE_SDCARD != 0
 #include "board.h"
