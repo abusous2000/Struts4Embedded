@@ -121,10 +121,17 @@ static ICUConfig icucfg = {
 };
 
 //A weak/virtual function that could be overridden in other modules
-CC_WEAK void onChannelPPMValueChange(uint8_t ch, uint8_t currentValue, uint8_t newValue){
-  dbgprintf("OnChangeChannelValue: %d\t%d\t%d\r\n", ch, currentValue, newValue);
+CC_WEAK void onChannelPPMValueChange(uint8_t ch, PPM_FRAME_TYPDEF   *pCurrentPPMFrame, PPM_FRAME_TYPDEF   *pLastPPMFrame ){
+	printPPMValueChange(ch,pCurrentPPMFrame,pLastPPMFrame);
 }
 
+void printPPMValueChange(uint8_t ch, PPM_FRAME_TYPDEF   *pCurrentPPMFrame, PPM_FRAME_TYPDEF   *pLastPPMFrame ){
+#if S4E_USE_IBUS != 0
+  dbgprintf("iBus OnChangeChannel (%d) Value: %d / %d\t%d / %d\r\n", ch, pCurrentPPMFrame->rawValue[ch], pLastPPMFrame->rawValue[ch], pCurrentPPMFrame->valueInCycles[ch], pLastPPMFrame->valueInCycles[ch]);
+#else
+  dbgprintf("PPM OnChangeChannel (%d) Value: %d\t%d\r\n", ch, pCurrentPPMFrame->valueInCycles[ch], pLastPPMFrame->valueInCycles[ch]);
+#endif
+}
 void toggleEnableDisablePPMDecoder(void){
 	enablePPMDecoder(currentPPMDecoderState?false:true);
 }
@@ -161,7 +168,6 @@ static THD_FUNCTION(ppmDecoderThread, arg) {(void)arg;
 
 #if S4E_USE_IBUS != 0
 	palSetLineMode(IBUS_UART_RX, IBUS_PIN_MODE);
-	palSetLineMode(IBUS_UART_TX, IBUS_PIN_MODE);
 	sdStart(&IBUS_SD, &iBusSerialcfg);
 #else
 	icuStart(&RC_ICUD, &icucfg);
@@ -171,49 +177,60 @@ static THD_FUNCTION(ppmDecoderThread, arg) {(void)arg;
 	icuEnableNotifications(&RC_ICUD);
 	uint8_t lastValue = MAX_FRAMES_TO_COLLECT > 1?MAX_FRAMES_TO_COLLECT-1:0;
 #endif
-
+    const double freqInSec = (double)((double)PPM_FREQUENCY_USED/1000000);
 	while (true) {
 		if ( currentPPMDecoderState ){
 #if S4E_USE_IBUS != 0
 			uint16_t checksum_cal, checksum_ibus;
-			uint8_t rx_buffer[32] = {0};
-			uint16_t channel_buffer[IBUS_MAX_CHANNLES] = {0};
+			uint8_t rx_buffer[IBUS_BUFF_LEN] = {0};
+			uint16_t channelRawValues[IBUS_MAX_CHANNLES] = {0};
 
-			size_t byteRead = sdReadTimeout(&IBUS_SD,rx_buffer, 32, TIME_MS2I(100));
-			if ( byteRead == 0 ) continue;
+			size_t byteRead = sdReadTimeout(&IBUS_SD,rx_buffer, IBUS_BUFF_LEN, TIME_MS2I(100));
+			if ( byteRead == 0 )
+				continue;
 			else
-			if(rx_buffer[0] == IBUS_LENGTH && rx_buffer[1] == IBUS_COMMAND40){
+			if( IS_IBUS_CH_COMMAND40(rx_buffer) ){
 				checksum_cal = 0xffff - rx_buffer[0] - rx_buffer[1];
 				for(int i = 0; i < IBUS_MAX_CHANNLES; i++){
-					channel_buffer[i] = (uint16_t)(rx_buffer[i * 2 + 3] << 8 | rx_buffer[i * 2 + 2]);
+					channelRawValues[i] = (uint16_t)(rx_buffer[i * 2 + 3] << 8 | rx_buffer[i * 2 + 2]);
 					checksum_cal = checksum_cal - rx_buffer[i * 2 + 3] - rx_buffer[i * 2 + 2];
 
 				}
-				checksum_ibus = rx_buffer[31] << 8 | rx_buffer[30];
+				checksum_ibus = rx_buffer[IBUS_BUFF_LEN - 1] << 8 | rx_buffer[IBUS_BUFF_LEN-2];
+
 				PPM_FRAME_TYPDEF   *pLastPPMFrame = &PPM_Frame[0];
+
+				pLastPPMFrame->source = IBUS_SIGNAL_SRC;
 				if(checksum_cal == checksum_ibus){
-					for(int j = 0; j < MAX_CHANNELS; j++){
-						pLastPPMFrame->valueInCycles[j] = (uint8_t)(PPM_FREQUENCY_USED/channel_buffer[j]);
-						 int delta = pLastPPMFrame->valueInCycles[j] - mostRecentFrame.valueInCycles[j];
-						 if ( pLastPPMFrame->valueInCycles[j] > 0 && delta != 0 && abs(delta) > RC_ERR_MARGIN  )
-							 onChannelPPMValueChange(j,mostRecentFrame.valueInCycles[j],pLastPPMFrame->valueInCycles[j]);
+					for(int i = 0; i < MAX_CHANNELS; i++){
+						pLastPPMFrame->rawValue[i]      = channelRawValues[i];
+						pLastPPMFrame->valueInCycles[i] = (uint8_t)(channelRawValues[i]*freqInSec);
+
+						int delta = pLastPPMFrame->valueInCycles[i] - mostRecentFrame.valueInCycles[i];
+						if ( pLastPPMFrame->valueInCycles[i] > 0 && delta != 0 && abs(delta) > RC_ERR_MARGIN  )
+							 onChannelPPMValueChange(i,&mostRecentFrame,pLastPPMFrame);
 					}
-					 mostRecentFrame = *pLastPPMFrame;
+					mostRecentFrame = *pLastPPMFrame;
 				}
 
 				if ( ppmDebug ){
 				    dbgprintf("RC Channel Values:");
 					for(int i = 0; i < IBUS_MAX_CHANNLES; i++){
-					    dbgprintf("%d\t", channel_buffer[i]);
+					    dbgprintf("(%d)%d\t", i+1, channelRawValues[i]);
 					}
 				    dbgprintf("\r\n");
 				}
 
-				if ( IBUS_SLEEP_BTWN_MSGS > 0 )
+				if ( IBUS_SLEEP_BTWN_MSGS > 0 ){
 				   chThdSleepMilliseconds(IBUS_SLEEP_BTWN_MSGS);
+				   chSysLock();
+				   oqResetI(&IBUS_SD.iqueue);
+				   chSchRescheduleS();
+				   chSysUnlock();
+				}
 			}
 			else{
-				//process other messages
+				//TODO:process other messages
 				;
 			}
 
@@ -240,10 +257,12 @@ static THD_FUNCTION(ppmDecoderThread, arg) {(void)arg;
 			 }
 
 			 PPM_FRAME_TYPDEF   *pLastPPMFrame = &PPM_Frame[base+lastValue];
+
+			 pLastPPMFrame->source = PPM_SIGNAL_SRC;
 			 for(int j = 0;j < MAX_CHANNELS; ++j){
 				 int delta = pLastPPMFrame->valueInCycles[j] - mostRecentFrame.valueInCycles[j];
 				 if ( pLastPPMFrame->valueInCycles[j] > 0 && delta != 0 && abs(delta) > RC_ERR_MARGIN  )
-					 onChannelPPMValueChange(j,mostRecentFrame.valueInCycles[j],pLastPPMFrame->valueInCycles[j]);
+					 onChannelPPMValueChange(j,&mostRecentFrame,pLastPPMFrame);
 			 }
 
 			 mostRecentFrame = *pLastPPMFrame;

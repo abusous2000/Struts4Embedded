@@ -280,10 +280,12 @@ static uint8_t  				lastCh3Value = 0;
 static ButtonStats_Typedef  	rcSWA = BUTTON_STATE_UNKNOWN;
 static ButtonStats_Typedef  	rcSWB = BUTTON_STATE_UNKNOWN;
 
-void onChannelPPMValueChange (uint8_t ch, uint8_t currentValue, uint8_t newValue){
+void onChannelPPMValueChange(uint8_t ch, PPM_FRAME_TYPDEF   *pCurrentPPMFrame, PPM_FRAME_TYPDEF   *pLastPPMFrame ){
 	ButtonStats_Typedef buttonStatus;
     uint8_t    toggleLED = 0;
     uint8_t    printDebugInfo = 0;
+    uint8_t    currentValue = pCurrentPPMFrame->valueInCycles[ch];
+    uint8_t    newValue = pLastPPMFrame->valueInCycles[ch];
 	switch(ch){
 		case RC_CH3:{
 			uint32_t  currentValue =  100 *(newValue-RC_MIN_VALUE)/(RC_MAX_VALUE - RC_MIN_VALUE);
@@ -316,7 +318,7 @@ void onChannelPPMValueChange (uint8_t ch, uint8_t currentValue, uint8_t newValue
 			break;
 	}
 	if ( printDebugInfo )
-	    dbgprintf("OnChangeChannelValue: %d\t%d\t%d\r\n", ch, currentValue, newValue);
+		printPPMValueChange(ch,pCurrentPPMFrame,pLastPPMFrame);
 
 #ifdef LINE_LED_RED
 	if ( toggleLED )

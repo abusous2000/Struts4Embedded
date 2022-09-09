@@ -12,22 +12,22 @@
 #define PPM_THD_STACK_SIZE             	512
 #endif
 #ifndef PPM_FREQUENCY_USED
-#define PPM_FREQUENCY_USED          		60000
+#define PPM_FREQUENCY_USED          	50000
 #endif
 #ifndef PERIOD_USED
-#define PERIOD_USED          		    60000
+#define PERIOD_USED          		    50000
 #endif
 #ifndef RC_ERR_MARGIN
 #define RC_ERR_MARGIN                   2
 #endif
 #ifndef RC_MIN_VALUE
-#define RC_MIN_VALUE                    36
+#define RC_MIN_VALUE                    50
 #endif
 #ifndef RC_MAX_VALUE
-#define RC_MAX_VALUE                    96
+#define RC_MAX_VALUE                    100
 #endif
 #ifndef RC_MID_VALUE
-#define RC_MID_VALUE                    66
+#define RC_MID_VALUE                    75
 #endif
 
 #define RC_CH1							0
@@ -78,19 +78,27 @@
 #define IBUS_LENGTH                     0x20
 #define IBUS_COMMAND40                  0x40
 #define IBUS_MAX_CHANNLES               14
-#define IBUS_PIN_MODE                   PAL_MODE_ALTERNATE(8)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL
+#define IBUS_BUFF_LEN                   32
 #define IBUS_SLEEP_BTWN_MSGS            150
+
+#define IS_IBUS_CH_COMMAND40(Y)         (Y[0] == IBUS_LENGTH && Y[1] == IBUS_COMMAND40)
 enum ButtonStats {
   BUTTON_STATE_LOW     = 0,
   BUTTON_STATE_MID     = 1,
   BUTTON_STATE_HIGH    = 2,
   BUTTON_STATE_UNKNOWN = 3
 };
-
 typedef enum ButtonStats ButtonStats_Typedef;
+
+enum RC_SIGNAL_SRC {
+  IBUS_SIGNAL_SRC    = 0,
+  PPM_SIGNAL_SRC     = 1
+};
+typedef enum RC_SIGNAL_SRC RC_SIGNAL_SRC_Typedef;
 
 typedef struct {
 	uint8_t   		valueInCycles[MAX_CHANNELS];
+	uint32_t   		rawValue[MAX_CHANNELS];
 	uint8_t  		period[MAX_CHANNELS];
 	uint32_t  		gap;
 	bool      		processed;
@@ -99,12 +107,14 @@ typedef struct {
 	systime_t   	end;
 	sysinterval_t	frameDuration;
 	uint32_t 	    frameDurationMicroSec;
+	RC_SIGNAL_SRC_Typedef   source;
 }PPM_FRAME_TYPDEF;
 
 #ifdef __cplusplus
  extern "C" {
 #endif
-void onChannelPPMValueChange(uint8_t ch, uint8_t currentValue, uint8_t newValue);
+void printPPMValueChange(uint8_t ch, PPM_FRAME_TYPDEF   *pCurrentPPMFrame, PPM_FRAME_TYPDEF   *pLastPPMFrame );
+void onChannelPPMValueChange(uint8_t ch, PPM_FRAME_TYPDEF   *pCurrentPPMFrame, PPM_FRAME_TYPDEF   *pLastPPMFrame );
 void enablePPMDecoder(bool enable);
 void initPPMFrameDecoder(void);
 void toggleDebugPPMDecoder(void);
