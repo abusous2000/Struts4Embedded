@@ -234,22 +234,17 @@
 
 #define S4E_USE_IBUS                    1
 
-#define IBUS_UART_RX                    PAL_LINE(GPIOD, 2U)//PD2-in conflict with SDIO
-#define IBUS_SD                         SD5
+#define IBUS_UART_RX                    PAL_LINE(GPIOC, 7U)//PC7 w/ uart6
+
+#define IBUS_SD                         SD6
 #define IBUS_PIN_MODE                   PAL_MODE_ALTERNATE(8)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL
 
-#if 1
+
 #define RC_ICU_LINE 				    PAL_LINE(GPIOE, 6)//PE6-FSMC_D7--2nd lower hand corner P18
 #define RC_ICUD 					    ICUD9
 #define RC_ICU_AF  				        3
 #define RC_ICU_CHANNEL 			        ICU_CHANNEL_2
 
-#else
-#define RC_ICU_LINE 				    PAL_LINE(GPIOC, 6U)
-#define RC_ICUD 					    ICUD8
-#define RC_ICU_AF  				        3
-#define RC_ICU_CHANNEL 			        ICU_CHANNEL_1
-#endif
 
 #endif //End-S4E_USE_PPM_FRAME_DECODER
 
