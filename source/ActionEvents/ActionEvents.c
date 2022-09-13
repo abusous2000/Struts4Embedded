@@ -311,7 +311,8 @@ void onChannelPPMValueChange(uint8_t ch, PPM_FRAME_TYPDEF   *pCurrentPPMFrame, P
 			buttonStatus = getRCButtonStatus(newValue);
 			if ( buttonStatus != BUTTON_STATE_UNKNOWN && rcSWB != buttonStatus){
 				toggleLED = 1;
-				triggerActionEvent(TOGGLE_PAUSE_AE_NAME,NULL,buttonStatus,"RC");
+				//triggerActionEvent(TOGGLE_PAUSE_AE_NAME,NULL,buttonStatus,"RC");
+				triggerActionEvent(TOGGLE_BUZZER_AE_NAME,NULL,buttonStatus,"RC");
 				rcSWB = buttonStatus;
 			}
 			printDebugInfo =1;

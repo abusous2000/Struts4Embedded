@@ -47,6 +47,7 @@ thread_reference_t 	ppmDecoderThdRef 	= NULL;
 
 #if S4E_USE_IBUS == 0
 
+#if 0
 static void icuwidthcb(ICUDriver *icup) {
   last_width = icuGetWidthX(icup);
 
@@ -88,6 +89,7 @@ static void icuperiodcb(ICUDriver *icup) {
 	  currentChannel++;
  }
 }
+#endif
 
 static systime_t            lastPulseEndTime;
 

@@ -24,7 +24,7 @@
 #if S4E_USE_IBUS != 0
 #define RC_BUTTON_ADJ                  25
 #else
-#define RC_BUTTON_ADJ                  0
+#define RC_BUTTON_ADJ                  6
 #endif
 
 #ifndef RC_BUTTON_MIN_VALUE
