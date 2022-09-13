@@ -217,26 +217,17 @@
 #if S4E_USE_PPM_FRAME_DECODER != 0
 #define PPM_DECODING_DEBUG				0
 #define PPM_FREQUENCY_USED         		50000
-#define RC_MIN_VALUE                    50
-#define RC_MID_VALUE                    75
-#define RC_MAX_VALUE                    100
-#define MAX_FRAMES_TO_COLLECT     		10
-#if 0
-#define PORTABLE_PWM_LINE 				LINE_ARD_D5 //PC8
-#define PORTABLE_PWMD 					PWMD8
-#define PORTABLE_PWM_AF  				2
-#define PORTABLE_PWM_CHANNEL			2
-#define CH1_CB 							{PWM_OUTPUT_DISABLED, NULL}
-#define CH2_CB 							{PWM_OUTPUT_DISABLED, NULL}
-#define CH3_CB 							{PWM_OUTPUT_ACTIVE_HIGH, pwmc1cb}
-#define CH4_CB 							{PWM_OUTPUT_DISABLED, NULL}
-#endif
 
-#define S4E_USE_IBUS                    1
+#define MAX_FRAMES_TO_COLLECT     		10
+
+#define S4E_USE_IBUS                    0
 
 #define IBUS_UART_RX                    PAL_LINE(GPIOC, 7U)//PC7 w/ uart6
-#define IBUS_SD                         SD6
-#define IBUS_PIN_MODE                   PAL_MODE_ALTERNATE(8)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL
+#define IBUS_UART_RX3                    PAL_LINE(GPIOB, 11U)//PB11 in conflict with Lora w/ uart3
+#define IBUS_SD3                         SD3//in conflict with LORA SD
+#define IBUS_SD                        SD6
+#define IBUS_PIN_MODE                  PAL_MODE_ALTERNATE(8)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL
+#define IBUS_PIN_MODE3                   PAL_MODE_ALTERNATE(7)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL
 
 
 #define RC_ICU_LINE 				    PAL_LINE(GPIOE, 6)//PE6-FSMC_D7--2nd lower hand corner P18

@@ -20,14 +20,21 @@
 #ifndef RC_ERR_MARGIN
 #define RC_ERR_MARGIN                   2
 #endif
-#ifndef RC_MIN_VALUE
-#define RC_MIN_VALUE                    50
+
+#if S4E_USE_IBUS != 0
+#define RC_BUTTON_ADJ                  25
+#else
+#define RC_BUTTON_ADJ                  0
 #endif
-#ifndef RC_MAX_VALUE
-#define RC_MAX_VALUE                    100
+
+#ifndef RC_BUTTON_MIN_VALUE
+#define RC_BUTTON_MIN_VALUE            (25+RC_BUTTON_ADJ)
 #endif
-#ifndef RC_MID_VALUE
-#define RC_MID_VALUE                    75
+#ifndef RC_BUTTON_MAX_VALUE
+#define RC_BUTTON_MAX_VALUE            (75+RC_BUTTON_ADJ)
+#endif
+#ifndef RC_BUTTON_MID_VALUE
+#define RC_BUTTON_MID_VALUE            (50+RC_BUTTON_ADJ)
 #endif
 
 #define RC_CH1							0
@@ -67,13 +74,14 @@
 #define MAX_FRAMES_TO_COLLECT     		10
 #endif
 #ifndef PPM_MIN_GAP_BTWN_FRAMES
-#define PPM_MIN_GAP_BTWN_FRAMES     	450
+#define PPM_MIN_GAP_BTWN_FRAMES     	230
 #endif
 
 #ifndef PPM_CHANNEL_WIDTH
 #define PPM_CHANNEL_WIDTH        		100
 #endif
-#define PPM_WITHIN_MARGIN(x,y)          (x >= (y-RC_ERR_MARGIN) &&  x <= (y+RC_ERR_MARGIN))
+#define PPM_WITHIN_MARGIN(x,y)          (x >= (y-RC_ERR_MARGIN) && x <= (y+RC_ERR_MARGIN))
+#define IS_VALID_PPM_VALUE(x)           (x >= (RC_BUTTON_MIN_VALUE-RC_ERR_MARGIN) && x <= (81+RC_ERR_MARGIN))
 
 #define IBUS_LENGTH                     0x20
 #define IBUS_COMMAND40                  0x40
@@ -102,6 +110,7 @@ typedef struct {
 	uint8_t  		period[MAX_CHANNELS];
 	uint32_t  		gap;
 	bool      		processed;
+	uint8_t  		channelsCollected;
 	uint32_t  		frameID;
 	systime_t   	start;
 	systime_t   	end;

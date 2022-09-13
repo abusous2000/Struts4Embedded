@@ -288,7 +288,7 @@ void onChannelPPMValueChange(uint8_t ch, PPM_FRAME_TYPDEF   *pCurrentPPMFrame, P
     uint8_t    newValue = pLastPPMFrame->valueInCycles[ch];
 	switch(ch){
 		case RC_CH3:{
-			uint32_t  currentValue =  100 *(newValue-RC_MIN_VALUE)/(RC_MAX_VALUE - RC_MIN_VALUE);
+			uint32_t  currentValue =  100 *(newValue-RC_BUTTON_MIN_VALUE)/(RC_BUTTON_MAX_VALUE - RC_BUTTON_MIN_VALUE);
 			int8_t   delta         = currentValue- lastCh3Value;
 
 			if ( delta > 2 ){
