@@ -28,7 +28,7 @@ CPalTypedef 		  			*pGreenLedPAL = NULL, *pCenterKey= NULL,    *pUpKey= NULL,
                                 *pDownKey= NULL,      *pLeftKey  = NULL,    *pRightKey= NULL,
 								*pBuzzer= NULL,       *pRgb= NULL,          *pEasyLinkKey= NULL,
 								*pEasyLinkKey0= NULL, *pEasyLinkKey1= NULL, *pYellow= NULL,
-								*pRed2LedPAL= NULL,   *pBlueLedPAL= NULL;
+								*pRed2LedPAL= NULL,   *pBlueLedPAL= NULL,   *pRelayPAL= NULL;
 
 #if S4E_USE_BUZZER != 0
 static CPalTypedef buzzer={     .line=BUZZER_LINE,          .mode=LED_MODE};
@@ -49,6 +49,10 @@ static CPalTypedef red2LedPAL={  .line=LINE_LED_RED2,       	.mode=LED_MODE};
 #if defined(LINE_LED_BLUE)
 CPalTypedef 		  			*pRedLedPAL;
 static CPalTypedef blueLedPAL={  .line=LINE_LED_BLUE,       	.mode=LED_MODE};
+#endif
+#if defined(LINE_RELAY)
+CPalTypedef 		  			*pRedLedPAL;
+static CPalTypedef relayPAL={  .line=LINE_RELAY,       	.mode=LED_MODE};
 #endif
 #if S4E_USE_JOYSTICK != 0
 #ifdef LINE_JOY_CENTER
@@ -108,6 +112,11 @@ void initButtonsLEDs(void) {
 #if defined(LINE_LED_BLUE)
   pBlueLedPAL 	   = initCPalInstance(&blueLedPAL);
   pBlueLedPAL->init(&blueLedPAL);
+#endif
+
+#if defined(LINE_RELAY)
+  pRelayPAL 	   = initCPalInstance(&relayPAL);
+  pRelayPAL->init(&relayPAL);
 #endif
 
 #if S4E_USE_JOYSTICK != 0

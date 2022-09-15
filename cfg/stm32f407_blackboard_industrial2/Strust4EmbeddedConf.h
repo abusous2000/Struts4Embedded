@@ -134,6 +134,7 @@
 #define LINE_LED_RED                    PAL_LINE(GPIOE, 3U)//PE3
 #define LINE_LED_RED2                   PAL_LINE(GPIOE, 4U)//PE4
 
+#define LINE_RELAY                      PAL_LINE(GPIOD, 14U)//PD14
 
 #ifndef S4E_USE_SDCARD
 #define S4E_USE_SDCARD 			        1

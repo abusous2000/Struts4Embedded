@@ -24,6 +24,7 @@
 #define CAN_BUS_SEND_MSG_AE_NAME            "canBusSendMsg"
 #define CAN_BUS_ADD_FILTER_AE_NAME          "canBusAddFilter"
 #define TOGGLE_ENABLE_MODULE_AE_NAME        "toggleModule"
+#define TOGGLE_RELAY_MODULE_AE_NAME         "toggleRelay"
 
 #ifdef __cplusplus
  extern "C" {
