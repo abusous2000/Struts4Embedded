@@ -5,13 +5,14 @@
  *      Author: abusous2000
  */
 #include "Strust4EmbeddedConf.h"
+#if S4E_USE_CAN_BUS != 0
 #include "ch.h"
 #include "hal.h"
 
 #ifndef SOURCE_CONTROLS_CANBUS_CANBUS_H_
 #define SOURCE_CONTROLS_CANBUS_CANBUS_H_
 
-#if S4E_USE_CAN_BUS != 0
+
 
 #ifndef CAN2_RX_LINE
 	#ifdef STM32F4_INDUSTRIAL1_NEW

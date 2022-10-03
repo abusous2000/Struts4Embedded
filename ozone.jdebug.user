@@ -1,0 +1,17 @@
+
+OpenDocument="main.c", FilePath="/home/abusous2000/ChibiOS_21.6.0/demos/STM32/Struts4Embedded/main.c", Line=0
+OpenToolbar="View", Floating=0, x=0, y=0
+OpenToolbar="Debug", Floating=0, x=1, y=0
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=1, w=582, h=335, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Memory 1", DockArea=FLOATING, x=775, y=738, w=1145, h=319, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x0
+OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=582, h=285, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Functions", DockArea=LEFT, x=0, y=1, w=704, h=295, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Code Profile", DockArea=LEFT, x=0, y=0, w=704, h=325, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, GroupByFiles=0, SortRespectsFilters=0, ParentRelativeLoad=0
+OpenWindow="Console", DockArea=BOTTOM, x=0, y=0, w=1871, h=319, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+TableHeader="Functions", SortCol="#Insts", SortOrder="DESCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[168;100;100;100;220]
+TableHeader="Code Profile", SortCol="Fetch Count", SortOrder="DESCENDING", VisibleCols=["File / Function";"Source Coverage";"Inst. Coverage";"Run Count";"Fetch Count";"Load"], ColWidths=[269;128;139;100;100;100]
+TableHeader="Local Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[154;100;100;100;175;238]
+TableHeader="Task List", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Task";"Priority";"Status";"Working Area";"ID"], ColWidths=[110;110;110;110;110]
+TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[100;105;361]
+TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
+TableHeader="Power Sampling", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;353]

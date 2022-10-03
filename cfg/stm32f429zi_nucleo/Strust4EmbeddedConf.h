@@ -152,7 +152,7 @@
 
 #define DEFAULT_TO_ADDRESS_HIGH			1
 #define DEFAULT_TO_ADDRESS_LOW			0
-#define DEFAULT_TO_CHANNE				5
+#define DEFAULT_TO_CHANNEL				5
 
 #define EBYTE_LORA_HOST_ID              2
 #define EBYTE_LORA_SAVE_PARAMS		    1

@@ -41,7 +41,9 @@ static EByteParams_TypeDef  eByteDefaultParams = {._AddressHigh	=DEFAULT_ADDRESS
 										   ._Address = 0, ._Version = 0, ._Features = 0, ._buf = 0, ._Speed =0, ._Options = 0, ._Save = 0};
 static void eByteWriteTrippleCMD(uint8_t cmd){
 	uint8_t CMD[3] = {cmd, cmd, cmd};
-    sdWriteTimeout(&PORTAB_EBYTE_LORA_SD, (uint8_t*)CMD, sizeof(CMD), TIME_MS2I(DEFAULT_UART_TIMEOUT));
+    size_t size = sdWriteTimeout(&PORTAB_EBYTE_LORA_SD, (uint8_t*)CMD, sizeof(CMD), TIME_MS2I(DEFAULT_UART_TIMEOUT));
+
+//    chprintf((BaseSequentialStream *)&PORTAB_EBYTE_LORA_SD,"%d%d%d", cmd);
 }
 
 static uint16_t eByteGetAddress(void) {
@@ -112,7 +114,7 @@ void eByteReset(void) {
 
 	chThdSleepMilliseconds(50);
 	eByteWriteTrippleCMD(WRITE_RESET_MODULE);
-	eByteCompleteTask(100);
+	eByteCompleteTask(1000);
 
 	eByteSetMode(MODE_NORMAL);
 }
@@ -121,51 +123,65 @@ static bool eByteReadModelData(void) {
 	memset(eByteParams._Params,0,sizeof(eByteParams._Params));
 	eByteSetMode(MODE_PROGRAM);
 
-	eByteClearBuffer();
-	eByteWriteTrippleCMD(READ_MODULE_VERSION);
+    chThdSleepMilliseconds(5);
+	int i=0;
+	do{
+		eByteClearBuffer();
+		eByteWriteTrippleCMD(READ_MODULE_VERSION);
+		uint8_t _Params[6];
+		size_t size =  sdReadTimeout(&PORTAB_EBYTE_LORA_SD, _Params,sizeof(_Params), TIME_MS2I(DEFAULT_UART_TIMEOUT));
+        if ( size >= 4  ){
+			eByteParams._Save     = _Params[0];
+			eByteParams._Model    = _Params[1];
+			eByteParams._Version  = _Params[2];
+			eByteParams._Features = _Params[3];
 
-	chThdSleepMilliseconds(5);
-	sdReadTimeout(&PORTAB_EBYTE_LORA_SD, eByteParams._Params,sizeof(eByteParams._Params), TIME_MS2I(DEFAULT_UART_TIMEOUT));
-	chThdSleepMilliseconds(5);
-
-	eByteParams._Save     = eByteParams._Params[0];
-	eByteParams._Model    = eByteParams._Params[1];
-	eByteParams._Version  = eByteParams._Params[2];
-	eByteParams._Features = eByteParams._Params[3];
-
+			break;
+        }
+		chThdSleepMilliseconds(150);
+        i++;
+	}
+    while( i < 6 );
 	eByteSetMode(MODE_NORMAL);
+
 	return READ_MODULE_VERSION == eByteParams._Params[0];
 }
 static bool eByteReadParameters(void){
 	memset(eByteParams._Params,0,sizeof(eByteParams._Params));
 	eByteSetMode(MODE_PROGRAM);
 
-	eByteClearBuffer();
-	chThdSleepMilliseconds(5);
-	eByteWriteTrippleCMD(READ_CONFIGURATION);
-	chThdSleepMilliseconds(5);
-	sdReadTimeout(&PORTAB_EBYTE_LORA_SD, eByteParams._Params,sizeof(eByteParams._Params), TIME_MS2I(DEFAULT_UART_TIMEOUT));
-	chThdSleepMilliseconds(5);
+	int i = 0;
+	do{
+		eByteClearBuffer();
+		chThdSleepMilliseconds(5);
+		eByteWriteTrippleCMD(READ_CONFIGURATION);
+		chThdSleepMilliseconds(5);
+		size_t size = sdReadTimeout(&PORTAB_EBYTE_LORA_SD, eByteParams._Params,sizeof(eByteParams._Params), TIME_MS2I(DEFAULT_UART_TIMEOUT));
+		chThdSleepMilliseconds(5);
+		if ( size == sizeof(eByteParams._Params) && WRITE_CFG_PWR_DWN_SAVE == eByteParams._Params[0] ){
+			eByteParams._Save 		 = eByteParams._Params[0];
+			eByteParams._AddressHigh = eByteParams._Params[1];
+			eByteParams._AddressLow  = eByteParams._Params[2];
+			eByteParams._Speed 		 = eByteParams._Params[3];
+			eByteParams._Channel 	 = eByteParams._Params[4];
+			eByteParams._Options 	 = eByteParams._Params[5];
+
+			eByteParams._Address     =  (eByteParams._AddressHigh << 8) | (eByteParams._AddressLow);
+			eByteParams._ParityBit    = (eByteParams._Speed & 0XC0) >> 6;
+			eByteParams._UARTDataRate = (eByteParams._Speed & 0X38) >> 3;
+			eByteParams._AirDataRate  = (eByteParams._Speed & 0X07);
+
+			eByteParams._OptionTrans  = (eByteParams._Options & 0X80) >> 7;
+			eByteParams._OptionPullup = (eByteParams._Options & 0X40) >> 6;
+			eByteParams._OptionWakeup = (eByteParams._Options & 0X38) >> 3;
+			eByteParams._OptionFEC    = (eByteParams._Options & 0X07) >> 2;
+			eByteParams._OptionPower  = (eByteParams._Options & 0X03);
+			break;
+		}
+        i++;
+	}
+	while( i < 6 );
 	eByteSetMode(MODE_NORMAL);
-
-	eByteParams._Save 		 = eByteParams._Params[0];
-	eByteParams._AddressHigh = eByteParams._Params[1];
-	eByteParams._AddressLow  = eByteParams._Params[2];
-	eByteParams._Speed 		 = eByteParams._Params[3];
-	eByteParams._Channel 	 = eByteParams._Params[4];
-	eByteParams._Options 	 = eByteParams._Params[5];
-
-	eByteParams._Address     =  (eByteParams._AddressHigh << 8) | (eByteParams._AddressLow);
-	eByteParams._ParityBit    = (eByteParams._Speed & 0XC0) >> 6;
-	eByteParams._UARTDataRate = (eByteParams._Speed & 0X38) >> 3;
-	eByteParams._AirDataRate  = (eByteParams._Speed & 0X07);
-
-	eByteParams._OptionTrans  = (eByteParams._Options & 0X80) >> 7;
-	eByteParams._OptionPullup = (eByteParams._Options & 0X40) >> 6;
-	eByteParams._OptionWakeup = (eByteParams._Options & 0X38) >> 3;
-	eByteParams._OptionFEC    = (eByteParams._Options & 0X07) >> 2;
-	eByteParams._OptionPower  = (eByteParams._Options & 0X03);
-
 
 	return WRITE_CFG_PWR_DWN_SAVE == eByteParams._Params[0];
 }
@@ -181,7 +197,7 @@ static void eByteSaveParameters(uint8_t val, EByteParams_TypeDef *pEByteDefaultP
     sdWriteTimeout(&PORTAB_EBYTE_LORA_SD, data, sizeof(data), TIME_MS2I(DEFAULT_UART_TIMEOUT*3));
 
 	chThdSleepMilliseconds(50);
-	eByteCompleteTask(400);
+	eByteCompleteTask(1000);
 
 	eByteSetMode(MODE_NORMAL);
 
@@ -218,12 +234,12 @@ void eBytePrintParameters(void) {
 bool eByteInit(void){
 	bool rc = true;
 
-	palSetLineMode(EBYTE_LORA_TX, PAL_MODE_ALTERNATE(EBYTE_LORA_AF) | PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL);
-	palSetLineMode(EBYTE_LORA_RX, PAL_MODE_ALTERNATE(EBYTE_LORA_AF) | PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL);
+	palSetLineMode(EBYTE_LORA_TX, PAL_MODE_ALTERNATE(EBYTE_LORA_AF) | PAL_STM32_OSPEED_LOWEST | PAL_STM32_OTYPE_PUSHPULL);
+	palSetLineMode(EBYTE_LORA_RX, PAL_MODE_ALTERNATE(EBYTE_LORA_AF) | PAL_STM32_OSPEED_LOWEST | PAL_STM32_OTYPE_PUSHPULL);
 	palSetLineMode(EBYTE_LORA_M0, EBYTE_LORA_MODE);
 	palSetLineMode(EBYTE_LORA_M1, EBYTE_LORA_MODE);
 #ifdef EBYTE_LORA_AUX
-	palSetLineMode(EBYTE_LORA_AUX, PAL_MODE_INPUT);
+	palSetLineMode(EBYTE_LORA_AUX, PAL_MODE_INPUT | PAL_STM32_PUPDR_PULLUP);
 #endif
 	chThdSleepMilliseconds(5);
 	sdStart(&PORTAB_EBYTE_LORA_SD, &eBytecfg);
@@ -280,13 +296,21 @@ void eByteProcessReplyMsgs(void){
     while ( true ){
           EByteLoRaFrame_TypeDef	myLoraFrame   = {0};
           uint8_t	*pMyLoraMsgPayload = (uint8_t*)&myLoraFrame;
-          uint8_t                       *tmp               = (uint8_t*)(pMyLoraMsgPayload+FIXED_TRANS_PAD);
-		  size_t size = sdReadTimeout(&PORTAB_EBYTE_LORA_SD, tmp, sizeof(myLoraFrame)-FIXED_TRANS_PAD, TIME_MS2I(EBYTE_LORA_DEFAULT_IO_TIMEOUT));
-		  if ( size > 0 ){
+          uint8_t   *tmp               = (uint8_t*)(pMyLoraMsgPayload+FIXED_TRANS_PAD);
+          uint16_t  bytesToRead        = sizeof(myLoraFrame)-FIXED_TRANS_PAD;
+		  size_t size = sdReadTimeout(&PORTAB_EBYTE_LORA_SD, tmp, bytesToRead, TIME_MS2I(EBYTE_LORA_DEFAULT_IO_TIMEOUT));
+		  if ( size >= bytesToRead ){
 			  if ( myLoraFrame.msgTypeID == MSG_RECEIVED_MSG_TYPE )
 				  eByteOnMsgReply(&myLoraFrame);
 		  }
+		  else
+		  if ( size >=8 ){
+	          EByteLoRaFrame_TypeDef	*pEByteLoRaFrame   = &myLoraFrame;
 
+			 dbgprintf("--->Incomplete Reply: Host ID:%d\tAddH:%d\tAddL:%d\tChannel:%d\tMsgTypeID:%d\r\n",
+						   pEByteLoRaFrame->hostID, 	   pEByteLoRaFrame->fromAddressHigh, pEByteLoRaFrame->fromAddressLow,
+						   pEByteLoRaFrame->fromChannel,   pEByteLoRaFrame->msgTypeID );
+		  }
 		  if ( size <= 0 )
 			  break;
      }
@@ -363,11 +387,13 @@ THD_FUNCTION(eByteLoraThread, arg) {(void)arg;
     eByteInit();
 	while (true) {
 
+        #if 1
 		if ( enableEbyte == false ){
 			dbgprintf("eByte Lora Thd disabled\r\n");
-			chThdSleepSeconds(120);
+			chThdSleepSeconds(5);
 			continue;
 		}
+        #endif
 		#if EBYTE_LORA_SERVER != 0
 			#if EBYTE_LORA_SEND_PERIODIC_MSG != 0
 			eByteSendPeriodicMsg();
@@ -378,7 +404,7 @@ THD_FUNCTION(eByteLoraThread, arg) {(void)arg;
 			#endif
 		#else
 			EByteLoRaFrame_TypeDef   myLoraMsgPayload = {0};
-			MyMessage_TypeDef		      myPayload        = {0};
+			MyMessage_TypeDef	     myPayload        = {0};
 
 			size_t size = eByteReceiveMsg(&myLoraMsgPayload, &myPayload);
 			if ( size > 0 )

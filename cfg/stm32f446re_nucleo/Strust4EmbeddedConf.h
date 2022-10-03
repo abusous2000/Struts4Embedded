@@ -8,6 +8,7 @@
 #ifndef CFG_STRUST4EMBEDDEDCONF_H_
 #define CFG_STRUST4EMBEDDEDCONF_H_
 
+#define S4E_USE_CAN_BUS         0
 #define S4E_USE_IR_RECEIVER     0
 #define USERLIB_USE_RF 			0
 #define USE_W25Q_XXXX 			0
@@ -121,11 +122,11 @@
 #define EBYTE_LORA_SERVER               1
 #define PORTAB_EBYTE_LORA_SD 			SD1
 
-#define EBYTE_LORA_TX 	    			LINE_ARD_D2  //PA10
-#define EBYTE_LORA_RX 	    			LINE_ARD_D10 //PB6
-#define EBYTE_LORA_M0 	    			LINE_ARD_D4
-#define EBYTE_LORA_M1 	    			LINE_ARD_D5
-#define EBYTE_LORA_AUX 	    			LINE_ARD_D6
+#define EBYTE_LORA_TX 	    			LINE_ARD_D2  //PA10 STM32 uart1 RX
+#define EBYTE_LORA_RX 	    			LINE_ARD_D10 //PB6  STM32 uart1 TX
+#define EBYTE_LORA_M0 	    			LINE_ARD_D4  //PB5
+#define EBYTE_LORA_M1 	    			LINE_ARD_D5  //PB4
+#define EBYTE_LORA_AUX 	    			LINE_ARD_D6  //PB10
 #define EBYTE_LORA_AF       			7
 
 #define DEFAULT_OPTION_FIXED_TRANS		1

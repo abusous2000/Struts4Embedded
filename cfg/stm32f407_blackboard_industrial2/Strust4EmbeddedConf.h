@@ -170,11 +170,14 @@
 #define EBYTE_LORA_SERVER               0
 #endif
 #if S4E_USE_EBYTE_LORA != 0
-#define PORTAB_EBYTE_LORA_SD 			SD3
+
 
 #define EBYTE_LORA_TX 	    			PAL_LINE(GPIOB, 10U)//PB10
 #define EBYTE_LORA_RX 	    			PAL_LINE(GPIOB, 11U)//PB11
+#define PORTAB_EBYTE_LORA_SD 			SD3
 #define EBYTE_LORA_AF       			7
+
+
 
 #define EBYTE_LORA_M0 	    			PAL_LINE(GPIOF, 13U)//PF13
 #define EBYTE_LORA_M1 	    			PAL_LINE(GPIOE, 15U)//PE15
@@ -189,7 +192,7 @@
 
 #define DEFAULT_TO_ADDRESS_HIGH			1
 #define DEFAULT_TO_ADDRESS_LOW			0
-#define DEFAULT_TO_CHANNE				5
+#define DEFAULT_TO_CHANNEL				5
 
 #define EBYTE_LORA_HOST_ID              2
 #define EBYTE_LORA_SAVE_PARAMS		    1

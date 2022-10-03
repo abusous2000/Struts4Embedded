@@ -400,19 +400,21 @@ static int32_t canBusControlAE(ActionEvent_Typedef 	*pActionEvent){(void)pAction
    char     *context    = NULL;
    char     temp[ACTION_EVENT_DATA_MAX_SIZE];
 
+   #if S4E_USE_CAN_BUS != 0
    strlcpy(temp,pActionEvent->u.pData,ACTION_EVENT_DATA_MAX_SIZE);
 
    char     *actionId 	= strtok_r(temp,"#",&context);
    char     *pData 	    = strtok_r(NULL,"#",&context);
 
    canBusControl(atoi(actionId),pData);
-
+   #endif
    return MSG_OK;
 }
 
 
 ///MSGFormat:XXX#<LEN><Data>
 static int32_t sendCanBusMsg(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
+    #if S4E_USE_CAN_BUS != 0
 	if ( pActionEvent->u.pData != NULL){
 		char temp[ACTION_EVENT_DATA_MAX_SIZE];
 		char *context    = NULL;
@@ -429,6 +431,7 @@ static int32_t sendCanBusMsg(ActionEvent_Typedef 	*pActionEvent){(void)pActionEv
 		   dbgprintf("No data to send CanBus Msg\r\n");
 		   return MSG_RESET;
 	}
+    #endif
    return MSG_OK;
 }
 
