@@ -39,6 +39,7 @@ void eByteOnMsgReply(EByteLoRaFrame_TypeDef   *pEByteLoRaFrame){
 	   LCD_Display_Update();
 	#endif
 
+	return;
 }
 void eByteProcessReceivedMsg(EByteLoRaFrame_TypeDef	*pEByteLoRaFrame, MyMessage_TypeDef *pMyPayload){
   	dbgprintf("+++FrameID:%d\tHostID:%d\tAddH:%d\tAddL:%d\tChannel:%d\tMsgTypeId:%d\tVolume:%d\tButtons:%d\r\n",
