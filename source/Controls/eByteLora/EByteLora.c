@@ -299,7 +299,7 @@ void eByteProcessReplyMsgs(void){
           uint8_t   *tmp               = (uint8_t*)(pMyLoraMsgPayload+FIXED_TRANS_PAD);
           uint16_t  bytesToRead        = sizeof(myLoraFrame)-FIXED_TRANS_PAD;
 		  size_t size = sdReadTimeout(&PORTAB_EBYTE_LORA_SD, tmp, bytesToRead, TIME_MS2I(EBYTE_LORA_DEFAULT_IO_TIMEOUT));
-		  if ( size >= bytesToRead ){
+		  if ( size >= 8 ){
 			  if ( myLoraFrame.msgTypeID == MSG_RECEIVED_MSG_TYPE )
 				  eByteOnMsgReply(&myLoraFrame);
 		  }
