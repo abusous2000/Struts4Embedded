@@ -1,15 +1,15 @@
 [
     {
-        "id": "31cc55da.55e6da",
+        "id": "65b8019f.ef5c3",
         "type": "tab",
         "label": "MP3Play w/ S4E & STM32f769i",
         "disabled": false,
         "info": ""
     },
     {
-        "id": "102c0e14.d41132",
+        "id": "ed5d7b5.3c24a88",
         "type": "inject",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "repeat": "",
         "crontab": "",
@@ -22,14 +22,14 @@
         "y": 1580,
         "wires": [
             [
-                "e84e3a34.32e2f8"
+                "7a9e79a0.71aaf"
             ]
         ]
     },
     {
-        "id": "d2d732d.bfa4ad",
+        "id": "30dd0134.e070e6",
         "type": "debug",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "debugESGET",
         "active": false,
         "tosidebar": true,
@@ -42,28 +42,28 @@
         "wires": []
     },
     {
-        "id": "8563f0a.2bbf71",
+        "id": "652e74b3.5a329c",
         "type": "mqtt in",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "TriggerFrom MQTT",
         "topic": "dev/update/+/mp3Player",
         "qos": "0",
         "datatype": "auto",
-        "broker": "bc23579c.d8182",
+        "broker": "5b211d30.836d3c",
         "x": 170,
         "y": 380,
         "wires": [
             [
-                "97b45083.1cd1f",
-                "8e1e7a87.63a8a8",
-                "4ceb5228.2320d4"
+                "2bdda8c4.294838",
+                "a00787ba.fd7c68",
+                "4bee5079.a2a388"
             ]
         ]
     },
     {
-        "id": "91256a99.8d90c",
+        "id": "d026b57e.e7541",
         "type": "debug",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "debugPopulateTrackdDropDown",
         "active": true,
         "tosidebar": true,
@@ -76,10 +76,10 @@
         "wires": []
     },
     {
-        "id": "c902220.8962a6",
+        "id": "b4782f01.33ee18",
         "type": "sqlite",
-        "z": "31cc55da.55e6da",
-        "mydb": "93b598be.426a8",
+        "z": "65b8019f.ef5c3",
+        "mydb": "a2ebfdb0.d62cf8",
         "sqlquery": "msg.topic",
         "sql": "",
         "name": "sqlite3",
@@ -90,9 +90,9 @@
         ]
     },
     {
-        "id": "2eda6132.02d356",
+        "id": "a28f0d54.2c4698",
         "type": "function",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "d": true,
         "name": "Insert SQL",
         "func": "var seconds_remaining = msg.payload.seconds_remaining\nmsg.topic = \"insert into MP3Player_access_log(status, Track, seconds_remaining, vol) values ('\"+\n             msg.payload.status+\"','\"+msg.payload.track+\"',\"+msg.payload.seconds_remaining+\",\"+msg.payload.vol+\");\";\nconsole.log(\"Insert SQL:\"+ msg.topic);\n\nreturn msg;",
@@ -102,14 +102,14 @@
         "y": 520,
         "wires": [
             [
-                "c902220.8962a6"
+                "b4782f01.33ee18"
             ]
         ]
     },
     {
-        "id": "317b2a25.c56c2e",
+        "id": "6de16db5.ee3f14",
         "type": "function",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "MP3 Player Status",
         "func": "var vol          = {topic: \"Volume\",         payload: msg.payload.vol};\nvar secRemaining = {topic: \"Sec. Remaining\", payload: msg.payload.seconds_remaining};\n\n\n\nreturn [vol,secRemaining];",
         "outputs": 2,
@@ -118,17 +118,17 @@
         "y": 800,
         "wires": [
             [
-                "6bb7f2ae.fec0ac"
+                "6721cdee.683794"
             ],
             [
-                "6bb7f2ae.fec0ac"
+                "6721cdee.683794"
             ]
         ]
     },
     {
-        "id": "a7cb185d.6e9aa8",
+        "id": "29ee2f75.dddec8",
         "type": "inject",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "Reset chart",
         "repeat": "",
         "crontab": "",
@@ -141,14 +141,14 @@
         "y": 920,
         "wires": [
             [
-                "a28bfe61.2f44f"
+                "5159e284.3ff64c"
             ]
         ]
     },
     {
-        "id": "a28bfe61.2f44f",
+        "id": "5159e284.3ff64c",
         "type": "function",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "Reset chart",
         "func": "msg.payload = [];\nreturn msg;",
         "outputs": 1,
@@ -157,14 +157,14 @@
         "y": 920,
         "wires": [
             [
-                "6bb7f2ae.fec0ac"
+                "6721cdee.683794"
             ]
         ]
     },
     {
-        "id": "4ceb5228.2320d4",
+        "id": "4bee5079.a2a388",
         "type": "json",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "To JSON",
         "property": "payload",
         "action": "",
@@ -173,33 +173,33 @@
         "y": 660,
         "wires": [
             [
-                "edafedd.febee1",
-                "74bc18a1.c7c2",
-                "d279778f.0795d",
-                "317b2a25.c56c2e",
-                "d2e767d4.0f5848",
-                "2eda6132.02d356",
-                "4b4655d.491b72c"
+                "7de7fdc4.1ee17c",
+                "c8a432c4.9aeb8",
+                "e904875e.286d5",
+                "6de16db5.ee3f14",
+                "931f565.82eb9a8",
+                "a28f0d54.2c4698",
+                "b84f0132.474658"
             ]
         ]
     },
     {
-        "id": "d8f6c3bd.719ee8",
+        "id": "bfbd54d2.0bd8d8",
         "type": "mqtt out",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "topic": "dev/cmd/STM32F746g/mp3Player",
         "qos": "0",
         "retain": "",
-        "broker": "bc23579c.d8182",
+        "broker": "5b211d30.836d3c",
         "x": 1350,
         "y": 1340,
         "wires": []
     },
     {
-        "id": "b756cf62.4b0b48",
+        "id": "b87612f3.abaca8",
         "type": "function",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "set VOL AE",
         "func": "var newPayload = {actionEvent: \"setVolume\",data: msg.payload.toString()};\n\nvar newMsg = {payload: newPayload};\n\nreturn [newMsg,{payload: \"Volume Changed\"}];",
         "outputs": 2,
@@ -208,19 +208,19 @@
         "y": 1320,
         "wires": [
             [
-                "d8f6c3bd.719ee8",
-                "c010b06b.b3bd",
-                "849edac7.64eaf8"
+                "bfbd54d2.0bd8d8",
+                "6e323504.dc3004",
+                "bcff81f9.e79c38"
             ],
             [
-                "acd1a5c7.03a49"
+                "fc52a0b5.aa1c1"
             ]
         ]
     },
     {
-        "id": "fd6fa716.a0a988",
+        "id": "630b3f0c.9aff68",
         "type": "function",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "Set RGB LED",
         "func": "var newPayload = {actionEvent: \"setRGBLED\",data: msg.payload};\n\nvar newMsg = {payload: newPayload};\n\nreturn [newMsg,{payload: \"RGB SET\"}];",
         "outputs": 2,
@@ -231,19 +231,19 @@
         "y": 1440,
         "wires": [
             [
-                "d8f6c3bd.719ee8",
-                "c010b06b.b3bd",
-                "849edac7.64eaf8"
+                "bfbd54d2.0bd8d8",
+                "6e323504.dc3004",
+                "bcff81f9.e79c38"
             ],
             [
-                "acd1a5c7.03a49"
+                "fc52a0b5.aa1c1"
             ]
         ]
     },
     {
-        "id": "97b45083.1cd1f",
+        "id": "2bdda8c4.294838",
         "type": "function",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "d": true,
         "name": "Map MP3Player Status to ES",
         "func": "var newMsg = { payload: msg.payload, documentIndex: \"s4e\",documentId:Date.now(),  documentType : \"mp3player\"};\nvar msgAsString = JSON.stringify(newMsg);\nnode.log(\"Sending Msg to ES:\"+msgAsString);\n\nreturn newMsg;",
@@ -255,14 +255,14 @@
         "y": 280,
         "wires": [
             [
-                "735925eb.20605c"
+                "135582f9.4cc275"
             ]
         ]
     },
     {
-        "id": "22f1e2e3.49075e",
+        "id": "5345c89c.d9777",
         "type": "inject",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "Create MP3Player_access_log Table",
         "repeat": "",
         "crontab": "",
@@ -275,14 +275,14 @@
         "y": 460,
         "wires": [
             [
-                "c902220.8962a6"
+                "b4782f01.33ee18"
             ]
         ]
     },
     {
-        "id": "4b36d05e.2a38f8",
+        "id": "cd12f3c.0911d9",
         "type": "function",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "func": "msg.topic = \"API Error\";\nif (msg.error) {\n msg.payload = msg.error.message\n} else {\n msg.payload = \"\"\n}\nreturn msg;",
         "outputs": 1,
@@ -291,29 +291,29 @@
         "y": 1660,
         "wires": [
             [
-                "1f47cabe.425dc5"
+                "9765ba99.f4ee98"
             ]
         ]
     },
     {
-        "id": "99e59a4c.57df6",
+        "id": "66b64c02.03549c",
         "type": "catch",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "scope": null,
         "x": 180,
         "y": 1660,
         "wires": [
             [
-                "a3377e5c.427538",
-                "4b36d05e.2a38f8"
+                "fe952e0d.07e39",
+                "cd12f3c.0911d9"
             ]
         ]
     },
     {
-        "id": "a3377e5c.427538",
+        "id": "fe952e0d.07e39",
         "type": "debug",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "active": true,
         "console": false,
@@ -323,9 +323,9 @@
         "wires": []
     },
     {
-        "id": "1f47cabe.425dc5",
+        "id": "9765ba99.f4ee98",
         "type": "delay",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "pauseType": "rate",
         "timeout": "5",
@@ -341,14 +341,14 @@
         "y": 1660,
         "wires": [
             [
-                "b2c71b78.78878"
+                "63f0c8e3.c2bc58"
             ]
         ]
     },
     {
-        "id": "8e1e7a87.63a8a8",
+        "id": "a00787ba.fd7c68",
         "type": "debug",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "debugMQTTInboundMsg",
         "active": false,
         "tosidebar": true,
@@ -361,22 +361,22 @@
         "wires": []
     },
     {
-        "id": "d3f1960c.a0903",
+        "id": "7c368bd4.9460ac",
         "type": "mqtt out",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "topic": "dev/myTopic",
         "qos": "0",
         "retain": "",
-        "broker": "e2cc24b8.a66d4",
+        "broker": "dcb398f1.2dd66",
         "x": 1200,
         "y": 640,
         "wires": []
     },
     {
-        "id": "4b4655d.491b72c",
+        "id": "b84f0132.474658",
         "type": "rbe",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "Send to AWS IOT Only on Volume Change",
         "func": "deadband",
         "gap": "5%",
@@ -387,34 +387,34 @@
         "y": 640,
         "wires": [
             [
-                "d3f1960c.a0903",
-                "4bf6e2e3.1624cc"
+                "7c368bd4.9460ac",
+                "23c185e0.b55bca"
             ]
         ]
     },
     {
-        "id": "3173cad0.1dca06",
+        "id": "22956e93.782022",
         "type": "mqtt in",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "AWS IOT Shadow update",
         "topic": "dev/update/STM32F769i/mp3Player",
         "qos": "0",
         "datatype": "auto",
-        "broker": "e2cc24b8.a66d4",
+        "broker": "dcb398f1.2dd66",
         "x": 410,
         "y": 980,
         "wires": [
             [
-                "4bf6e2e3.1624cc",
-                "d8f6c3bd.719ee8",
-                "c010b06b.b3bd"
+                "23c185e0.b55bca",
+                "bfbd54d2.0bd8d8",
+                "6e323504.dc3004"
             ]
         ]
     },
     {
-        "id": "4bf6e2e3.1624cc",
+        "id": "23c185e0.b55bca",
         "type": "debug",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "debugAWSIOTShadow",
         "active": false,
         "tosidebar": true,
@@ -427,39 +427,39 @@
         "wires": []
     },
     {
-        "id": "c010b06b.b3bd",
+        "id": "6e323504.dc3004",
         "type": "mqtt out",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "topic": "dev/cmd/STM32F769i/mp3Player",
         "qos": "0",
         "retain": "",
-        "broker": "bc23579c.d8182",
+        "broker": "5b211d30.836d3c",
         "x": 1350,
         "y": 1200,
         "wires": []
     },
     {
-        "id": "ffac4317.2652b8",
+        "id": "3795f160.2f8f16",
         "type": "mqtt in",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "TriggerFrom MQTT",
         "topic": "dev/update/+/mp3Player/populateTracksDropDown",
         "qos": "0",
         "datatype": "auto",
-        "broker": "bc23579c.d8182",
+        "broker": "5b211d30.836d3c",
         "x": 110,
         "y": 100,
         "wires": [
             [
-                "8bdbb7f0.a19768"
+                "c237c3e3.a10488"
             ]
         ]
     },
     {
-        "id": "91da46f.5fb78b8",
+        "id": "491f714e.195a8",
         "type": "function",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "Populate Drop down",
         "func": "msg2 = {options: [ msg.payload] }\nreturn msg2;",
         "outputs": 1,
@@ -468,14 +468,14 @@
         "y": 100,
         "wires": [
             [
-                "2afbdb73.8fb6d4"
+                "307804b9.72f60c"
             ]
         ]
     },
     {
-        "id": "8bdbb7f0.a19768",
+        "id": "c237c3e3.a10488",
         "type": "json",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "To JSON",
         "property": "payload",
         "action": "",
@@ -484,15 +484,14 @@
         "y": 120,
         "wires": [
             [
-                "91da46f.5fb78b8",
-                "9045495f.44cfc"
+                "491f714e.195a8"
             ]
         ]
     },
     {
-        "id": "6cbd7bd6.6de33c",
+        "id": "51cadaed.f7dc74",
         "type": "function",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "Reposition To Track",
         "func": "var newMsg = {actionEvent: \"repositionToTrack\",data: msg.payload};\n\nreturn {payload: newMsg};",
         "outputs": 1,
@@ -501,69 +500,69 @@
         "y": 160,
         "wires": [
             [
-                "487739dc.a96b78",
-                "91256a99.8d90c",
-                "4a55e0ea.a0d6a",
-                "524dff9c.53cc5"
+                "78a0e0ed.858be",
+                "d026b57e.e7541",
+                "cd8a0c8b.345ae8",
+                "fec2552.fdf21a8"
             ]
         ]
     },
     {
-        "id": "487739dc.a96b78",
+        "id": "78a0e0ed.858be",
         "type": "mqtt out",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "topic": "dev/cmd/STM32F769i/mp3Player",
         "qos": "0",
         "retain": "",
-        "broker": "bc23579c.d8182",
+        "broker": "5b211d30.836d3c",
         "x": 1550,
         "y": 80,
         "wires": []
     },
     {
-        "id": "849edac7.64eaf8",
+        "id": "bcff81f9.e79c38",
         "type": "mqtt out",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "topic": "dev/cmd/STM32F407BlackBoard/mp3Player",
         "qos": "0",
         "retain": "",
-        "broker": "bc23579c.d8182",
+        "broker": "5b211d30.836d3c",
         "x": 1330,
         "y": 1060,
         "wires": []
     },
     {
-        "id": "4a55e0ea.a0d6a",
+        "id": "cd8a0c8b.345ae8",
         "type": "mqtt out",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "topic": "dev/cmd/STM32F746G/mp3Player",
         "qos": "0",
         "retain": "",
-        "broker": "bc23579c.d8182",
+        "broker": "5b211d30.836d3c",
         "x": 1550,
         "y": 160,
         "wires": []
     },
     {
-        "id": "524dff9c.53cc5",
+        "id": "fec2552.fdf21a8",
         "type": "mqtt out",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "topic": "dev/cmd/STM32F407/mp3Player",
         "qos": "0",
         "retain": "",
-        "broker": "bc23579c.d8182",
+        "broker": "5b211d30.836d3c",
         "x": 1550,
         "y": 220,
         "wires": []
     },
     {
-        "id": "9045495f.44cfc",
+        "id": "17740645.0205da",
         "type": "http request",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "method": "GET",
         "ret": "txt",
@@ -577,14 +576,14 @@
         "y": 180,
         "wires": [
             [
-                "6f1125a8.8af054"
+                "88c3d8ba.6d8f"
             ]
         ]
     },
     {
-        "id": "8ff40b9c.a39bf8",
+        "id": "7b2a33c9.b97bfc",
         "type": "inject",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "repeat": "",
         "crontab": "",
@@ -597,14 +596,14 @@
         "y": 240,
         "wires": [
             [
-                "9045495f.44cfc"
+                "17740645.0205da"
             ]
         ]
     },
     {
-        "id": "6f1125a8.8af054",
+        "id": "88c3d8ba.6d8f",
         "type": "json",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "To JSON",
         "property": "payload",
         "action": "",
@@ -613,14 +612,14 @@
         "y": 280,
         "wires": [
             [
-                "2e68d2ae.eeaf46"
+                "3960ff79.daa94"
             ]
         ]
     },
     {
-        "id": "2e68d2ae.eeaf46",
+        "id": "3960ff79.daa94",
         "type": "function",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "set Unix Time",
         "func": "var newPayload = {\"actionEvent\": \"setUnixtime\", \"data\": msg.payload.unixtime.toString() };\n\nvar newMsg = {payload: newPayload};\n\nreturn newMsg;",
         "outputs": 1,
@@ -631,47 +630,49 @@
         "y": 280,
         "wires": [
             [
-                "91256a99.8d90c",
-                "8df444ee.0039a"
+                "d026b57e.e7541",
+                "d66f0645.7a5da8",
+                "78a0e0ed.858be",
+                "cd8a0c8b.345ae8"
             ]
         ]
     },
     {
-        "id": "8df444ee.0039a",
+        "id": "d66f0645.7a5da8",
         "type": "mqtt out",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
-        "topic": "dev/cmd/STM32F429ZI/mp3Player",
+        "topic": "dev/cmd/STM32F407BlackBoard/mp3Player",
         "qos": "0",
         "retain": "",
-        "broker": "bc23579c.d8182",
-        "x": 1530,
+        "broker": "5b211d30.836d3c",
+        "x": 1570,
         "y": 360,
         "wires": []
     },
     {
-        "id": "30eca76f.54781",
+        "id": "d9a2ab35.5cb55",
         "type": "mqtt in",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "TriggerFrom MQTT",
         "topic": "dev/getTime",
         "qos": "0",
         "datatype": "auto",
-        "broker": "bc23579c.d8182",
+        "broker": "5b211d30.836d3c",
         "x": 90,
         "y": 220,
         "wires": [
             [
-                "6667e870.a702c8"
+                "cec6c0b8.2c4e"
             ]
         ]
     },
     {
-        "id": "d4ed592.608c5a8",
+        "id": "b0ee2ada.59a828",
         "type": "ui_button",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
-        "group": "319d1a2c.7cecfe",
+        "group": "62032bec.df09ac",
         "order": 2,
         "width": 2,
         "height": 1,
@@ -688,16 +689,16 @@
         "y": 840,
         "wires": [
             [
-                "6bb7f2ae.fec0ac"
+                "6721cdee.683794"
             ]
         ]
     },
     {
-        "id": "4af17a50.3b4054",
+        "id": "7d0e7ba1.9640dc",
         "type": "ui_button",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
-        "group": "319d1a2c.7cecfe",
+        "group": "62032bec.df09ac",
         "order": 6,
         "width": 2,
         "height": 1,
@@ -714,18 +715,18 @@
         "y": 1180,
         "wires": [
             [
-                "d8f6c3bd.719ee8",
-                "c010b06b.b3bd",
-                "849edac7.64eaf8"
+                "bfbd54d2.0bd8d8",
+                "6e323504.dc3004",
+                "bcff81f9.e79c38"
             ]
         ]
     },
     {
-        "id": "3818940.54fe2ec",
+        "id": "388f3c02.579534",
         "type": "ui_button",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
-        "group": "319d1a2c.7cecfe",
+        "group": "62032bec.df09ac",
         "order": 4,
         "width": 2,
         "height": 1,
@@ -742,18 +743,18 @@
         "y": 1240,
         "wires": [
             [
-                "d8f6c3bd.719ee8",
-                "c010b06b.b3bd",
-                "849edac7.64eaf8"
+                "bfbd54d2.0bd8d8",
+                "6e323504.dc3004",
+                "bcff81f9.e79c38"
             ]
         ]
     },
     {
-        "id": "8ce59621.f0a7e",
+        "id": "8cc29d3b.85c82",
         "type": "ui_button",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
-        "group": "319d1a2c.7cecfe",
+        "group": "62032bec.df09ac",
         "order": 6,
         "width": "0",
         "height": "0",
@@ -770,18 +771,18 @@
         "y": 1040,
         "wires": [
             [
-                "d8f6c3bd.719ee8",
-                "c010b06b.b3bd",
-                "849edac7.64eaf8"
+                "bfbd54d2.0bd8d8",
+                "6e323504.dc3004",
+                "bcff81f9.e79c38"
             ]
         ]
     },
     {
-        "id": "284c73f5.1f057c",
+        "id": "55f5f7c3.86fb5",
         "type": "ui_button",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
-        "group": "319d1a2c.7cecfe",
+        "group": "62032bec.df09ac",
         "order": 6,
         "width": "0",
         "height": "0",
@@ -798,17 +799,17 @@
         "y": 1140,
         "wires": [
             [
-                "c010b06b.b3bd",
-                "d8f6c3bd.719ee8"
+                "6e323504.dc3004",
+                "bfbd54d2.0bd8d8"
             ]
         ]
     },
     {
-        "id": "6bb7f2ae.fec0ac",
+        "id": "6721cdee.683794",
         "type": "ui_chart",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "Volume & Seconds Remaining",
-        "group": "319d1a2c.7cecfe",
+        "group": "62032bec.df09ac",
         "order": 1,
         "width": "0",
         "height": "0",
@@ -847,14 +848,14 @@
         ]
     },
     {
-        "id": "2afbdb73.8fb6d4",
+        "id": "307804b9.72f60c",
         "type": "ui_dropdown",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "Play Track Dropdown",
         "label": "Play Track",
         "tooltip": "Play Track",
         "place": "Select option",
-        "group": "319d1a2c.7cecfe",
+        "group": "62032bec.df09ac",
         "order": 13,
         "width": 0,
         "height": 0,
@@ -873,19 +874,19 @@
         "y": 80,
         "wires": [
             [
-                "6cbd7bd6.6de33c",
-                "ea048f41.14ad68"
+                "51cadaed.f7dc74",
+                "57baf1a.51feb1"
             ]
         ]
     },
     {
-        "id": "569463c0.dafa74",
+        "id": "b6a69d24.f51278",
         "type": "ui_numeric",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "label": "Set Volume",
         "tooltip": "",
-        "group": "319d1a2c.7cecfe",
+        "group": "62032bec.df09ac",
         "order": 18,
         "width": 0,
         "height": 0,
@@ -900,18 +901,18 @@
         "y": 1300,
         "wires": [
             [
-                "b756cf62.4b0b48"
+                "b87612f3.abaca8"
             ]
         ]
     },
     {
-        "id": "e8add296.8d4ae8",
+        "id": "9cf734e5.9a5ea8",
         "type": "ui_slider",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
         "label": "Volume Slider",
         "tooltip": "",
-        "group": "319d1a2c.7cecfe",
+        "group": "62032bec.df09ac",
         "order": 12,
         "width": 0,
         "height": 0,
@@ -925,18 +926,18 @@
         "y": 1380,
         "wires": [
             [
-                "b756cf62.4b0b48"
+                "b87612f3.abaca8"
             ]
         ]
     },
     {
-        "id": "733050e6.339ce8",
+        "id": "58d2f9a5.b4bd1",
         "type": "ui_text_input",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "Set RGB LED",
         "label": "Set RGB LED",
         "tooltip": "",
-        "group": "319d1a2c.7cecfe",
+        "group": "62032bec.df09ac",
         "order": 17,
         "width": 0,
         "height": 0,
@@ -948,15 +949,15 @@
         "y": 1460,
         "wires": [
             [
-                "fd6fa716.a0a988"
+                "630b3f0c.9aff68"
             ]
         ]
     },
     {
-        "id": "d2e767d4.0f5848",
+        "id": "931f565.82eb9a8",
         "type": "ui_text",
-        "z": "31cc55da.55e6da",
-        "group": "319d1a2c.7cecfe",
+        "z": "65b8019f.ef5c3",
+        "group": "62032bec.df09ac",
         "order": 11,
         "width": "0",
         "height": "0",
@@ -969,10 +970,10 @@
         "wires": []
     },
     {
-        "id": "edafedd.febee1",
+        "id": "7de7fdc4.1ee17c",
         "type": "ui_text",
-        "z": "31cc55da.55e6da",
-        "group": "319d1a2c.7cecfe",
+        "z": "65b8019f.ef5c3",
+        "group": "62032bec.df09ac",
         "order": 12,
         "width": "0",
         "height": "0",
@@ -985,10 +986,10 @@
         "wires": []
     },
     {
-        "id": "74bc18a1.c7c2",
+        "id": "c8a432c4.9aeb8",
         "type": "ui_text",
-        "z": "31cc55da.55e6da",
-        "group": "319d1a2c.7cecfe",
+        "z": "65b8019f.ef5c3",
+        "group": "62032bec.df09ac",
         "order": 14,
         "width": "0",
         "height": "0",
@@ -1001,10 +1002,10 @@
         "wires": []
     },
     {
-        "id": "d279778f.0795d",
+        "id": "e904875e.286d5",
         "type": "ui_text",
-        "z": "31cc55da.55e6da",
-        "group": "319d1a2c.7cecfe",
+        "z": "65b8019f.ef5c3",
+        "group": "62032bec.df09ac",
         "order": 15,
         "width": "0",
         "height": "0",
@@ -1017,9 +1018,9 @@
         "wires": []
     },
     {
-        "id": "acd1a5c7.03a49",
+        "id": "fc52a0b5.aa1c1",
         "type": "ui_toast",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "position": "top right",
         "displayTime": "3",
         "highlight": "",
@@ -1035,9 +1036,9 @@
         "wires": []
     },
     {
-        "id": "b2c71b78.78878",
+        "id": "63f0c8e3.c2bc58",
         "type": "ui_toast",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "position": "top right",
         "displayTime": "3",
         "highlight": "",
@@ -1051,9 +1052,9 @@
         "wires": []
     },
     {
-        "id": "ea048f41.14ad68",
+        "id": "57baf1a.51feb1",
         "type": "ui_toast",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "position": "top right",
         "displayTime": "3",
         "highlight": "",
@@ -1069,45 +1070,45 @@
         "wires": []
     },
     {
-        "id": "735925eb.20605c",
+        "id": "135582f9.4cc275",
         "type": "es-create",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "d": true,
         "name": "S4E MP3Player",
         "documentIndex": "s4e",
         "documentType": "mp3player",
-        "server": "720bdb22.e394c4",
+        "server": "cc002b2d.3d3e58",
         "x": 520,
         "y": 300,
         "wires": [
             [
-                "91256a99.8d90c"
+                "d026b57e.e7541"
             ]
         ]
     },
     {
-        "id": "e84e3a34.32e2f8",
+        "id": "7a9e79a0.71aaf",
         "type": "es-get",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "d": true,
         "name": "Get Record by ID",
         "documentId": "1585586013800",
         "documentIndex": "s4e",
         "documentType": "mp3player",
         "includeFields": "",
-        "server": "720bdb22.e394c4",
+        "server": "cc002b2d.3d3e58",
         "x": 590,
         "y": 1580,
         "wires": [
             [
-                "d2d732d.bfa4ad"
+                "30dd0134.e070e6"
             ]
         ]
     },
     {
-        "id": "69d53920.7caee",
+        "id": "e3bcdc47.f053d8",
         "type": "msg-router",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "routerType": "message",
         "topicDependent": false,
         "counterReset": false,
@@ -1135,15 +1136,15 @@
         "y": 180,
         "wires": [
             [
-                "9045495f.44cfc"
+                "17740645.0205da"
             ],
             []
         ]
     },
     {
-        "id": "5fd5fd5e.421b84",
+        "id": "57b7e145.37c1",
         "type": "function",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "Add route",
         "func": "var outputValue = 2;\nif ( msg.payload.output === undefined || msg.payload.output == 0)\n       outputValue = 1;\nelse\n    outputValue = msg.payload.output;\nvar newMsg = { payload: msg.payload, output: outputValue};\nvar msgAsString = JSON.stringify(newMsg);\nnode.log(\"Sending Msg to ES:\"+msgAsString);\n\nreturn newMsg;",
         "outputs": 1,
@@ -1154,15 +1155,15 @@
         "y": 180,
         "wires": [
             [
-                "69d53920.7caee",
-                "8e1e7a87.63a8a8"
+                "e3bcdc47.f053d8",
+                "a00787ba.fd7c68"
             ]
         ]
     },
     {
-        "id": "6667e870.a702c8",
+        "id": "cec6c0b8.2c4e",
         "type": "json",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "To JSON",
         "property": "payload",
         "action": "",
@@ -1171,16 +1172,16 @@
         "y": 160,
         "wires": [
             [
-                "5fd5fd5e.421b84"
+                "57b7e145.37c1"
             ]
         ]
     },
     {
-        "id": "a719eb2c.be746",
+        "id": "53c6e405.7f591c",
         "type": "ui_button",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
-        "group": "319d1a2c.7cecfe",
+        "group": "62032bec.df09ac",
         "order": 6,
         "width": "0",
         "height": "0",
@@ -1197,18 +1198,18 @@
         "y": 1080,
         "wires": [
             [
-                "849edac7.64eaf8",
-                "c010b06b.b3bd",
-                "d8f6c3bd.719ee8"
+                "bcff81f9.e79c38",
+                "6e323504.dc3004",
+                "bfbd54d2.0bd8d8"
             ]
         ]
     },
     {
-        "id": "3be89c02.fbf224",
+        "id": "3315252.5cfb1da",
         "type": "ui_button",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "",
-        "group": "319d1a2c.7cecfe",
+        "group": "62032bec.df09ac",
         "order": 6,
         "width": "0",
         "height": "0",
@@ -1225,18 +1226,18 @@
         "y": 1000,
         "wires": [
             [
-                "849edac7.64eaf8"
+                "bcff81f9.e79c38"
             ]
         ]
     },
     {
-        "id": "af89423b.10857",
+        "id": "abd6eeb3.5fc7f",
         "type": "ui_text_input",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "Invoke AE",
         "label": "Invoke AE",
         "tooltip": "",
-        "group": "319d1a2c.7cecfe",
+        "group": "62032bec.df09ac",
         "order": 17,
         "width": 0,
         "height": 0,
@@ -1248,14 +1249,14 @@
         "y": 1520,
         "wires": [
             [
-                "ee6191b5.1670e"
+                "af9300f8.6f522"
             ]
         ]
     },
     {
-        "id": "ee6191b5.1670e",
+        "id": "af9300f8.6f522",
         "type": "function",
-        "z": "31cc55da.55e6da",
+        "z": "65b8019f.ef5c3",
         "name": "Set AE",
         "func": "var newPayload = {actionEvent: msg.payload};\n\nvar newMsg = {payload: newPayload};\n\nreturn [newMsg,{payload: \"AE SET\"}];",
         "outputs": 2,
@@ -1266,15 +1267,15 @@
         "y": 1520,
         "wires": [
             [
-                "849edac7.64eaf8",
-                "c010b06b.b3bd",
-                "d8f6c3bd.719ee8"
+                "bcff81f9.e79c38",
+                "6e323504.dc3004",
+                "bfbd54d2.0bd8d8"
             ],
             []
         ]
     },
     {
-        "id": "bc23579c.d8182",
+        "id": "5b211d30.836d3c",
         "type": "mqtt-broker",
         "z": "",
         "name": "localhost",
@@ -1296,20 +1297,20 @@
         "willPayload": ""
     },
     {
-        "id": "93b598be.426a8",
+        "id": "a2ebfdb0.d62cf8",
         "type": "sqlitedb",
         "z": "",
         "db": "/home/abusous2000/Downloads/Temp/sqlite3/test.db",
         "mode": "RWC"
     },
     {
-        "id": "e2cc24b8.a66d4",
+        "id": "dcb398f1.2dd66",
         "type": "mqtt-broker",
         "z": "",
         "name": "AWS IOT",
         "broker": "a1km560udu1n3o-ats.iot.us-west-2.amazonaws.com",
         "port": "8883",
-        "tls": "ae4dfe1.cbbe58",
+        "tls": "5b3a4177.a42978",
         "clientid": "zdev_3",
         "usetls": true,
         "compatmode": false,
@@ -1326,18 +1327,18 @@
         "willPayload": ""
     },
     {
-        "id": "319d1a2c.7cecfe",
+        "id": "62032bec.df09ac",
         "type": "ui_group",
         "z": 0,
         "name": "Struts4Embedded",
-        "tab": "2b053f6c.196b18",
+        "tab": "a5999eb3.8821b",
         "order": 1,
         "disp": true,
         "width": "14",
         "collapse": false
     },
     {
-        "id": "720bdb22.e394c4",
+        "id": "cc002b2d.3d3e58",
         "type": "remote-server",
         "z": 0,
         "name": "Docker ES",
@@ -1346,7 +1347,7 @@
         "reqtimeout": "2000"
     },
     {
-        "id": "ae4dfe1.cbbe58",
+        "id": "5b3a4177.a42978",
         "type": "tls-config",
         "z": "",
         "name": "AWS-TLS",
@@ -1360,7 +1361,7 @@
         "verifyservercert": false
     },
     {
-        "id": "2b053f6c.196b18",
+        "id": "a5999eb3.8821b",
         "type": "ui_tab",
         "z": 0,
         "name": "Struts4Embedded",

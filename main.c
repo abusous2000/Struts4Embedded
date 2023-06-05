@@ -14,6 +14,7 @@
 #include "RTCHelper.h"
 #include "w25qxx.h"
 #include "IRReceiver.h"
+#include "CanBus.h"
 #include "AEShell.h"
 
 #if INCLUDE_SEGGER_JLINK != 0
@@ -123,11 +124,15 @@ int main(void) {
   initIRReeceiver();
 #endif
 
+#if S4E_USE_CAN_BUS != 0
+  initCanBusThreads();
+#endif
+
 #if USE_AE_SHELL != 0
  initAEShell();
 #endif
 
-  while (true) {
+ while (true) {
 	  chThdSleepMilliseconds(1500);
 	  #if S4E_USE_MQTT != 0
 	  if ( !isDefaultMQTTBrokerConnected() )
@@ -207,5 +212,49 @@ static void initUSBCFG(void){
 	usbConnectBus(serusbcfg.usbp);
 
 	sdStart(&PORTAB_SD_VCP, &myserialcfg);
+}
+#endif
+
+#if INCLUDE_SEGGER_JLINK != 0
+extern void tname(void *arg);
+extern void irReceiverThd(void *arg);
+extern void BlinkerThd(void *arg);
+extern void eByteLoraThread(void *arg);
+extern void can_rx(void *arg);
+extern void dummyDataSenderThd(void *arg);
+extern void BlinkerThd(void *arg);
+extern void lwip_thread(void *arg);
+
+char *_getThreadName(tfunc_t pf){
+	if ( pf == ActonEventThd)
+		return "ActonEventThd";
+#if S4E_USE_IR_RECEIVER != 0
+	if ( pf == irReceiverThd)
+		return "irReceiverThd";
+#endif
+#if S4E_USE_CAN_BUS != 0
+	if ( pf == dummyDataSenderThd)
+		return "dummyDataSenderThd";
+
+	if ( pf == can_rx)
+		return "can_rx";
+#endif
+#if S4E_USE_ETHERNET != 0
+	if ( pf == lwip_thread)
+		return "lwip_thread";
+#endif
+#if S4E_USE_BLINKER_THD != 0
+	if ( pf == BlinkerThd)
+		return "BlinkerThd";
+#endif
+#if S4E_USE_EBYTE_LORA != 0
+	if ( pf == eByteLoraThread)
+		return "eByteLoraThread";
+#endif
+#if USE_AE_SHELL != 0
+	if ( pf == shellThread)
+		return "shellThread";
+#endif
+	   return "noname";
 }
 #endif

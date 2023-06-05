@@ -9,14 +9,14 @@ static guarded_memory_pool_t guardedDataBufferMemoryPool  = {0};
 static dyn_objects_fifo_t 	 *dynObjMainQueueFIFO		  = NULL;
 static map_t                 *actionEventsMap             = NULL;
 
-ActionEvent_Typedef *sendActionEvent(char *aeName){
+ActionEvent_Typedef *sendActionEventI(char *aeName){
   ActionEvent_Typedef     *tmp = getActionEvent(aeName);//This is more like memcpy the AE definition, & later override the pData field, see triggerActionEventNoLock()
 
   if ( tmp != NULL){
 	  ActionEvent_Typedef     *pActionEvent = (ActionEvent_Typedef*)chFifoTakeObjectI(pMainQueue);//Get a free object from pool
 
 	  pActionEvent->processed = 0;
-	  //Do memory copy ONLY after you receive a NULL pointer.
+	  //Do memory copy ONLY after you receive a none NULL pointer.
 	 *pActionEvent =    *tmp;
 	 chFifoSendObjectI(pMainQueue,pActionEvent);
 
@@ -44,7 +44,7 @@ int8_t getActionEventNdx(char *aeName){
 
    return pAE!=NULL?pAE->ndx:-1;
 }
-
+//See http://www.chibios.org/dokuwiki/doku.php?id=chibios:documentation:books:rt:oslib_objects_fifo for details
 static void initActionEvents(void){
    dynObjMainQueueFIFO = chFactoryCreateObjectsFIFO(MAIN_ACTION_EVENTS_QUEUE,sizeof(ActionEvent_Typedef),MAIN_QUEUE_SIZE,PORT_NATURAL_ALIGN);
    pMainQueue = &(dynObjMainQueueFIFO->fifo);
@@ -52,17 +52,22 @@ static void initActionEvents(void){
    initStruts4EmbeddedFramework();
    return;
 }
-ActionEvent_Typedef *triggerActionEventNoLock(char *aeName, char *pData, uint32_t data, char *eventSource){
+ActionEvent_Typedef *triggerActionEventNoLockI(char *aeName, char *pData, uint32_t data, char *eventSource){
   if ( !isActonEventThdInitialized() ){
 	 chSysHalt("ActonEventThd hasn't been initialized. Plz call initActonEventThd() in your startup code");
   }
-  ActionEvent_Typedef *pAE = sendActionEvent(aeName);
+  /*
+   * Note that after this method is executed; the thread is not released yet.
+   * It will be once chSchRescheduleS(); & chSysUnlock(); are done
+   */
+  ActionEvent_Typedef *pAE = sendActionEventI(aeName);
 
   if ( pAE == NULL )
 	  return NULL;
-  pAE->dataType = IS_CHAR_STR_NULL(pData)?INT_DTYPE:CHAR_DTYPE;
-  //Use memory pool only when needed. If that was the case, then
-  //Always deep copy when char data else memory corruption will happen
+  //Use memory pool only when needed & defined as such. If that was the case, then
+  if ( pAE->dataType == CHAR_DTYPE)
+     pAE->dataType = IS_CHAR_STR_NULL(pData)?INT_DTYPE:CHAR_DTYPE;
+  //Always deep copy when char data as the type, else memory corruption will happen
   if ( pAE->dataType == CHAR_DTYPE){
 	  pAE->u.pData = (char*)chGuardedPoolAllocI(&guardedDataBufferMemoryPool);
 	  if ( pAE->u.pData == NULL){
@@ -82,7 +87,7 @@ ActionEvent_Typedef *triggerActionEventNoLock(char *aeName, char *pData, uint32_
 
 ActionEvent_Typedef *triggerActionEvent(char *aeName, char *pData, uint32_t data, char *eventSource){
   chSysLock();
-  ActionEvent_Typedef *pAE = triggerActionEventNoLock(aeName,pData,data,eventSource);
+  ActionEvent_Typedef *pAE = triggerActionEventNoLockI(aeName,pData,data,eventSource);
   /*##############IMPORTANT###################
    * YOU MUST CALL chSchRescheduleS() method else you might crash; see comment @chSysUnlock(void) in chsys.h for details
    * The following condition can be triggered by the use of i-class functions
@@ -100,7 +105,7 @@ ActionEvent_Typedef *triggerActionEvent(char *aeName, char *pData, uint32_t data
 }
 ActionEvent_Typedef *triggerActionEventFromISR(char *aeName, char *pData, uint32_t data, char *eventSource){
   chSysLockFromISR();
-  ActionEvent_Typedef *pAE = triggerActionEventNoLock(aeName,pData,data,eventSource);
+  ActionEvent_Typedef *pAE = triggerActionEventNoLockI(aeName,pData,data,eventSource);
   chSysUnlockFromISR();
 
   return pAE;

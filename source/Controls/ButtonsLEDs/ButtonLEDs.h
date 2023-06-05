@@ -34,7 +34,7 @@
 #endif
 extern CPalTypedef 		  			*pGreenLedPAL, *pRedLedPAL, *pRed2LedPAL, *pBlueLedPAL, *pCenterKey, *pUpKey,
                                     *pDownKey,     *pLeftKey,   *pRightKey,  *pBuzzer,
-									*pRgb,         *pEasyLinkKey;
+									*pRgb,         *pEasyLinkKey,   *pRelayPAL;
 void initButtonsLEDs(void);
 #ifdef __cplusplus
 }

@@ -196,6 +196,28 @@ TX1	<=>			PB13--Eggplant-1L
 #define RC_ICU_CHANNEL 			        ICU_CHANNEL_2
 #endif//Ends:S4E_USE_PPM_FRAME_DECODER
 
+#ifndef S4E_USE_CAN_BUS
+#define STM32F4_INDUSTRIAL1_OLD
+#define S4E_USE_CAN_BUS		            1
+#define CAN_BUS_SD                      PORTAB_SD
+#define CAN_BUS_LED                     LINE_LED_RED
+
+#ifdef STM32F4_INDUSTRIAL1_NEW
+#define CAN1_RX_LINE       PAL_LINE(GPIOA, 11)//PA11
+#define CAN1_TX_LINE       PAL_LINE(GPIOA, 12)//PA12
+#define CAN2_RX_LINE       PAL_LINE(GPIOB, 12)//PB12
+#define CAN2_TX_LINE       PAL_LINE(GPIOB, 13)//PB13
+#elif defined(STM32F4_INDUSTRIAL1_OLD)
+#define CAN1_RX_LINE       PAL_LINE(GPIOD, 0)//PD0
+#define CAN1_TX_LINE       PAL_LINE(GPIOD, 1)//PD1
+#define CAN2_RX_LINE       PAL_LINE(GPIOB, 5)//PB5
+#define CAN2_TX_LINE       PAL_LINE(GPIOB, 6)//PB6
+#endif
+
+#define CAN_BUS_AF                      9U
+#define CAN_PORT_MODE       	        PAL_MODE_ALTERNATE(CAN_BUS_AF)    |    PAL_STM32_OSPEED_HIGHEST | PAL_MODE_INPUT_PULLUP
+
+#endif//S4E_USE_CAN_BUS
 #define GO_TO_SLEEP_MACROS      	    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;\
 									    PWR->CR  |= (PWR_CR_PDDS | PWR_CR_LPDS | PWR_CR_CSBF  | PWR_CR_CWUF);\
 									    PWR->CSR |= (PWR_CSR_WUF |  PWR_CSR_EWUP );\

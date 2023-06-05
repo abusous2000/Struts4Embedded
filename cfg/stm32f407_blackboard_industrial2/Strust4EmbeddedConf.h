@@ -121,16 +121,20 @@
 #define MQTT_CMD_SUBSCRIBE_TOPIC   		"dev/cmd/STM32F407BlackBoard/mp3Player"
 #define DEFAULT_MQTT_PUBLISH_TOPIC 		"dev/update/STM32F407BlackBoard/mp3Player"
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithSTM32F407BlackBoard"
-//#define BLACKBOARD_INDUSTRIAL_V4_1
+#define BLACKBOARD_INDUSTRIAL_V4_1
+
+#define LINE_LED_RED3                   PAL_LINE(GPIOG, 9U)//PG9
 //By default, assume it is the new board, see schematic; there are minor changes for pings
-#ifndef BLACKBOARD_INDUSTRIAL_V5_1
-#define LINE_LED_GREEN                  PAL_LINE(GPIOA, 15U)//PA15-18b20-at P8-Right two pin. Left most is ground
+#ifdef BLACKBOARD_INDUSTRIAL_V5_1
+#define LINE_LED_GREEN                  LINE_LED_RED3//PAL_LINE(GPIOA, 15U)//PA15-18b20-at P8-Right two pin. Left most is ground
 #else
-#define LINE_LED_GREEN                  PAL_LINE(GPIOD, 3U)//PD3-18b20-at P8-Right two pin. Left most is ground
+#define LINE_LED_GREEN                  LINE_LED_RED3//PAL_LINE(GPIOD, 3U)//PD3-18b20-at P8-Right two pin. Left most is ground
 #endif
 #define LINE_LED_BLUE                   PAL_LINE(GPIOD, 6U)//PD6-P18-2nd pin - From top let hand corner, left most is ground
 #define LINE_LED_RED                    PAL_LINE(GPIOE, 3U)//PE3
 #define LINE_LED_RED2                   PAL_LINE(GPIOE, 4U)//PE4
+
+#define LINE_RELAY                      PAL_LINE(GPIOD, 14U)//PD14
 
 #ifndef S4E_USE_SDCARD
 #define S4E_USE_SDCARD 			        1
@@ -151,6 +155,8 @@
 #ifndef S4E_USE_IR_RECEIVER
 #define S4E_USE_IR_RECEIVER		        1
 #endif
+
+
 #if S4E_USE_IR_RECEIVER != 0
 #define PORTABLE_ICU_LINE 				PAL_LINE(GPIOC, 6U) //PC6
 #define PORTABLE_ICUD 					ICUD8
@@ -161,14 +167,17 @@
 //This is the receiver/client
 #ifndef S4E_USE_EBYTE_LORA
 #define S4E_USE_EBYTE_LORA              1
+#define EBYTE_LORA_SERVER               0
 #endif
 #if S4E_USE_EBYTE_LORA != 0
-#define EBYTE_LORA_SERVER               0
-#define PORTAB_EBYTE_LORA_SD 			SD3
+
 
 #define EBYTE_LORA_TX 	    			PAL_LINE(GPIOB, 10U)//PB10
 #define EBYTE_LORA_RX 	    			PAL_LINE(GPIOB, 11U)//PB11
+#define PORTAB_EBYTE_LORA_SD 			SD3
 #define EBYTE_LORA_AF       			7
+
+
 
 #define EBYTE_LORA_M0 	    			PAL_LINE(GPIOF, 13U)//PF13
 #define EBYTE_LORA_M1 	    			PAL_LINE(GPIOE, 15U)//PE15
@@ -183,7 +192,7 @@
 
 #define DEFAULT_TO_ADDRESS_HIGH			1
 #define DEFAULT_TO_ADDRESS_LOW			0
-#define DEFAULT_TO_CHANNE				5
+#define DEFAULT_TO_CHANNEL				5
 
 #define EBYTE_LORA_HOST_ID              2
 #define EBYTE_LORA_SAVE_PARAMS		    1
@@ -208,29 +217,53 @@
 #ifndef S4E_USE_PPM_FRAME_DECODER
 #define S4E_USE_PPM_FRAME_DECODER		1
 #endif
+
 #if S4E_USE_PPM_FRAME_DECODER != 0
 #define PPM_DECODING_DEBUG				0
-#define FREQUENCY_USED          		50000
-#define RC_MIN_VALUE                    30
-#define RC_MID_VALUE                    55
-#define RC_MAX_VALUE                    80
+#define PPM_FREQUENCY_USED         		50000
+
 #define MAX_FRAMES_TO_COLLECT     		10
-#if 0
-#define PORTABLE_PWM_LINE 				LINE_ARD_D5 //PC8
-#define PORTABLE_PWMD 					PWMD8
-#define PORTABLE_PWM_AF  				2
-#define PORTABLE_PWM_CHANNEL			2
-#define CH1_CB 							{PWM_OUTPUT_DISABLED, NULL}
-#define CH2_CB 							{PWM_OUTPUT_DISABLED, NULL}
-#define CH3_CB 							{PWM_OUTPUT_ACTIVE_HIGH, pwmc1cb}
-#define CH4_CB 							{PWM_OUTPUT_DISABLED, NULL}
-#endif
+
+#define S4E_USE_IBUS                    0
+
+#define IBUS_UART_RX                    PAL_LINE(GPIOC, 7U)//PC7 w/ uart6
+#define IBUS_UART_RX3                    PAL_LINE(GPIOB, 11U)//PB11 in conflict with Lora w/ uart3
+#define IBUS_SD3                         SD3//in conflict with LORA SD
+#define IBUS_SD                        SD6
+#define IBUS_PIN_MODE                  PAL_MODE_ALTERNATE(8)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL
+#define IBUS_PIN_MODE3                   PAL_MODE_ALTERNATE(7)| PAL_STM32_OSPEED_HIGHEST | PAL_STM32_OTYPE_PUSHPULL
+
 
 #define RC_ICU_LINE 				    PAL_LINE(GPIOE, 6)//PE6-FSMC_D7--2nd lower hand corner P18
 #define RC_ICUD 					    ICUD9
 #define RC_ICU_AF  				        3
 #define RC_ICU_CHANNEL 			        ICU_CHANNEL_2
+
+
 #endif //End-S4E_USE_PPM_FRAME_DECODER
+
+
+#ifndef S4E_USE_CAN_BUS
+
+#define S4E_USE_CAN_BUS		            1
+
+#define CAN_BUS_SD                      PORTAB_SD
+#define CAN_BUS_LED                     LINE_LED_RED2
+#define CAN_BUS_START_CAN1_THD          1
+
+#define CAN1_RX_LINE       				PAL_LINE(GPIOD, 0) //PD0
+#define CAN1_TX_LINE       				PAL_LINE(GPIOD, 1) //PD1
+#define CAN2_RX_LINE                    PAL_LINE(GPIOB, 5) //PB5
+#define CAN2_TX_LINE                    PAL_LINE(GPIOB, 6) //PB6
+
+
+#define CAN_BUS_AF                      9U
+#define CAN_PORT_MODE       	        PAL_MODE_ALTERNATE(CAN_BUS_AF)    |    PAL_STM32_OSPEED_HIGHEST | PAL_MODE_INPUT_PULLUP
+#define CAN_BUT_BTR_FLAGS               CAN_BTR_SJW(CAN_BUS_BTR_SJW) | CAN_BTR_TS2(CAN_BUS_BTR_TS2) | CAN_BTR_TS1(CAN_BUS_BTR_TS1) | CAN_BTR_BRP(CAN_BUS_BTR_BRP)
+#define CAN_BUS_MCR                     CAN_MCR_ABOM | CAN_MCR_AWUM | CAN_MCR_TXFP
+
+#endif//S4E_USE_CAN_BUS
+
 
 #define USERLIB_USE_RF                  0
 #define GO_TO_SLEEP_MACROS      	    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;\
@@ -257,5 +290,7 @@
 
 #define BACKUP_CCM_RAM_SECTION 			ram5
 
+
+//CanBuss
 
 #endif /* CFG_STRUST4EMBEDDED_H_ */

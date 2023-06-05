@@ -15,7 +15,7 @@ CC_WEAK void periodicSysTrigger(uint32_t i){(void)i;
  */
 //PLACE_IN_RAM_SECTION(.ram0.waBlinkerThd)
 static THD_WORKING_AREA(waBlinkerThd, BLINKER_THD_STACK_SIZE);
-static THD_FUNCTION(BlinkerThd, arg) {
+THD_FUNCTION(BlinkerThd, arg) {
   (void)arg;
   chRegSetThreadName("blinker");
 

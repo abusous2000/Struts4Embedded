@@ -10,6 +10,7 @@
 #include "RTCHelper.h"
 #include "ssd1306.h"
 #include "ButtonLEDs.h"
+#include "CanBus.h"
 #include "SDCard.h"
 #if INCLUDE_SEGGER_JLINK != 0
 #include "SEGGER_SYSVIEW_ChibiOS.h"
@@ -38,6 +39,7 @@ void eByteOnMsgReply(EByteLoRaFrame_TypeDef   *pEByteLoRaFrame){
 	   LCD_Display_Update();
 	#endif
 
+	return;
 }
 void eByteProcessReceivedMsg(EByteLoRaFrame_TypeDef	*pEByteLoRaFrame, MyMessage_TypeDef *pMyPayload){
   	dbgprintf("+++FrameID:%d\tHostID:%d\tAddH:%d\tAddL:%d\tChannel:%d\tMsgTypeId:%d\tVolume:%d\tButtons:%d\r\n",
@@ -110,7 +112,43 @@ void eByteLoraSendFrame(int8_t buttonPressed){
 
 }
 #endif
+static int32_t toggleModule(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
 
+  switch(pActionEvent->u.data){
+	  case 1:
+          #if S4E_USE_PPM_FRAME_DECODER != 0
+		  dbgprintf("toggleEnableDisablePPMDecoder\r\n");
+		  toggleDebugPPMDecoder();
+          #endif
+		  break;
+	  case 2:
+          #if S4E_USE_PPM_FRAME_DECODER != 0
+		  dbgprintf("toggleDebugPPMDecoder\r\n");
+		  toggleDebugPPMDecoder();
+          #endif
+		  break;
+     case 3:
+          #if S4E_USE_EBYTE_LORA != 0
+		  dbgprintf("toggleEnableDisableeByteLora\r\n" );
+		  toggleEnableDisableEByteLora();
+          #endif
+		  break;
+	  default:
+		dbgprintf("toggleModule module ignored AE:%d\r\n", pActionEvent->u.data);
+		break;
+  }
+
+  return MSG_OK;
+}
+
+static int32_t toggleRelay(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
+#ifdef LINE_RELAY
+      pRelayPAL->toggle(pRelayPAL);
+#endif
+	dbgprintf("toggleRelay\r\n", pActionEvent->u.data);
+
+	return MSG_OK;
+}
 
 static int32_t toggleMute(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
   mute= !mute;
@@ -191,11 +229,14 @@ static int32_t nextTrack(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
 int32_t setRGBLED(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
 #if S4E_USE_RGB == 1
    if ( pActionEvent->u.pData != NULL){
-	   char temp[DATA_FIELD_WAS_LT_MAX];
-	   strlcpy(temp,pActionEvent->u.pData,DATA_FIELD_WAS_LT_MAX);
-       char *strRed 	= strtok(temp,"|");
-       char *strGreen 	= strtok(NULL,"|");
-       char *strBlue 	= strtok(NULL,"|");
+	   char     temp[ACTION_EVENT_DATA_MAX_SIZE];
+	   char     *context    = NULL;
+
+	   strlcpy(temp,pActionEvent->u.pData,ACTION_EVENT_DATA_MAX_SIZE);
+
+       char *strRed 	= strtok_r(temp,"|",&context);
+       char *strGreen 	= strtok_r(NULL,"|",&context);
+       char *strBlue 	= strtok_r(NULL,"|",&context);
 
 	   uint8_t  red 	= strRed!=NULL?  atoi(strRed):  0;
 	   uint8_t  green	= strGreen!=NULL?atoi(strGreen):0;
@@ -215,12 +256,14 @@ int32_t setRGBLED(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
 static int32_t setPWMParams(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
 #if S4E_USE_PWM == 1
 	if ( pActionEvent->u.pData != NULL){
-	   char temp[DATA_FIELD_WAS_LT_MAX];
+	   char     temp[ACTION_EVENT_DATA_MAX_SIZE];
+	   char     *context    = NULL;
+
 	   strlcpy(temp,pActionEvent->u.pData,DATA_FIELD_WAS_LT_MAX);
-	   char *frequency			 	= strtok((char *)temp,"|");
-	   char *period 				= strtok(NULL,"|");
-	   char *firstChannelDutyCycle 	= strtok(NULL,"|");
-	   char *secondChannelDutyCycle = strtok(NULL,"|");
+	   char *frequency			 	= strtok_r((char *)temp,"|",&context);
+	   char *period 				= strtok_r(NULL,"|",&context);
+	   char *firstChannelDutyCycle 	= strtok_r(NULL,"|",&context);
+	   char *secondChannelDutyCycle = strtok_r(NULL,"|",&context);
 
 	   uint32_t iFrequency 	= atoi(frequency);
 	   uint32_t iPeriod     = atoi(period);
@@ -244,37 +287,50 @@ static int32_t setPWMParams(ActionEvent_Typedef 	*pActionEvent){(void)pActionEve
 }
 #if S4E_USE_PPM_FRAME_DECODER != 0
 static uint8_t  				lastCh3Value = 0;
-void onChannelPPMValueChange (uint8_t ch, uint8_t currentValue, uint8_t newValue){
+static ButtonStats_Typedef  	rcSWA = BUTTON_STATE_UNKNOWN;
+static ButtonStats_Typedef  	rcSWB = BUTTON_STATE_UNKNOWN;
+
+void onChannelPPMValueChange(uint8_t ch, PPM_FRAME_TYPDEF   *pCurrentPPMFrame, PPM_FRAME_TYPDEF   *pLastPPMFrame ){
 	ButtonStats_Typedef buttonStatus;
     uint8_t    toggleLED = 0;
-	dbgprintf("OnChangeChannelValue: %d\t%d\t%d\r\n", ch, currentValue, newValue);
+    uint8_t    printDebugInfo = 0;
+    uint8_t    currentValue = pCurrentPPMFrame->valueInCycles[ch];
+    uint8_t    newValue = pLastPPMFrame->valueInCycles[ch];
 	switch(ch){
 		case RC_CH3:{
-			uint32_t  currentValue =  100 *(newValue-RC_MIN_VALUE)/(RC_MAX_VALUE - RC_MIN_VALUE);
+			uint32_t  currentValue =  100 *(newValue-RC_BUTTON_MIN_VALUE)/(RC_BUTTON_MAX_VALUE - RC_BUTTON_MIN_VALUE);
 			int8_t   delta         = currentValue- lastCh3Value;
 
 			if ( delta > 2 ){
 				triggerActionEvent(SET_VOLUME_AE_NAME,NULL,currentValue,"RC");
 				toggleLED = 1;
 			}
+			printDebugInfo =1;
 		}
 		break;
-
-		case RC_SWB:
-			buttonStatus = getRCButtonStatus(newValue);
-			if ( buttonStatus != BUTTON_STATE_UNKNOWN){
-				toggleLED = 1;
-				triggerActionEvent(TOGGLE_PAUSE_AE_NAME,NULL,buttonStatus,"RC");
-			}
-			break;
 		case RC_SWA:
 			buttonStatus = getRCButtonStatus(newValue);
-			if ( buttonStatus != BUTTON_STATE_UNKNOWN){
+			if ( buttonStatus != BUTTON_STATE_UNKNOWN && rcSWA != buttonStatus ){
 				toggleLED = 1;
 				triggerActionEvent(TOGGLE_MUTE_AE_NAME,NULL,buttonStatus,"RC");
+				rcSWA = buttonStatus;
 			}
+			printDebugInfo =1;
+			break;
+		case RC_SWB:
+			buttonStatus = getRCButtonStatus(newValue);
+			if ( buttonStatus != BUTTON_STATE_UNKNOWN && rcSWB != buttonStatus){
+				toggleLED = 1;
+				//triggerActionEvent(TOGGLE_PAUSE_AE_NAME,NULL,buttonStatus,"RC");
+				triggerActionEvent(TOGGLE_BUZZER_AE_NAME,NULL,buttonStatus,"RC");
+				rcSWB = buttonStatus;
+			}
+			printDebugInfo =1;
 			break;
 	}
+	if ( printDebugInfo )
+		printPPMValueChange(ch,pCurrentPPMFrame,pLastPPMFrame);
+
 #ifdef LINE_LED_RED
 	if ( toggleLED )
   	    pRedLedPAL->toggle(pRedLedPAL);
@@ -341,6 +397,45 @@ static int32_t testSDCard(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent
    return MSG_OK;
 }
 
+static int32_t canBusControlAE(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
+   char     *context    = NULL;
+   char     temp[ACTION_EVENT_DATA_MAX_SIZE];
+
+   #if S4E_USE_CAN_BUS != 0
+   strlcpy(temp,pActionEvent->u.pData,ACTION_EVENT_DATA_MAX_SIZE);
+
+   char     *actionId 	= strtok_r(temp,"#",&context);
+   char     *pData 	    = strtok_r(NULL,"#",&context);
+
+   canBusControl(atoi(actionId),pData);
+   #endif
+   return MSG_OK;
+}
+
+
+///MSGFormat:XXX#<LEN><Data>
+static int32_t sendCanBusMsg(ActionEvent_Typedef 	*pActionEvent){(void)pActionEvent;
+    #if S4E_USE_CAN_BUS != 0
+	if ( pActionEvent->u.pData != NULL){
+		char temp[ACTION_EVENT_DATA_MAX_SIZE];
+		char *context    = NULL;
+
+		strlcpy(temp,pActionEvent->u.pData,ACTION_EVENT_DATA_MAX_SIZE);
+		char     *strMsgId 	= strtok_r(temp,"#",&context);
+		char     *pData 	= strtok_r(NULL,"#",&context);
+		uint8_t  len        = (uint8_t)(*pData)-'0';
+		uint8_t  *pData8    = (uint8_t*)(pData+1);
+
+		sendCanMsg((uint32_t)strtol(strMsgId, NULL, 16),len,pData8);
+	}
+	else{
+		   dbgprintf("No data to send CanBus Msg\r\n");
+		   return MSG_RESET;
+	}
+    #endif
+   return MSG_OK;
+}
+
 static ActionEvent_Typedef actionEventToggleMute 	 	= {.name=TOGGLE_MUTE_AE_NAME,  			.eventSource="Center",      	.action=toggleMute,			.view=toggleMuteView,		.dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventNextTrack  	 	= {.name=NEXT_TRACK_AE_NAME,			.eventSource="Up",          	.action=nextTrack,          							.dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventTogglePausePlay	= {.name=TOGGLE_PAUSE_AE_NAME,			.eventSource="Down",        	.action=togglePausePlay};
@@ -356,7 +451,12 @@ static ActionEvent_Typedef actionEventPerformanceInfo 	= {.name=PERFORMANCE_INFO
 static ActionEvent_Typedef actionEventSetUnixtime      	= {.name=SET_UNIX_TIME_AE_NAME,			.eventSource="WiFi",   		    .action=setUnixtime, 		.view=NULL,			        .dataType = CHAR_DTYPE};
 static ActionEvent_Typedef actionEventGoToSleep      	= {.name=GO_TO_SLEEP_AE_NAME,			.eventSource="WiFi",   		    .action=goToSleep, 		    .view=NULL,			        .dataType = INT_DTYPE};
 static ActionEvent_Typedef actionEventToggleBuzzer     	= {.name=TOGGLE_BUZZER_AE_NAME,			.eventSource="WiFi",   		    .action=toggleBuzzer, 		.view=NULL,			        .dataType = INT_DTYPE};
-static ActionEvent_Typedef actionEventTestSDCard     	= {.name=TOGGLE_TEST_SDCARD,			.eventSource="WiFi",   		    .action=testSDCard, 		.view=NULL,			        .dataType = INT_DTYPE};
+static ActionEvent_Typedef actionEventTestSDCard     	= {.name=TEST_SDCARD,			        .eventSource="WiFi",   		    .action=testSDCard, 		.view=NULL,			        .dataType = INT_DTYPE};
+static ActionEvent_Typedef actionEventCanBusControl    	= {.name=CAN_BUS_CONTROL_AE_NAME,		.eventSource="WiFi",   		    .action=canBusControlAE, 	.view=NULL,			        .dataType = CHAR_DTYPE};
+static ActionEvent_Typedef actionEventCanBusSendMsg    	= {.name=CAN_BUS_SEND_MSG_AE_NAME,		.eventSource="WiFi",   		    .action=sendCanBusMsg, 		.view=NULL,			        .dataType = CHAR_DTYPE};
+static ActionEvent_Typedef actionEventToggleModule      = {.name=TOGGLE_ENABLE_MODULE_AE_NAME,	.eventSource="WiFi",   		    .action=toggleModule, 		.view=NULL,			        .dataType = INT_DTYPE};
+static ActionEvent_Typedef actionEventToggleRelay       = {.name=TOGGLE_RELAY_MODULE_AE_NAME,	.eventSource="WiFi",   		    .action=toggleRelay, 		.view=NULL,			        .dataType = INT_DTYPE};
+
 
 ActionEvent_Typedef *gActionEvents[MAX_ACTION_EVENTS] ={&actionEventToggleMute,
 		                                                &actionEventNextTrack,
@@ -373,5 +473,9 @@ ActionEvent_Typedef *gActionEvents[MAX_ACTION_EVENTS] ={&actionEventToggleMute,
 														&actionEventSetUnixtime,
 														&actionEventGoToSleep,
                                                         &actionEventToggleBuzzer,
-                                                        &actionEventTestSDCard};
+                                                        &actionEventTestSDCard,
+														&actionEventCanBusControl,
+														&actionEventCanBusSendMsg,
+														&actionEventToggleModule,
+                                                        &actionEventToggleRelay};
 

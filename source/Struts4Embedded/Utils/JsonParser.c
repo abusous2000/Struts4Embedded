@@ -117,12 +117,13 @@ map_t *parseMap(char *jsonPayload,  map_t *mymap){
 	           continue; /* We expect groups to be an array of strings */
 	         }
 	         for (int j = 0; j < jsmnToken[i + 1].size; j++) {
-	           char nameValuePair[60] = {0};
+	           char     nameValuePair[60] = {0};
+	           char     *context    = NULL;
 	           jsmntok_t *g = &jsmnToken[i + j + 2];
 		       strlcpy(nameValuePair, jsonPayload + g->start, g->end - g->start+1);
 
-		       name = strtok((char *)nameValuePair,NVP_TOK);
-		       value = strtok(NULL,NVP_TOK);
+		       name  = strtok_r((char *)nameValuePair,NVP_TOK,&context);
+		       value = strtok_r(NULL,NVP_TOK,&context);
 		       NameValuePairTypeDef *hashEntry = (NameValuePairTypeDef*)chHeapAlloc(NULL,sizeof(NameValuePairTypeDef));
 		       strlcpy(hashEntry->key,name,       KEY_MAX_LENGTH);
 		       strlcpy(hashEntry->value,value,    VALUE_MAX_LENGTH);
