@@ -9,3 +9,6 @@ https://canhacker.com/examples/toyota-camry-instrument-cluster/
 
 How Can Bus speed is calculated?
 STM32_PCLK1/((BRP+1)*(SWJ+(TS1+1)+(TS2+1)))=42M/((1+6+7)*6)=500Kbps
+
+STM32F4Industrial 2 has jumper if you plan to use the on board CAN1 interface (which use PA11 & PA12) which we have't used by default
+We opted to use external interface  module that used PD0 & PD1; this way we can use the CAN1 & USB OTG

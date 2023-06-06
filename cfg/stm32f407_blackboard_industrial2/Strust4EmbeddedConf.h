@@ -251,7 +251,7 @@
 #define CAN_BUS_LED                     LINE_LED_RED2
 #define CAN_BUS_START_CAN1_THD          1
 
-#define CAN1_RX_LINE       				PAL_LINE(GPIOD, 0) //PD0
+#define CAN1_RX_LINE       				PAL_LINE(GPIOD, 0) //PD0---this requires that you provide your own CAN interface module; the board uses PA11+12 which requires re-config for jumper
 #define CAN1_TX_LINE       				PAL_LINE(GPIOD, 1) //PD1
 #define CAN2_RX_LINE                    PAL_LINE(GPIOB, 5) //PB5
 #define CAN2_TX_LINE                    PAL_LINE(GPIOB, 6) //PB6
