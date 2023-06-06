@@ -100,6 +100,7 @@ USE_MAC := "yes"
 USE_AE_SHELL := "yes"
 USE_AE_SHELL_VALUE := 0
 USE_FATFS := "yes"
+INCLUDE_USB_HID := "yes"
 
 
 # Licensing files.
@@ -138,6 +139,11 @@ include $(CHIBIOS_CONTRIB)/os/various/segger_bindings/segger_rtt.mk
 include $(CHIBIOS_CONTRIB)/os/various/segger_bindings/segger_systemview.mk
 INCLUDE_SEGGER_JLINK_VALUE := 1
 endif
+ifeq ($(INCLUDE_USB_HID),"yes")
+include $(USBCFG)/usbhid.mk
+INCLUDE_USB_HID := 1
+endif
+
 LDSCRIPT= $(STARTUPLD)/STM32F407xE.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global

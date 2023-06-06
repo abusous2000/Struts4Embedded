@@ -26,6 +26,7 @@
 #include "usbcfg.h"
 static void initUSBCFG(void);
 #endif
+#include "usb_hid.h"
 
 static void initDrivers(void);
 

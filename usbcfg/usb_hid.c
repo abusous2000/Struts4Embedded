@@ -21,29 +21,29 @@
   SOFTWARE.
 
 */
-
+#include "Strust4EmbeddedConf.h"
+#ifdef S4E_USE_USB_HID
 #include "ch.h"
 #include "hal.h"
-
 #include "usb_hid.h"
 
 // The USB driver to use
-#define USB_DRIVER USBD2
+
 
 // HID specific constants
-#define USB_DESCRIPTOR_HID 0x21
+#define USB_DESCRIPTOR_HID        0x21
 #define USB_DESCRIPTOR_HID_REPORT 0x22
-#define HID_GET_REPORT 0x01
-#define HID_SET_REPORT 0x09
+#define HID_GET_REPORT            0x01
+#define HID_SET_REPORT            0x09
 
 // Endpoints
-#define USBD2_IN_EP  1
-#define USBD2_OUT_EP 1
+#define USBD2_IN_EP               1
+#define USBD2_OUT_EP              1
 
-InputQueue usb_input_queue;
+input_queue_t usb_input_queue;
 static uint8_t usb_input_queue_buffer[USB_INPUT_QUEUE_BUFFER_SIZE];
 
-OutputQueue usb_output_queue;
+output_queue_t usb_output_queue;
 static uint8_t usb_output_queue_buffer[USB_OUTPUT_QUEUE_BUFFER_SIZE];
 
 static uint8_t in_report_sequence_number = 0;
@@ -558,7 +558,7 @@ usb_send_hid_report (struct usb_hid_in_report_s *report)
       return 0;
     }
 
-  res = chOQGetEmptyI (&usb_output_queue);
+  res = oqGetEmptyI (&usb_output_queue);
   chSysUnlock ();
 
   if (res > USB_HID_IN_REPORT_SIZE)
@@ -577,9 +577,9 @@ usb_send_hid_report (struct usb_hid_in_report_s *report)
 /*
  * Prepare an IN report
  */
-void
-usb_build_in_report (struct usb_hid_in_report_s *report)
+CC_WEAK void usb_build_in_report (struct usb_hid_in_report_s *report)
 {
   report->sequence_number = in_report_sequence_number++;
   report->wkup_pb_value = palReadPad (GPIOA, GPIOA_BUTTON_WKUP);
 }
+#endif

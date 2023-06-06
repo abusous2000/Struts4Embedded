@@ -251,7 +251,7 @@
 #define CAN_BUS_LED                     LINE_LED_RED2
 #define CAN_BUS_START_CAN1_THD          1
 
-#define CAN1_RX_LINE       				PAL_LINE(GPIOD, 0) //PD0---this requires that you provide your own CAN interface module; the board uses PA11+12 which requires re-config for jumper
+#define CAN1_RX_LINE       				PAL_LINE(GPIOD, 0) //PD0---this requires that you provide your own CAN interface module; the board uses PA11+PA12 which requires re-config for jumper
 #define CAN1_TX_LINE       				PAL_LINE(GPIOD, 1) //PD1
 #define CAN2_RX_LINE                    PAL_LINE(GPIOB, 5) //PB5
 #define CAN2_TX_LINE                    PAL_LINE(GPIOB, 6) //PB6
@@ -263,6 +263,16 @@
 #define CAN_BUS_MCR                     CAN_MCR_ABOM | CAN_MCR_AWUM | CAN_MCR_TXFP
 
 #endif//S4E_USE_CAN_BUS
+
+#ifndef S4E_USE_USB_HID
+#define S4E_USE_USB_HID		            1
+//Those two ports have been already confirgured correct in board.h with ALF ==> 10
+//#define USB_OTG_FS_DM      				PAL_LINE(GPIOA, 11) //PA11---this requires that you provide your own CAN interface module; the board uses PA11+12 which requires re-config for jumper
+//#define USB_ OTG_FS_DP     				PAL_LINE(GPIOA, 12) //PA12
+#define USB_DRIVER                      USBD2
+
+
+#endif//S4E_USE_USB_HID
 
 
 #define USERLIB_USE_RF                  0
@@ -291,6 +301,6 @@
 #define BACKUP_CCM_RAM_SECTION 			ram5
 
 
-//CanBuss
+
 
 #endif /* CFG_STRUST4EMBEDDED_H_ */

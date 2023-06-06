@@ -68,9 +68,9 @@ struct usb_hid_out_report_s
 };
 
 // The reception queue
-extern InputQueue usb_input_queue;
+extern input_queue_t usb_input_queue;
 // The emission queue
-extern OutputQueue usb_output_queue;
+extern output_queue_t usb_output_queue;
 
 // Initialize the USB serial string from STM32 unique serial number
 void init_usb_serial_string (void);
