@@ -100,7 +100,7 @@ USE_MAC := "yes"
 USE_AE_SHELL := "yes"
 USE_AE_SHELL_VALUE := 0
 USE_FATFS := "yes"
-
+USE_USB_HID := "yes"
 
 # Licensing files.
 include $(CHIBIOS)/os/license/license.mk
@@ -111,6 +111,11 @@ include $(CHIBIOS)/os/hal/hal.mk
 include $(CHIBIOS)/os/hal/ports/STM32/STM32F4xx/platform.mk
 include $(CHIBIOS)/os/hal/boards/$(BOARD_NAME)/board.mk
 include $(CHIBIOS)/os/hal/osal/rt-nil/osal.mk
+ifeq ($(USE_USB_HID),"yes")
+include $(CHIBIOS_CONTRIB)/os/hal/hal.mk
+include $(USBHID)/usb_hid.mk
+USE_USB_HID_VALUE := 1
+endif
 # RTOS files (optional).
 include $(CHIBIOS)/os/rt/rt.mk
 include $(CHIBIOS)/os/common/ports/ARMv7-M/compilers/GCC/mk/port.mk

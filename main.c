@@ -16,7 +16,10 @@
 #include "IRReceiver.h"
 #include "CanBus.h"
 #include "AEShell.h"
-
+#if S4E_USE_USB_HID != 0
+static void initUsbHid(void);
+#include "usb_hid.h"
+#endif
 #if INCLUDE_SEGGER_JLINK != 0
 #include "SEGGER_SYSVIEW_ChibiOS.h"
 #include "SEGGER_RTT_streams.h"
@@ -131,6 +134,9 @@ int main(void) {
 #if USE_AE_SHELL != 0
  initAEShell();
 #endif
+#if S4E_USE_USB_HID != 0
+initUsbHid();
+#endif
 
  while (true) {
 	  chThdSleepMilliseconds(1500);
@@ -138,6 +144,17 @@ int main(void) {
 	  if ( !isDefaultMQTTBrokerConnected() )
 		  reconnectDefaultMQTTBroker();
 	  #endif
+
+	  #if S4E_USE_USB_HID != 0
+	  if (usbhidcfg.usbp->state == USB_ACTIVE) {
+	      uint8_t report;
+	      size_t  n = hidGetReport(0, &report, sizeof(report));
+	      hidWriteReport(&UHD, &report, n);
+	      n = hidReadReportt(&UHD, &report, sizeof(report), TIME_IMMEDIATE);
+	      if (n > 0)
+	        hidSetReport(0, &report, n);
+	  }
+      #endif
   }
 }
 
@@ -212,6 +229,28 @@ static void initUSBCFG(void){
 	usbConnectBus(serusbcfg.usbp);
 
 	sdStart(&PORTAB_SD_VCP, &myserialcfg);
+}
+#endif
+
+#if S4E_USE_USB_HID != 0
+static void initUsbHid(void){
+	  /*
+	   * Initializes a USB HID driver.
+	   */
+	  hidObjectInit(&UHD);
+	  hidStart(&UHD, &usbhidcfg);
+
+	  /*
+	   * Activates the USB driver and then the USB bus pull-up on D+.
+	   * Note, a delay is inserted in order to not have to disconnect the cable
+	   * after a reset.
+	   */
+
+	  usbDisconnectBus(usbhidcfg.usbp);
+	  chThdSleepMilliseconds(1000);
+	  usbStart(usbhidcfg.usbp, &usb_hid);
+	  chThdSleepMilliseconds(1000);
+	  usbConnectBus(usbhidcfg.usbp);
 }
 #endif
 

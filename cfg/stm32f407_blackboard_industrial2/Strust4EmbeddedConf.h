@@ -264,6 +264,14 @@
 
 #endif//S4E_USE_CAN_BUS
 
+#ifndef S4E_USE_USB_HID
+#define S4E_USE_USB_HID                 1
+#define USB_HID_DRIVE                   USBD1
+//no need to confirgurathem with STM32F4 since the board.h is file already doing that
+//#define USB_HID_DM_LINE       			PAL_LINE(GPIOA, 11) //PA11 with ALF ==>10
+//#define USB_HID_DP_LINE       			PAL_LINE(GPIOA, 12) //PA11
+#endif//S4E_USE_USB_HID
+
 
 #define USERLIB_USE_RF                  0
 #define GO_TO_SLEEP_MACROS      	    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;\

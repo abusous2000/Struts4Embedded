@@ -101,7 +101,7 @@ static void enableFPU(void)
 {
     SCB->CPACR |= (0xF << 20);
 }
-
+__attribute__((used))
 static void crashWithFPUDisabled(void)
 {
     disableFPU();
@@ -112,7 +112,7 @@ static void crashWithFPUDisabled(void)
 
 static const uint32_t ASPEN = 1 << 31;
 static const uint32_t LSPEN = 1 << 30;
-
+__attribute__((used))
 static void crashWithFPUAutoStackingDisabled(void)
 {
     disableFPU();
@@ -122,7 +122,7 @@ static void crashWithFPUAutoStackingDisabled(void)
     testInitFPURegisters();
     CRASH_CATCHER_READ_FAULT();
 }
-
+__attribute__((used))
 static void crashWithFPUAutoStackEnabled(void)
 {
     disableFPU();
@@ -133,7 +133,7 @@ static void crashWithFPUAutoStackEnabled(void)
     testInitFPURegisters();
     CRASH_CATCHER_READ_FAULT();
 }
-
+__attribute__((used))
 static void crashWithFPULazyAutoStacking(void)
 {
     disableFPU();

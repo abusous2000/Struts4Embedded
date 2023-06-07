@@ -4,6 +4,7 @@ endif
 CHIBIOS_CONTRIB  :=$(CHIBIOS)/ChibiOS-Contrib
 GFXLIB   := $(CHIBIOS)/ext/ugfx-2.7
 USBCFG   := $(STRUTS4EMBEDDED)/../../usbcfg
+USBHID   := $(STRUTS4EMBEDDED)/../../usb_hid
 MQTTCLIENT := $(STRUTS4EMBEDDED)/../MQTTClient
 CONTROLS = $(STRUTS4EMBEDDED)/../Controls
 CONFDIR  := ./cfg/$(BOARD_NAME)
