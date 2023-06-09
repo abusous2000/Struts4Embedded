@@ -26,9 +26,12 @@
 #if S4E_USE_USB_HID != 0
 #include "hal.h"
 #include "usb_hid.h"
+#include "dbgtrace.h"
 
-#define VID 0x1209
-#define PID 0x0003
+#ifndef VID
+#define VID 0x0483
+#define PID 0x5740
+#endif
 /*
  * Endpoints to be used for USBD2.
  */
@@ -43,7 +46,7 @@ USBHIDDriver UHD;
 /*
  * Data used for feedback
  */
-uint8_t increment_var = 0;
+static uint8_t frameId = 0;
 
 /*
  * USB Device Descriptor.
@@ -163,7 +166,8 @@ static const uint8_t hid_report_descriptor_data[] = {
   USB_DESC_BYTE (0x75),                 /* Report size -                    */
   USB_DESC_BYTE (0x08),                 /*   8 bits.                        */
   USB_DESC_BYTE (0x95),                 /* Report count -                   */
-  USB_DESC_BYTE (0x01),                 /*   1.                             */
+//  USB_DESC_BYTE (0x04),                 /*   1.                             */
+  USB_DESC_BYTE (sizeof(MyUSBidReport_TypeDef)),
   USB_DESC_BYTE (0x81),                 /* Input -                          */
   USB_DESC_BYTE (0x02),                 /*   Data, Variable, Absolute.      */
 
@@ -176,7 +180,8 @@ static const uint8_t hid_report_descriptor_data[] = {
   USB_DESC_BYTE (0x75),                 /* Report Size -                    */
   USB_DESC_BYTE (0x08),                 /*   8 bits.                        */
   USB_DESC_BYTE (0x95),                 /* Report Count -                   */
-  USB_DESC_BYTE (0x01),                 /*   1.                             */
+//  USB_DESC_BYTE (0x04),                 /*   1.                             */
+  USB_DESC_BYTE (sizeof(MyUSBidReport_TypeDef)),
   USB_DESC_BYTE (0x91),                 /* Output -                         */
   USB_DESC_BYTE (0x02),                 /*   Data, Variable, Absolute.      */
 
@@ -317,14 +322,15 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
   return;
 }
 
+static MyUSBidReport_TypeDef myHidReport ={0};
 static bool req_handler(USBDriver *usbp) {
-  size_t n;
 
   if ((usbp->setup[0] & USB_RTYPE_TYPE_MASK) == USB_RTYPE_TYPE_CLASS) {
     switch (usbp->setup[1]) {
     case HID_GET_REPORT:
-      n = hidGetReport(0, &increment_var, sizeof(increment_var));
-      usbSetupTransfer(usbp, &increment_var, n, NULL);
+      myHidReport.frameId = 0;
+      hidGetReport(&myHidReport);
+      usbSetupTransfer(usbp, (uint8_t*)&myHidReport, sizeof(myHidReport), NULL);
       return true;
     default:
       return hidRequestsHook(usbp);
@@ -333,43 +339,21 @@ static bool req_handler(USBDriver *usbp) {
   return hidRequestsHook(usbp);
 }
 
-/**
- * @brief   Generate HID Report
- * @details This function generates the data for an HID report so
- *          that it can be transferred to the host.
- *
- * @param[in]  id       report ID
- * @param[out] bp       data buffer pointer
- * @param[in]  n        the maximum number of bytes for data buffer
- * @return              number of bytes of report in data buffer
- */
-size_t hidGetReport(uint8_t id, uint8_t *bp, size_t n) {
+msg_t hidGetReport(MyUSBidReport_TypeDef *pHidReport) {
 
-  (void) id;
-  (void) n;
+  pHidReport->frameId = frameId++;
+  pHidReport->volume = frameId % 100;
+  pHidReport->buttons = frameId % 8;
+  pHidReport->buzzer = frameId % 2;
 
-  increment_var++;
-  *bp = increment_var;
-  return sizeof(increment_var);
+
+
+  return MSG_OK;
 }
 
-/**
- * @brief   Set HID Report
- * @details This function sets the data for an HID report
- *          that was transferred from the host.
- *
- * @param[in]  id       report ID
- * @param[in]  bp       data buffer pointer
- * @param[in]  n        the number of bytes in data buffer
- * @return              The operation status.
- * @retval MSG_OK       if the report was set.
- */
-msg_t hidSetReport(uint8_t id, uint8_t *bp, size_t n) {
+msg_t hidSetReport(MyUSBidReport_TypeDef *pHidReport) {
+   frameId = pHidReport->frameId;
 
-  (void) id;
-  (void) n;
-
-  increment_var = *bp;
   return MSG_OK;
 }
 

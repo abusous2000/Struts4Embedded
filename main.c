@@ -144,17 +144,6 @@ initUsbHid();
 	  if ( !isDefaultMQTTBrokerConnected() )
 		  reconnectDefaultMQTTBroker();
 	  #endif
-
-	  #if S4E_USE_USB_HID != 0
-	  if (usbhidcfg.usbp->state == USB_ACTIVE) {
-	      uint8_t report;
-	      size_t  n = hidGetReport(0, &report, sizeof(report));
-	      hidWriteReport(&UHD, &report, n);
-	      n = hidReadReportt(&UHD, &report, sizeof(report), TIME_IMMEDIATE);
-	      if (n > 0)
-	        hidSetReport(0, &report, n);
-	  }
-      #endif
   }
 }
 
@@ -210,6 +199,23 @@ void periodicSysTrigger(uint32_t i){(void)i;
        #if INCLUDE_SEGGER_JLINK != 0
 	   SEGGER_SYSVIEW_PrintfHost("RTT %d\r\n", i);
        #endif
+	   #if S4E_USE_USB_HID != 0
+	   if (usbhidcfg.usbp->state == USB_ACTIVE) {
+			  MyUSBidReport_TypeDef hidReport = {0};
+			  MyUSBidReport_TypeDef *pHidReport = &hidReport;
+
+			hidGetReport(&hidReport);
+			hidWriteReport(&UHD, (uint8_t*)&hidReport, sizeof(hidReport));
+//			dbgprintf("hidGetReport:%d\t%d\t%d\t%d\r\n",pHidReport->frameId,pHidReport->volume,pHidReport->buttons, pHidReport->buzzer);
+
+			msg_t n = hidReadReportt(&UHD, (uint8_t*)&hidReport, sizeof(hidReport), TIME_IMMEDIATE);
+			if (n > 0){
+				hidSetReport(&hidReport);
+				  dbgprintf("hidSetReport:%d\t%d\t%d\t%d\r\n",pHidReport->frameId,pHidReport->volume,pHidReport->buttons, pHidReport->buzzer);
+			}
+		}
+		#endif
+
    }
 
 }

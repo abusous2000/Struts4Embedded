@@ -32,6 +32,18 @@ extern const USBConfig usb_hid;
 extern const USBHIDConfig usbhidcfg;
 extern USBHIDDriver UHD;
 
+typedef struct {
+	#ifdef USB_HID_MSG_DATA
+	USB_HID_DATA
+	#else
+    uint8_t                    frameId;
+	uint8_t					   volume;
+    uint8_t                    buttons;
+    uint8_t                    buzzer;
+	#endif
+}MyUSBidReport_TypeDef;
+
+
 #define USB_DESC_STRING(...)                                                                       \
   {                                                                                                \
     USB_DESC_BYTE((sizeof((int[]){__VA_ARGS__}) / sizeof(int)) + 2),                               \
@@ -41,8 +53,8 @@ extern USBHIDDriver UHD;
 #ifdef __cplusplus
 extern "C" {
 #endif
-  size_t hidGetReport(uint8_t id, uint8_t *bp, size_t n);
-  msg_t hidSetReport(uint8_t id, uint8_t *bp, size_t n);
+msg_t hidGetReport(MyUSBidReport_TypeDef *pHidReport);
+msg_t hidSetReport(MyUSBidReport_TypeDef *pHidReport);
 #ifdef __cplusplus
 }
 #endif

@@ -137,7 +137,7 @@
 #define LINE_RELAY                      PAL_LINE(GPIOD, 14U)//PD14
 
 #ifndef S4E_USE_SDCARD
-#define S4E_USE_SDCARD 			        1
+#define S4E_USE_SDCARD 			        0
 #endif
 #if S4E_USE_SDCARD != 0
 #include "board.h"
@@ -166,7 +166,7 @@
 
 //This is the receiver/client
 #ifndef S4E_USE_EBYTE_LORA
-#define S4E_USE_EBYTE_LORA              1
+#define S4E_USE_EBYTE_LORA              0
 #define EBYTE_LORA_SERVER               0
 #endif
 #if S4E_USE_EBYTE_LORA != 0
@@ -245,7 +245,7 @@
 
 #ifndef S4E_USE_CAN_BUS
 
-#define S4E_USE_CAN_BUS		            1
+#define S4E_USE_CAN_BUS		            0
 
 #define CAN_BUS_SD                      PORTAB_SD
 #define CAN_BUS_LED                     LINE_LED_RED2
