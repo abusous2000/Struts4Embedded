@@ -29,30 +29,12 @@
 #define CHCONF_H
 
 #define _CHIBIOS_RT_CONF_
-#define _CHIBIOS_RT_CONF_VER_7_0_
+#define _CHIBIOS_RT_CONF_VER_6_1_
 #define bool_t						bool
-
-
-/*===========================================================================*/
-/**
- * @name System settings
- * @{
- */
-/*===========================================================================*/
-
-/**
- * @brief   Handling of instances.
- * @note    If enabled then threads assigned to various instances can
- *          interact each other using the same synchronization objects.
- *          If disabled then each OS instance is a separate world, no
- *          direct interactions are handled by the OS.
- */
-#if !defined(CH_CFG_SMP_MODE)
-#define CH_CFG_SMP_MODE                     FALSE
-#endif
-
-/** @} */
-
+#define DEBUG_TRACE_PRINT     		TRUE
+#define CHPRINTF_USE_FLOAT    		TRUE
+#define PORT_ENABLE_GUARD_PAGES     TRUE
+#define INCLUDE_SEGGER_JLINK 		1
 /*===========================================================================*/
 /**
  * @name System timers settings
@@ -62,7 +44,7 @@
 
 /**
  * @brief   System time counter resolution.
- * @note    Allowed values are 16, 32 or 64 bits.
+ * @note    Allowed values are 16 or 32 bits.
  */
 #if !defined(CH_CFG_ST_RESOLUTION)
 #define CH_CFG_ST_RESOLUTION                32
@@ -180,17 +162,6 @@
  */
 #if !defined(CH_CFG_USE_TM)
 #define CH_CFG_USE_TM                       TRUE
-#endif
-
-/**
- * @brief   Time Stamps APIs.
- * @details If enabled then the time time stamps APIs are included in
- *          the kernel.
- *
- * @note    The default is @p TRUE.
- */
-#if !defined(CH_CFG_USE_TIMESTAMP)
-#define CH_CFG_USE_TIMESTAMP                TRUE
 #endif
 
 /**
@@ -566,7 +537,7 @@
  * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_SYSTEM_STATE_CHECK)
-#define CH_DBG_SYSTEM_STATE_CHECK           FALSE
+#define CH_DBG_SYSTEM_STATE_CHECK           TRUE
 #endif
 
 /**
@@ -664,7 +635,7 @@
  * @details User fields added to the end of the @p ch_system_t structure.
  */
 #define CH_CFG_SYSTEM_EXTRA_FIELDS                                          \
-  /* Add system custom fields here.*/
+  /* Add threads custom fields here.*/
 
 /**
  * @brief   System initialization hook.
@@ -672,7 +643,7 @@
  *          just before interrupts are enabled globally.
  */
 #define CH_CFG_SYSTEM_INIT_HOOK() {                                         \
-  /* Add system initialization code here.*/                                 \
+  /* Add threads initialization code here.*/                                \
 }
 
 /**
@@ -689,6 +660,7 @@
  * @note    It is invoked from within @p _thread_init() and implicitly from all
  *          the threads creation APIs.
  */
+
 #include "chHooks.h"
 /**
  * @brief   Idle thread enter hook.
@@ -726,6 +698,8 @@
 #define CH_CFG_SYSTEM_TICK_HOOK() {                                         \
   /* System tick event code here.*/                                         \
 }
+
+
 /**
  * @brief   Trace hook.
  * @details This hook is invoked each time a new record is written in the
@@ -734,7 +708,6 @@
 #define CH_CFG_TRACE_HOOK(tep) {                                            \
   /* Trace code here.*/                                                     \
 }
-
 
 /** @} */
 

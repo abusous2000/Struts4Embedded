@@ -266,7 +266,7 @@ void ssd1306Stop(SSD1306Driver *devp) {
 }
 
 static const I2CConfig i2ccfg = {
-#if defined(STM32F769xx) || defined(STM32F746xx)
+#if defined(STM32F769xx) || defined(STM32F746xx) || defined(STM32F767xx)
 //  .timingr=STM32_TIMINGR_PRESC(15U) | STM32_TIMINGR_SCLDEL(4) |
 //           STM32_TIMINGR_SDADEL(2U) | STM32_TIMINGR_SCLH(15U) | STM32_TIMINGR_SCLL(21U),
   .timingr=0x00501E63,//0x6000030D,

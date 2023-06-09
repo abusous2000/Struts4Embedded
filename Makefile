@@ -11,8 +11,8 @@ all:
 #	+@make --no-print-directory -f make/stm32f407_blackboard-C++.make all	
 #	@echo === Building for stm32f407_blackboard_industrial1 ===============================
 #	+@make --no-print-directory -f make/stm32f407_blackboard_industrial1.make all
-	@echo === Building for stm32f407_blackboard_industrial2 ===============================
-	+@make --no-print-directory -f make/stm32f407_blackboard_industrial2.make all
+#	@echo === Building for stm32f407_blackboard_industrial2 ===============================
+#	+@make --no-print-directory -f make/stm32f407_blackboard_industrial2.make all
 #	@echo === Building for stm32f407_discovery ===============================
 #	+@make --no-print-directory -f make/stm32f407_discovery.make all
 #	+@make --no-print-directory -f make/stm32f407_discovery-C++.make all	
@@ -31,6 +31,9 @@ all:
 #	@echo === Building for STM32F746zg-nucleo ===============================
 #	+@make --no-print-directory -f make/stm32f746zg_nucleo.make all
 #	+@make --no-print-directory -f make/stm32f746zg_nucleo-C++.make all
+	@echo === Building for STM32F767zi-nucleo ===============================
+	+@make --no-print-directory -f make/stm32f767zi_nucleo.make all
+#	+@make --no-print-directory -f make/stm32f767zi_nucleo-C++.make all
 #	@echo === Building for STM32F769i-Discovery ===============================	
 #	+@make --no-print-directory -f make/stm32f769i_discovery.make all	
 #	+@make --no-print-directory -f make/stm32f769i_discovery-C++.make all	
@@ -50,6 +53,7 @@ clean:
 #	+@make --no-print-directory -f make/stm32f429zi_nucleo.make clean	
 	+@make --no-print-directory -f make/stm32f446re_nucleo.make clean	
 	+@make --no-print-directory -f make/stm32f746_discovery.make clean
+	+@make --no-print-directory -f make/stm32f767zi_nucleo.make clean
 #	+@make --no-print-directory -f make/stm32f746zg_nucleo.make clean
 	+@make --no-print-directory -f make/stm32f769i_discovery.make clean
 	@echo

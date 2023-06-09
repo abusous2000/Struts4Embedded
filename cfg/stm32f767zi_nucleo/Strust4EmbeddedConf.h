@@ -14,7 +14,6 @@
 #define S4E_USE_IR_RECEIVER		0
 #define USE_W25Q_XXXX		    0
 #define S4E_USE_CAN_BUS		    0
-#define S4E_USE_USB_HID		    0
 #define USERLIB_USE_RF		    0
 
 #ifndef S4E_USE_SDCARD
@@ -120,13 +119,22 @@
 #define MQTT_CLIENT_ID                  "Struts4EmbeddedWithSTM32F746ZG"
 
 
-#define LINE_LED_GREEN                  PAL_LINE(GPIOB, 0U)//PB0
-#define LINE_LED_BLUE                   PAL_LINE(GPIOB, 7U)//PB7 blue
-#define LINE_LED_RED                    PAL_LINE(GPIOB, 14U)//PB14 blue
+#define LINE_LED_GREEN                  PAL_LINE(GPIOB, 0U)//
+#define LINE_LED_BLUE                   PAL_LINE(GPIOB, 7U)//blue
+#define LINE_LED_RED                    PAL_LINE(GPIOB, 14U)//blue
 #define TIM_TGRO_EVENT_EXTSEL 		    12 //See table 98 in RM on pages 451 & 471 for details
 #define ADC_CHANNEL_IN 					ADC_CHANNEL_IN3//ARD_A0--->PA3-->IN3 with ADC123 only...see p. 38 in user manual
 #define ADC_SMPR2_SMP           		ADC_SMPR2_SMP_AN3(ADC_SAMPLE_144)
 #define ADC_POT                     	ADCD1
+
+
+#ifndef S4E_USE_USB_HID
+#define S4E_USE_USB_HID                 1
+#define USB_HID_DRIVE                   USBD1
+//no need to confirgurathem with STM32F4 since the board.h is file already doing that
+//#define USB_HID_DM_LINE       			PAL_LINE(GPIOA, 11) //PA11 with ALF ==>10
+//#define USB_HID_DP_LINE       			PAL_LINE(GPIOA, 12) //PA11
+#endif//S4E_USE_USB_HID
 
 #define GO_TO_SLEEP_MACROS      		SCB->SCR 	|= SCB_SCR_SLEEPDEEP_Msk;\
 										PWR->CR1  	|= (PWR_CR1_PDDS | PWR_CR1_LPDS | PWR_CR1_CSBF);\

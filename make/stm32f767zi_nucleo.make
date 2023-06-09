@@ -5,7 +5,7 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16 -Wno-unused-variable -Wunused-function -DFPM_ARM --specs=nosys.specs -lm
+  USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16 -Wno-unused-variable -Wunused-function -DFPM_ARM --specs=nosys.specs
 endif
 
 # C specific options here (added to USE_OPT).
@@ -71,7 +71,7 @@ endif
 
 # FPU-related options.
 ifeq ($(USE_FPU_OPT),)
-  USE_FPU_OPT = -mfloat-abi=$(USE_FPU) -mfpu=fpv4-sp-d16
+  USE_FPU_OPT = -mfloat-abi=$(USE_FPU) -mfpu=fpv5-sp-d16
 endif
 
 #
@@ -86,16 +86,15 @@ endif
 PROJECT = ch
 
 # Target settings.
-MCU  = cortex-m4
+MCU  = cortex-m7
 
 # Imported source files and paths.
 CHIBIOS  := ../../..
-#CHIBIOS  := /home/abusous2000/ChibiOS_21.6.0
-BOARD_NAME := stm32f407_blackboard_industrial2
+BOARD_NAME := stm32f767zi_nucleo
 STRUTS4EMBEDDED :=$(CHIBIOS)/demos/STM32/Struts4Embedded/source/Struts4Embedded
 include $(STRUTS4EMBEDDED)/CommonS4EVars.mk
-INCLUDE_SEGGER_JLINK := "yes"
-INCLUDE_SEGGER_JLINK_VALUE :=1
+INCLUDE_SEGGER_JLINK := "no"
+INCLUDE_SEGGER_JLINK_VALUE :=0
 USE_MAC := "yes"
 USE_AE_SHELL := "yes"
 USE_AE_SHELL_VALUE := 0
@@ -105,11 +104,11 @@ USE_USB_HID := "yes"
 # Licensing files.
 include $(CHIBIOS)/os/license/license.mk
 # Startup files.
-include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
+include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f7xx.mk
 # HAL-OSAL files (optional).
 include $(CHIBIOS)/os/hal/hal.mk
-include $(CHIBIOS)/os/hal/ports/STM32/STM32F4xx/platform.mk
-include $(CHIBIOS)/os/hal/boards/$(BOARD_NAME)/board.mk
+include $(CHIBIOS)/os/hal/ports/STM32/STM32F7xx/platform.mk
+include $(CHIBIOS)/os/hal/boards/ST_NUCLEO144_F767ZI/board.mk
 include $(CHIBIOS)/os/hal/osal/rt-nil/osal.mk
 ifeq ($(USE_USB_HID),"yes")
 include $(CHIBIOS_CONTRIB)/os/hal/hal.mk
@@ -129,11 +128,13 @@ include $(CHIBIOS)/test/oslib/oslib_test.mk
 include $(CHIBIOS)/os/various/shell/shell.mk
 USE_AE_SHELL_VALUE := 1
 endif
+# Other files (optional).
+#include $(CHIBIOS)/test/lib/test.mk
+#include $(CHIBIOS)/test/rt/rt_test.mk
+#include $(CHIBIOS)/test/oslib/oslib_test.mk
 include $(CHIBIOS)/os/hal/lib/streams/streams.mk
 include $(CHIBIOS_CONTRIB)/os/common/ports/ARMCMx/compilers/GCC/utils/fault_handlers_v7m.mk
-ifeq ($(USE_FATFS),"yes")
-include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
-endif
+#include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
 #STARTUPLD = /os/common/startup/ARMCMx/compilers/GCC/ld
 ifeq ($(USE_MAC),"yes")
 include $(CHIBIOS)/os/various/lwip_bindings/lwip.mk
@@ -141,14 +142,14 @@ endif
 ifeq ($(INCLUDE_SEGGER_JLINK),"yes")
 include $(CHIBIOS_CONTRIB)/os/various/segger_bindings/segger_rtt.mk
 include $(CHIBIOS_CONTRIB)/os/various/segger_bindings/segger_systemview.mk
-INCLUDE_SEGGER_JLINK_VALUE := 1
 endif
-LDSCRIPT= $(STARTUPLD)/STM32F407xE.ld
+# Define linker script file here
+LDSCRIPT= $(STARTUPLD)/STM32F76xxI.ld
+#LDSCRIPT= $(STARTUPLD)/STM32F76xxI.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
 CSRC = $(ALLCSRC) \
-       $(CHIBIOS)/os/various/syscalls.c \
        $(CHIBIOS)/os/various/evtimer.c \
        main.c
 
@@ -180,10 +181,10 @@ CPPWARN = -Wall -Wextra -Wundef
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS = -DSHELL_CMD_TEST_ENABLED=0  -DBOARD_PHY_ID=MII_DP83848I_ID -DWICED_LWIP_DEBUG222 \
+UDEFS = -DSHELL_CMD_TEST_ENABLED=0  -DBOARD_PHY_ID_2=MII_DP83848I_ID -DWICED_LWIP_DEBUG222 \
         -DDEBUG_TRACE_PRINT=1 -DCHPRINTF_USE_FLOAT=1 -DPORT_ENABLE_GUARD_PAGES=1 \
         -DINCLUDE_SEGGER_JLINK=$(INCLUDE_SEGGER_JLINK_VALUE) -Dboot_t=bool -DSERIAL_BUFFERS_SIZE=512 \
-        -DUSE_AE_SHELL=$(USE_AE_SHELL_VALUE) -DAPP_NAME='"S4E Running All Demos on STM32F4-Industrial2 V12"'
+        -DUSE_AE_SHELL=$(USE_AE_SHELL_VALUE) -DAPP_NAME='"S4E Running All Demos on STM32F746zg_nucleu"'
 #UDEFS = -DSHELL_CMD_TEST_ENABLED=0  -DBOARD_PHY_ID=MII_DP83848I_ID  
 
 # Define ASM defines here

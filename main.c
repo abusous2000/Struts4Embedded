@@ -201,18 +201,21 @@ void periodicSysTrigger(uint32_t i){(void)i;
        #endif
 	   #if S4E_USE_USB_HID != 0
 	   if (usbhidcfg.usbp->state == USB_ACTIVE) {
-			  MyUSBidReport_TypeDef hidReport = {0};
-			  MyUSBidReport_TypeDef *pHidReport = &hidReport;
+			  MyUSBidReport_TypeDef hidRReport = {0};
+			  MyUSBidReport_TypeDef hidWReport = {0};
+			  MyUSBidReport_TypeDef *pRHidReport = &hidRReport;
+			  MyUSBidReport_TypeDef *pWHidReport = &hidWReport;
 
-			hidGetReport(&hidReport);
-			hidWriteReport(&UHD, (uint8_t*)&hidReport, sizeof(hidReport));
-//			dbgprintf("hidGetReport:%d\t%d\t%d\t%d\r\n",pHidReport->frameId,pHidReport->volume,pHidReport->buttons, pHidReport->buzzer);
+			hidGetReport(&hidWReport);
+			hidWriteReport(&UHD, (uint8_t*)&hidWReport, sizeof(hidWReport));
+			dbgprintf("hidGetReport:%d\r\n",pWHidReport->frameId);
 
-			msg_t n = hidReadReportt(&UHD, (uint8_t*)&hidReport, sizeof(hidReport), TIME_IMMEDIATE);
+			msg_t n = hidReadReportt(&UHD, (uint8_t*)&hidRReport, sizeof(hidRReport), TIME_IMMEDIATE);
 			if (n > 0){
-				hidSetReport(&hidReport);
-				  dbgprintf("hidSetReport:%d\t%d\t%d\t%d\r\n",pHidReport->frameId,pHidReport->volume,pHidReport->buttons, pHidReport->buzzer);
+				hidSetReport(&hidRReport);
+				dbgprintf("hidSetReport:%d\t%d\t%d\t%d\r\n",pRHidReport->frameId,pRHidReport->volume,pRHidReport->buttons, pRHidReport->buzzer);
 			}
+
 		}
 		#endif
 

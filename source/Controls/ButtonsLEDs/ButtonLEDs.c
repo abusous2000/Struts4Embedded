@@ -130,7 +130,7 @@ void initButtonsLEDs(void) {
   pLeftKey     = initCPalInstance(&leftKey);pLeftKey->init(&leftKey);
   #endif
   pDownKey     = initCPalInstance(&downKey);pDownKey->init(&downKey);
-  #if !defined(STM32F429xx) && !defined(BOARD_ST_NUCLEO144_F746ZG)
+  #if !defined(STM32F429xx) && !defined(BOARD_ST_NUCLEO144_F746ZG)&& !defined(BOARD_ST_NUCLEO144_F767ZI)
   pRightKey    = initCPalInstance(&rightKey);pRightKey->init(&rightKey);
   #endif
 #ifdef EASYLINK_BUTTON
