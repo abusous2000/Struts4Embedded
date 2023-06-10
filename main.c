@@ -200,6 +200,9 @@ void periodicSysTrigger(uint32_t i){(void)i;
 	   SEGGER_SYSVIEW_PrintfHost("RTT %d\r\n", i);
        #endif
 	   #if S4E_USE_USB_HID != 0
+	   //To test, plz use modified file
+	   ///ChibiOS-Contrib/testhal/NUMICRO/NUC123/NUTINY-SDK-NUC123-V2.0/USB_HID/Client/linux/test-usb-hid.c
+	   //sudo ./test-usb-hid /dev/hidraw5
 	   if (usbhidcfg.usbp->state == USB_ACTIVE) {
 			  MyUSBidReport_TypeDef hidRReport = {0};
 			  MyUSBidReport_TypeDef hidWReport = {0};
@@ -210,7 +213,7 @@ void periodicSysTrigger(uint32_t i){(void)i;
 			hidWriteReport(&UHD, (uint8_t*)&hidWReport, sizeof(hidWReport));
 			#if !defined(BOARD_BLACKBOARD_INDUSTRIAL2)//for some reason, the USB driver stopps working if debug is outputted here
 			dbgprintf("hidGetReport:%d\r\n",pWHidReport->frameId);
-            #end
+            #endif
 			msg_t n = hidReadReportt(&UHD, (uint8_t*)&hidRReport, sizeof(hidRReport), TIME_IMMEDIATE);
 			if (n > 0){
 				hidSetReport(pRHidReport);
