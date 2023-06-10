@@ -208,8 +208,9 @@ void periodicSysTrigger(uint32_t i){(void)i;
 
 			hidGetReport(&hidWReport);
 			hidWriteReport(&UHD, (uint8_t*)&hidWReport, sizeof(hidWReport));
+			#if !defined(BOARD_BLACKBOARD_INDUSTRIAL2)//for some reason, the USB driver stopps working if debug is outputted here
 			dbgprintf("hidGetReport:%d\r\n",pWHidReport->frameId);
-
+            #end
 			msg_t n = hidReadReportt(&UHD, (uint8_t*)&hidRReport, sizeof(hidRReport), TIME_IMMEDIATE);
 			if (n > 0){
 				hidSetReport(pRHidReport);
