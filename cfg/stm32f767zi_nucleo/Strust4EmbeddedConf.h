@@ -66,11 +66,11 @@
 
 //With This board, you cannot used ARD_11 & ETH, there is a conflict
 #ifndef S4E_USE_BUZZER
-#define S4E_USE_BUZZER			0
+#define S4E_USE_BUZZER			1
 #endif
 
 #ifndef S4E_USE_RGB
-#define S4E_USE_RGB				0
+#define S4E_USE_RGB				1
 #endif
 
 #ifndef S4E_USE_MQTT

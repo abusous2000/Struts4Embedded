@@ -212,10 +212,9 @@ void periodicSysTrigger(uint32_t i){(void)i;
 
 			msg_t n = hidReadReportt(&UHD, (uint8_t*)&hidRReport, sizeof(hidRReport), TIME_IMMEDIATE);
 			if (n > 0){
-				hidSetReport(&hidRReport);
-				dbgprintf("hidSetReport:%d\t%d\t%d\t%d\r\n",pRHidReport->frameId,pRHidReport->volume,pRHidReport->buttons, pRHidReport->buzzer);
+				hidSetReport(pRHidReport);
+				usbHidProcessReceivedMsg(pRHidReport,SOURCE_USB_HID);
 			}
-
 		}
 		#endif
 

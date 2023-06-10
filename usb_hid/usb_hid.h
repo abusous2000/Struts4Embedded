@@ -55,6 +55,8 @@ extern "C" {
 #endif
 msg_t hidGetReport(MyUSBidReport_TypeDef *pHidReport);
 msg_t hidSetReport(MyUSBidReport_TypeDef *pHidReport);
+void usbHidProcessReceivedMsg(MyUSBidReport_TypeDef  *pHidReport, char *eventSource);
+
 #ifdef __cplusplus
 }
 #endif

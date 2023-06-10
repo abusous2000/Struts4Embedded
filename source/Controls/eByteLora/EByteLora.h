@@ -109,14 +109,16 @@
 #define OPT_TP10 						0b11		// 10 db
 #endif
 
-#define NONE_BUTTON   		0b0
-#define TOGGLE_MUTE_BUTTON 	0b1
-#define TOGGLE_PAUSE_BUTTON 0b10
-#define NEXT_TRACK_BUTTON   0b100
-#define PREV_TRACK_BUTTON   0b1000
-#define VOLUME_UP_BUTTON    0b10000
-#define VOLUME_DOWN_BUTTON  0b100000
-
+#ifndef NONE_BUTTON
+#define NONE_BUTTON   		            0b0
+#define TOGGLE_MUTE_BUTTON 	            0b1
+#define TOGGLE_PAUSE_BUTTON             0b10
+#define NEXT_TRACK_BUTTON               0b100
+#define PREV_TRACK_BUTTON   	        0b1000
+#define VOLUME_UP_BUTTON    		    0b10000
+#define VOLUME_DOWN_BUTTON  		    0b100000
+#define TOGGLE_BUZZER_BUTTON  		    0b1000000
+#endif
 
 #ifndef EBYTE_LORA_DEFAULT_IO_TIMEOUT
 #define EBYTE_LORA_DEFAULT_IO_TIMEOUT 	20

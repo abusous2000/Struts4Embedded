@@ -12,6 +12,7 @@
 #include "ButtonLEDs.h"
 #include "CanBus.h"
 #include "SDCard.h"
+#include "usb_hid.h"
 #if INCLUDE_SEGGER_JLINK != 0
 #include "SEGGER_SYSVIEW_ChibiOS.h"
 #include "SEGGER_RTT_streams.h"
@@ -67,6 +68,9 @@ void eByteProcessReceivedMsg(EByteLoRaFrame_TypeDef	*pEByteLoRaFrame, MyMessage_
 			case VOLUME_DOWN_BUTTON:
 				triggerActionEvent(VOLUME_DOWN_AE_NAME,NULL,pMyPayload->buttons,SOURCE_EVENT_LORA);
 				break;
+			case TOGGLE_BUZZER_BUTTON:
+				triggerActionEvent(TOGGLE_BUZZER_AE_NAME,NULL,pMyPayload->buttons,TOGGLE_BUZZER_AE_NAME);
+				break;
   		}
    	}
 
@@ -78,6 +82,49 @@ void eByteProcessReceivedMsg(EByteLoRaFrame_TypeDef	*pEByteLoRaFrame, MyMessage_
 	return;
 }
 #endif
+
+#if S4E_USE_USB_HID != 0
+void usbHidProcessReceivedMsg(MyUSBidReport_TypeDef  *pReport, char *eventSource){
+  	dbgprintf("+++usbHidProcessReceivedMsg: FrameID:%d\tVolume:%d\tButtons:%d\tBuzzer:%d\r\n",
+  			pReport->frameId,  pReport->volume,  pReport->buttons, pReport->buzzer);
+  	if ( pReport->volume )
+			triggerActionEvent(SET_VOLUME_AE_NAME,NULL,pReport->volume,eventSource);
+  	if ( pReport->buzzer )
+		triggerActionEvent(TOGGLE_BUZZER_AE_NAME,NULL,pReport->buttons,eventSource);
+  	if ( pReport->buttons ){
+  		switch(pReport->buttons ){
+			case TOGGLE_MUTE_BUTTON:
+				triggerActionEvent(TOGGLE_MUTE_AE_NAME,NULL,pReport->buttons,eventSource);
+				break;
+			case TOGGLE_PAUSE_BUTTON:
+				triggerActionEvent(TOGGLE_PAUSE_AE_NAME,NULL,pReport->buttons,eventSource);
+				break;
+			case NEXT_TRACK_BUTTON:
+				triggerActionEvent(NEXT_TRACK_AE_NAME,NULL,pReport->buttons,eventSource);
+				break;
+			case PREV_TRACK_BUTTON:
+				triggerActionEvent(NEXT_TRACK_AE_NAME,NULL,pReport->buttons,eventSource);
+				break;
+			case VOLUME_UP_BUTTON:
+				triggerActionEvent(VOLUME_UP_AE_NAME,NULL,pReport->buttons,eventSource);
+				break;
+			case VOLUME_DOWN_BUTTON:
+				triggerActionEvent(VOLUME_DOWN_AE_NAME,NULL,pReport->buttons,eventSource);
+				break;
+			case TOGGLE_BUZZER_BUTTON:
+				triggerActionEvent(TOGGLE_BUZZER_AE_NAME,NULL,pReport->buttons,eventSource);
+				break;
+  		}
+   	}
+
+#ifdef LINE_LED_BLUE
+  	pBlueLedPAL->toggle(pBlueLedPAL);
+#endif
+
+	return;
+}
+#endif
+
 int8_t isPaused(void){
 	return pause;
 }

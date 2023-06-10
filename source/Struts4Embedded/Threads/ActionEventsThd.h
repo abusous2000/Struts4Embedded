@@ -24,7 +24,20 @@
 #define SOURCE_EVENT_IR					    "IR"
 #define SOURCE_EVENT_RC						"RC"
 #define SOURCE_EVENT_LORA					"LoRa"
+#define SOURCE_USB_HID   					"UsbHid"
 #define SOURCE_EVENT_CAN_BUS				"CanBus"
+
+#ifndef NONE_BUTTON
+#define NONE_BUTTON   		                0b0
+#define TOGGLE_MUTE_BUTTON 	            	0b1
+#define TOGGLE_PAUSE_BUTTON             	0b10
+#define NEXT_TRACK_BUTTON               	0b100
+#define PREV_TRACK_BUTTON   	        	0b1000
+#define VOLUME_UP_BUTTON    		    	0b10000
+#define VOLUME_DOWN_BUTTON  		    	0b100000
+#define TOGGLE_BUZZER_BUTTON  		    	0b1000000
+#endif
+
 
 #define DATA_FIELD_WAS_LT_MAX               100
 struct ActionEvent_Typedef;
